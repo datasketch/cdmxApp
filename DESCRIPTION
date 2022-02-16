@@ -1,0 +1,45 @@
+Package: cdmxApp
+Title: App CDMX
+Version: 0.0.0.9000
+Authors@R: person('datasketch', ' ', email = 'datasketch@gmail.co', role = c('cre', 'aut'))
+Description: App to explore plots
+License: MIT + file LICENSE
+Imports: 
+    airtabler,
+    attempt,
+    config (>= 0.3.1),
+    dsmodules (>= 0.5.6),
+    DT,
+    glue,
+    golem (>= 0.3.1),
+    hgchmagic (>= 1.0.0),
+    htmltools,
+    lfltmagic (>= 0.1.0),
+    parmesan (>= 0.6.1),
+    pkgload,
+    processx,
+    renv,
+    shi18ny (>= 1.1.1),
+    shiny (>= 1.6.0),
+    shinybusy,
+    shinydisconnect,
+    shinyinvoer (>= 0.1.0),
+    shinypanels (>= 0.5.1)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Suggests: 
+    spelling,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Language: en-US
+Remotes: 
+    datasketch/parmesan,
+    datasketch/shinyinvoer,
+    datasketch/shi18ny,
+    datasketch/shinypanels,
+    datasketch/dsmodules,
+    datasketch/lfltmagic,
+    datasketch/hgchmagic
+Depends: 
+    R (>= 2.10)

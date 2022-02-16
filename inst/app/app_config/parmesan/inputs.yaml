@@ -1,0 +1,7 @@
+---
+zonas:
+  show: true
+  input_type: selectizeInput
+  input_params:
+    label: Municipio a explorar
+    choices: zonas_opts()
