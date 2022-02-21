@@ -20,8 +20,32 @@ mod_viz_data_ui <- function(id){
 mod_viz_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
+ 
+    data_viz <- reactive({
+      req(r$d_fil)
+      df <- r$d_fil
+      req(r$varViewId)
+      
+      var_sel <- r$varViewId 
+      if (length("Categoria" == var_sel) == 1) {
+        if (r$categoriaId != "TODAS") {
+          var_sel <- "Delito"
+        }
+      }
+      
+      df <- df[,c(var_sel, "Año_hecho")] %>%
+               dplyr::group_by_all() %>%
+                 dplyr::summarise(Víctimas = dplyr::n())
+      if (length(unique(df$Año_hecho)) == 1 | r$active_viz != "line") {
+        df <- df %>% dplyr::select(-Año_hecho)
+      }
+      df
+    })
     
     
+    observe({
+      r$d_viz <- data_viz()
+    })
     
   })
 }

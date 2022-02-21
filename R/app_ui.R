@@ -12,7 +12,7 @@ app_ui <- function(request) {
     shinypanels::panelsPage(
       shinypanels::panel(title = "Filtros",
                          id = "azul",
-                         width = 290,
+                         width = 310,
                          body = div(
                            div(style = "max-height: 300px !important; overflow: auto; margin-bottom: 5%;",
                                mod_questions_buttons_ui("questions_buttons_ui_1")
@@ -32,15 +32,15 @@ app_ui <- function(request) {
                          body = div(shinybusy::add_busy_spinner(spin = "fading-circle"),
                                     mod_load_viz_ui("load_viz_ui_1")
                          )
-      ),
-      shinypanels::panel(title = "DETALLE", 
-                         width = 290,
-                         body =  mod_click_info_ui("click_info_ui_1"),
-                         footer = 
-                           tags$a(
-                             href="https://www.datasketch.co", target="blank",
-                             img(src= 'www/img/ds_logo.png', align = "right", width = 150, height = 110))
-      )
+      )#,
+      # shinypanels::panel(title = "DETALLE", 
+      #                    width = 290,
+      #                    body =  mod_click_info_ui("click_info_ui_1"),
+      #                    footer = 
+      #                      tags$a(
+      #                        href="https://www.datasketch.co", target="blank",
+      #                        img(src= 'www/img/ds_logo.png', align = "right", width = 150, height = 110))
+      # )
     )
   )
 }

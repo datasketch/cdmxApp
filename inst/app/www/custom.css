@@ -49,8 +49,8 @@ html, body {
 
 .needed {
  margin-bottom: 9px;
- max-width: 95%;
- width: 95% !important;
+ max-width: 100%;
+ width: 100% !important;
  text-align: left;
  white-space: normal;
  word-wrap: break-word;
@@ -172,3 +172,9 @@ scroll STYLES
 .shiny-html-output {
   font-weight: 400 !important;
 }
+
+#load_parmesan_ui_1-output_aggId {
+ border-bottom: 1px solid #cccccc !important;
+ margin-bottom: 7% !important;
+}
+

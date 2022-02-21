@@ -10,7 +10,7 @@
 mod_questions_buttons_ui <- function(id){
   ns <- NS(id)
   tagList(
-    
+    uiOutput(ns("general_filter"))
   )
 }
 
@@ -20,7 +20,14 @@ mod_questions_buttons_ui <- function(id){
 mod_questions_buttons_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
+    
+    output$general_filter <- renderUI({
+      question_buttons(c("violencia", "otra1", "otra2"), 
+                       c("Víctimas en carpetas de investigación FGJ",
+                         "Otros datos 1",
+                         "Otros datos 2")
+      )
+    })
  
   })
 }

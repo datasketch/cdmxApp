@@ -22,11 +22,39 @@ mod_load_parmesan_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    dataId <- reactive({
+      r$quest_choose
+    })
     
-    zonas_opts <- reactive({
-      c("a", "b", "c")
+    var_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      if (r$quest_choose != "violencia") return()
+      setNames(c("Sexo", "Categoria", "competencia", "AlcaldiaHechos"),
+               c("Sexo", "Categoria", "Competencia", "Alcaldias"))
+    })
+    
+    plotSel <- reactive({
+      req(r$active_viz)
+      r$active_viz
+    })
+    
+    varTwoSel <- reactive({
+      req(r$varViewId)
+      length(r$varViewId) == 2
+    })
+    
+    
+    catg_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      df <- r$d_sel
+      c("TODAS",unique(df$Categoria))
     })
 
+    jur_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      df <- r$d_sel
+      c("TODAS",unique(df$CalidadJuridica))
+    })
     
     # Initialize parmesan
     path <- app_sys("app/app_config/parmesan")

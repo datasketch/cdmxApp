@@ -1,4 +1,10 @@
 filtros:
   label: 
   inputs:
-    - zonas
+    - varViewId
+    - stackedId
+    - aggId
+    - categoriaId
+    - calidadId
+    - anioId
+    

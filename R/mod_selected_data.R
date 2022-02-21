@@ -21,7 +21,23 @@ mod_selected_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-  
+   data_select <- reactive({
+     tryCatch({
+     qs <- r$quest_choose
+     df <- NULL
+     if (qs == "violencia") {
+       df <- dataViolencia
+     } 
+     df
+     },
+     error = function(cond) {
+       return()
+     })
+   })
+   
+   observe({
+     r$d_sel <- data_select()
+   })
     
   })
 }

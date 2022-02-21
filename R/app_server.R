@@ -15,13 +15,12 @@ app_server <- function( input, output, session ) {
   
   quest_choose <- reactive({
     last_btn <- input$last_click
-    if (is.null(last_btn)) last_btn <- "iniciativas"
+    if (is.null(last_btn)) last_btn <- "violencia"
     last_btn
   })
   
   observe({
     r$quest_choose <- quest_choose()
-    r$uiClasses <- input$shi18ny_ui_classes
   })
   
   mod_load_parmesan_server("load_parmesan_ui_1", r)
@@ -29,7 +28,7 @@ app_server <- function( input, output, session ) {
   mod_selected_data_server("selected_data_ui_1", r)
   mod_filter_data_server("filter_data_ui_1", r)
   mod_viz_data_server("viz_data_ui_1", r)
-  mod_data_to_table_server("data_to_table_ui_1", r)
+  #mod_data_to_table_server("data_to_table_ui_1", r)
   mod_viz_type_server("viz_type_ui_1", r)
   mod_load_viz_server("load_viz_ui_1", r)
   mod_click_info_server("click_info_ui_1", r)

@@ -21,7 +21,46 @@ mod_filter_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
  
+   data_filter <- reactive({
+     tryCatch({
+     qs <- r$quest_choose
+     
+     if (qs != "violencia") return()
+     
+     req(r$d_sel)
+     req(r$categoriaId)
+     req(r$calidadId)
+     df <- r$d_sel
+     
+     
+     if (r$categoriaId != "TODAS") {
+       df <- df %>% dplyr::filter(Categoria %in% r$categoriaId)
+     }
+     if (r$calidadId != "TODAS") {
+       df <- df %>% dplyr::filter(CalidadJuridica %in% r$calidadId)
+     }
+     cambioEdad <- !all(c(1917, 2022) %in% r$anioId)
+       if (cambioEdad) {
+         if (length(r$anioId) == 1) {
+           df <- df %>% dplyr::filter(Año_hecho == r$anioId)
+         } else {
+           i_Edad <- r$anioId[1]:r$anioId[2]
+           df <- df %>% dplyr::filter(Año_hecho %in% i_Edad)
+         }
+     }
+     df
+     },
+     error = function(cond) {
+       return()
+     })
+     
+     
+   })
    
+   
+   observe({
+     r$d_fil <- data_filter()
+   })
     
   })
 }

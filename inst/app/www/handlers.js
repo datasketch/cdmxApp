@@ -9,5 +9,6 @@ $(document).on('click', '.needed', function(){
     $(this).addClass('basic_active');
 });
 
-
 });
+
+
