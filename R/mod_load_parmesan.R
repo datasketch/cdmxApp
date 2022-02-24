@@ -33,6 +33,18 @@ mod_load_parmesan_server <- function(id, r){
                c("Sexo", "Categoria", "Competencia", "Alcaldias"))
     })
     
+    varExtra_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      if (r$quest_choose != "violencia") return()
+      setNames(c("Sexo", "Categoria", "competencia", "AlcaldiaHechos"),
+               c("Sexo", "Categoria", "Competencia", "Alcaldias"))
+    })
+    
+    
+    numVar <- reactive({
+      2
+    })
+    
     plotSel <- reactive({
       req(r$active_viz)
       r$active_viz
@@ -40,9 +52,16 @@ mod_load_parmesan_server <- function(id, r){
     
     varTwoSel <- reactive({
       req(r$varViewId)
-      length(r$varViewId) == 2
+      length(r$varViewId) #== 2
     })
     
+    stackLabel <- reactive({
+      HTML("<span style='margin-left:5px; margin-top: -6px;'>Apilar barras </span>")
+    })
+    
+    axisLabel <- reactive({
+      HTML("<span style='margin-left:5px; margin-top: -6px;'> Cambiar de orden las variables </span>")
+    })
     
     catg_opts <- reactive({
       if (is.null(r$d_sel)) return()

@@ -2,7 +2,9 @@ filtros:
   label: 
   inputs:
     - varViewId
+    - varOtherId
     - stackedId
+    - axisId
     - aggId
     - categoriaId
     - calidadId

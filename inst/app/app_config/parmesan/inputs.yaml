@@ -1,11 +1,26 @@
 ---
 varViewId:
   show: true
-  input_type: checkboxGroupInput
+  show_if_all:
+    plotSel():
+      is_any_of: [bar, treemap]
+  input_type: selectizeInput
   input_params:
     label: Variable a visualizar
     choices: var_opts()
     selected: Sexo
+    options: 
+        maxItems:
+        - 2
+varOtherId:
+  show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [line, pie]
+  input_type: selectizeInput
+  input_params:
+    label: Variable a visualizar
+    choices: varExtra_opts()
 stackedId:
   show: true
   show_if_all:
@@ -15,7 +30,20 @@ stackedId:
       equals: 2
   input_type: toggleSwitchInput
   input_params:
-    label: Apilar barras
+    label: stackLabel()
+    value: false
+    on_label: ''
+    off_label: ''
+axisId:
+  show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [bar, treemap]
+    varTwoSel():
+      equals: 2
+  input_type: toggleSwitchInput
+  input_params:
+    label: axisLabel()
     value: false
     on_label: ''
     off_label: ''
@@ -26,7 +54,7 @@ aggId:
       equals: violencia
   input_type: radioButtons
   input_params:
-    label: graph_type
+    label: Agregación
     choices:
       Total:
       - sum

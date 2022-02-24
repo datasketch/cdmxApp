@@ -112,7 +112,7 @@ mod_load_viz_server <- function(id, r){
                                scrollY = TRUE,
                                language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
                                lengthChange = F,
-                               pageLength = 5,
+                               pageLength = 4,
                                scrollX = T,
                                scrollY = T,
                                initComplete = JS(
@@ -130,12 +130,14 @@ mod_load_viz_server <- function(id, r){
     output$viz_plot <- renderUI({
       tryCatch({
       if (r$quest_choose != "violencia") return()
-      
+        div(
       if (r$active_viz == "table") {
-        DT::dataTableOutput(ns("table_view"), width = 950)
+        DT::dataTableOutput(ns("table_view"), width = 980)
       } else {
-      highcharter::highchartOutput(ns("viz_hgch"), height = 580)
-      }
+      highcharter::highchartOutput(ns("viz_hgch"), height = 550)
+      },
+      tags$a(href="www.rstudio.com", "Fuente: Portal de datos abiertos de CDMX", target="_blank")
+      )
       },
       error = function(cond) {
         return()

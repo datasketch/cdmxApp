@@ -135,6 +135,12 @@ height: 30px !important;
     color: #ffffff;
 }
 
+.switch-styles {
+    display: inline-flex !important;
+    flex-direction: row-reverse !important;
+    align-items: center !important;
+}
+
 
 /*
 scroll STYLES
@@ -176,5 +182,9 @@ scroll STYLES
 #load_parmesan_ui_1-output_aggId {
  border-bottom: 1px solid #cccccc !important;
  margin-bottom: 7% !important;
+}
+
+.form-group,.radio {
+  margin-bottom: 3px !important;
 }
 

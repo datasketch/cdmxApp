@@ -58,9 +58,30 @@ mod_filter_data_server <- function(id, r){
    })
    
    
+
+   
+   
+   
+   varSelection <- reactiveValues(id = "Sexo")
+   observe({
+     if (is.null(r$active_viz)) return()
+     if (r$active_viz %in% c("bar", "treemap")) {
+       if (is.null(r$varViewId)) return()
+       varSelection$id <- r$varViewId
+     }
+     if (r$active_viz %in% c("line", "pie")) {
+       if (is.null(r$varOtherId)) return()
+       varSelection$id <- r$varOtherId
+     }
+     
+   })
+   
+   
    observe({
      r$d_fil <- data_filter()
+     r$v_sel <- varSelection$id
    })
+   
     
   })
 }
