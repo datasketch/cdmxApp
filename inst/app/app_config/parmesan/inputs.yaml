@@ -8,7 +8,7 @@ varViewId:
   input_params:
     label: Variable a visualizar
     choices: var_opts()
-    selected: Sexo
+    selected: AlcaldiaHechos
     options: 
         maxItems:
         - 2

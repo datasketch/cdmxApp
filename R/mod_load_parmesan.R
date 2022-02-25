@@ -29,15 +29,15 @@ mod_load_parmesan_server <- function(id, r){
     var_opts <- reactive({
       if (is.null(r$d_sel)) return()
       if (r$quest_choose != "violencia") return()
-      setNames(c("Sexo", "Categoria", "competencia", "AlcaldiaHechos"),
-               c("Sexo", "Categoria", "Competencia", "Alcaldias"))
+      setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
+               c("Alcaldias", "Sexo", "Categoria", "Competencia"))
     })
     
     varExtra_opts <- reactive({
       if (is.null(r$d_sel)) return()
       if (r$quest_choose != "violencia") return()
-      setNames(c("Sexo", "Categoria", "competencia", "AlcaldiaHechos"),
-               c("Sexo", "Categoria", "Competencia", "Alcaldias"))
+      setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
+               c("Alcaldias", "Sexo", "Categoria", "Competencia"))
     })
     
     alcaldias_opts <- reactive({

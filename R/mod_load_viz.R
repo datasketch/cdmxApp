@@ -57,6 +57,7 @@ mod_load_viz_server <- function(id, r){
       
       if (r$active_viz %in% c("choropleth", "bubbles")) {
         opts_viz$map_name <- "mex_mayors"
+        opts_viz$map_tiles <- "CartoDB.Voyager"
       }
       
       # if (r$active_viz %in% "bubbles") {
@@ -95,12 +96,17 @@ mod_load_viz_server <- function(id, r){
       print(optsViz()$data)
       print(optsViz()$map_name)
       print(r$v_type)
-        # if (r$active_viz %in% c("choropleth", "bubbles")) {
-      #   do.call(eval(parse(text=r$v_type)), optsViz())
-      # } else {
+      
+ 
       library(hgchmagic)
-      do.call(eval(parse(text=r$v_type)), optsViz())
-      #}
+      lv <- do.call(eval(parse(text=r$v_type)), optsViz())
+  
+      if (r$active_viz %in% c("bubbles")) {
+      lv <- lv %>% 
+      leaflet::setView(lng = median(optsViz()$data$longitud, na.rm = TRUE), 
+                       lat = median(optsViz()$data$latitud, na.rm = TRUE), zoom = 13)
+      }
+      lv
       },
       error = function(cond) {
         return()

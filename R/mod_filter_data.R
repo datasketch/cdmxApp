@@ -80,7 +80,7 @@ mod_filter_data_server <- function(id, r){
    
    
    
-   varSelection <- reactiveValues(id = "Sexo")
+   varSelection <- reactiveValues(id = "AlcaldiaHechos")
    observe({
      if (is.null(r$active_viz)) return()
      if (r$active_viz %in% c("bar", "treemap")) {
