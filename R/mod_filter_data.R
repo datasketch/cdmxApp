@@ -21,6 +21,8 @@ mod_filter_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
  
+    
+    
    data_filter <- reactive({
      tryCatch({
      qs <- r$quest_choose
@@ -30,6 +32,7 @@ mod_filter_data_server <- function(id, r){
      req(r$d_sel)
      req(r$categoriaId)
      req(r$calidadId)
+     req(r$alcaldiasId)
      df <- r$d_sel
      
      
@@ -47,7 +50,22 @@ mod_filter_data_server <- function(id, r){
            i_Edad <- r$anioId[1]:r$anioId[2]
            df <- df %>% dplyr::filter(Año_hecho %in% i_Edad)
          }
+       }
+     print(r$active_viz)
+     print(r$alcaldiasId )
+     if (r$active_viz != "bubbles") {
+     if (r$alcaldiasId == "CDMX") {
+        idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
+        df <- df %>% dplyr::filter(AlcaldiaHechos %in% idAlc$AlcaldiaHechos)
      }
+     if (!(r$alcaldiasId %in% c("TODAS", "CDMX"))) {
+        df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
+     }
+     } else {
+        if (r$alcaldiasId  %in% c("TODAS", "CDMX")) return()
+        df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
+     }
+     #print(head(df))
      df
      },
      error = function(cond) {
@@ -69,7 +87,7 @@ mod_filter_data_server <- function(id, r){
        if (is.null(r$varViewId)) return()
        varSelection$id <- r$varViewId
      }
-     if (r$active_viz %in% c("line", "pie")) {
+     if (r$active_viz %in% c("line", "pie", "choropleth", "bubbles")) {
        if (is.null(r$varOtherId)) return()
        varSelection$id <- r$varOtherId
      }

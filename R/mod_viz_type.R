@@ -23,6 +23,7 @@ mod_viz_type_server <- function(id, r){
     
     viz_type <- reactive({
       req(r$d_viz)
+      req(r$active_viz)
       df <- r$d_viz
       tv <- "CatNum"
       if (ncol(df) == 3) tv <- "CatCatNum"
@@ -30,13 +31,28 @@ mod_viz_type_server <- function(id, r){
         tv <- "YeaNum"
         if (ncol(df) == 3) tv <- "YeaCatNum"
       }
+      if ("latitud" %in% names(df)) {
+        if (ncol(df) == 3) tv <- "GlnGltNum"
+        if (ncol(df) == 4) tv <- "GlnGltCatNum"
+      }
+      if (r$active_viz == "choropleth") {
+       if (ncol(df) == 2) tv <- "GnmNum"
+       if (ncol(df) == 3) tv <- "GnmCatNum"
+      }
+      print(tv)
       tv
     })
     
     viz_name <- reactive({
       req(viz_type())
       if (r$active_viz == "table") return()
-      paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
+      if (r$active_viz %in% c("choropleth", "bubbles")) {
+      vp <- paste0("lfltmagic::", paste0("lflt_", r$active_viz, "_", viz_type())) 
+      } else {
+      vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
+      }
+      print(vp)
+      vp
     })
     
     observe({

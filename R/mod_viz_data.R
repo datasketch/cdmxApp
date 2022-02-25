@@ -27,8 +27,12 @@ mod_viz_data_server <- function(id, r){
       req(r$v_sel)
       
       var_sel <- r$v_sel
+      if (r$active_viz  == "bubbles") {
+        var_sel <- c("longitud", "latitud", var_sel)
+      }
       
-      if (length(var_sel) == 2 & !(r$active_viz %in% c("line"))) {
+      
+      if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "choropleth", "bubbles"))) {
         if (is.null(r$axisId)) return()
         if (r$axisId) {
           var_sel <- rev(var_sel)
@@ -42,14 +46,32 @@ mod_viz_data_server <- function(id, r){
       }
       
       
-      df <- df[,c(var_sel, "Año_hecho")] %>%
+      df <- df[,unique(c(var_sel, "Año_hecho", "AlcaldiaHechos"))] %>%
         dplyr::group_by_all() %>%
         dplyr::summarise(Víctimas = dplyr::n())
+
       if (length(unique(df$Año_hecho)) == 1 | r$active_viz != "line") {
-        df <- df %>% dplyr::select(-Año_hecho)
+        indAnio <- grep("Año_hecho", names(df))
+        df <- df[,-indAnio]
       }
       
+      if (!(r$active_viz %in% c("choropleth", "bubbles"))) {
+        if (var_sel != "AlcaldiaHechos") {
+        df <- df %>% dplyr::select(-AlcaldiaHechos)
+        }
+      }
       
+      if (r$active_viz %in% c("choropleth")) {
+          df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
+      }
+      
+      if (r$active_viz == "bubbles") {
+        indAlc <- grep("AlcaldiaHechos", names(df))
+        df <- df[,-indAlc] %>% tidyr::drop_na()
+      }
+ 
+  
+     print(names(df))
       
       df
     })

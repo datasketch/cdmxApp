@@ -35,6 +35,7 @@ mod_selected_data_server <- function(id, r){
      })
    })
    
+   
    observe({
      r$d_sel <- data_select()
    })

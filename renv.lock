@@ -772,15 +772,9 @@
     "dsvizprep": {
       "Package": "dsvizprep",
       "Version": "0.1.0",
-      "Source": "GitHub",
+      "Source": "unknown",
       "Remotes": "datasketch/geodata, datasketch/homodatum, datasketch/makeup",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "dsvizprep",
-      "RemoteUsername": "datasketch",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "d906391c8036d141259172b804190512846061fa",
-      "Hash": "fc51ead43d6903b845dd1a77599faf63",
+      "Hash": "c61e831a36d767d8c49bf3e364dd75df",
       "Requirements": [
         "dplyr",
         "geodata",
@@ -941,9 +935,14 @@
     "geodata": {
       "Package": "geodata",
       "Version": "1.0.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9fe5c4a7d88432962ee257f90b566a9d",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "geodata",
+      "RemoteUsername": "datasketch",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "f0dec2b4345c25b46e0928b2f6eceaafb40c9acd",
+      "Hash": "863fc3695fe683ae55e46f94f3fd3089",
       "Requirements": [
         "geojsonio",
         "purrrlyr",
@@ -1070,10 +1069,10 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.6.1",
+      "Version": "1.6.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "de07842fc27ebf60e1102091c0c85e47",
+      "Hash": "4f2596dfb05dac67b9dc558e5c6fba2e",
       "Requirements": []
     },
     "golem": {
@@ -1573,15 +1572,9 @@
     "lfltmagic": {
       "Package": "lfltmagic",
       "Version": "0.1.0",
-      "Source": "GitHub",
+      "Source": "unknown",
       "Remotes": "datasketch/homodatum, datasketch/geodata, datasketch/makeup,\n        datasketch/paletero, datasketch/dsvizopts,\n        datasketch/dsvizprep, dreamRs/d3.format",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "lfltmagic",
-      "RemoteUsername": "datasketch",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "f5351cce741f712791bf843ff9ac7efb689f98bd",
-      "Hash": "0d877bad6f0c30550afd7bb33edffa36",
+      "Hash": "72882c340d2c854874ac569070a979ba",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2821,10 +2814,10 @@
     },
     "terra": {
       "Package": "terra",
-      "Version": "1.4-11",
+      "Version": "1.5-21",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "12f8a0e6cad73c6c022ff579bbc6d82b",
+      "Hash": "a713f0d9f9a2b68af112a991adbfe5d5",
       "Requirements": [
         "Rcpp"
       ]

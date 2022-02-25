@@ -52,8 +52,16 @@ mod_load_viz_server <- function(id, r){
       
        if (r$active_viz %in% c("treemap", "pie")) {
           opts_viz$color_by <- names(r$d_viz)[1]
-          opts_viz$legend_show = FALSE 
+          opts_viz$legend_show <- FALSE 
        }
+      
+      if (r$active_viz %in% c("choropleth", "bubbles")) {
+        opts_viz$map_name <- "mex_mayors"
+      }
+      
+      # if (r$active_viz %in% "bubbles") {
+      #   opts_viz$map_name <- "mex_states"
+      # }
       
       opts_viz$agg <- "sum"
       opts_viz$percentage <- FALSE
@@ -83,17 +91,34 @@ mod_load_viz_server <- function(id, r){
       req(optsViz())
       req(r$v_type)
       req(r$d_viz)
+      print("VEEEER")
+      print(optsViz()$data)
+      print(optsViz()$map_name)
+      print(r$v_type)
+        # if (r$active_viz %in% c("choropleth", "bubbles")) {
+      #   do.call(eval(parse(text=r$v_type)), optsViz())
+      # } else {
       library(hgchmagic)
       do.call(eval(parse(text=r$v_type)), optsViz())
+      #}
       },
       error = function(cond) {
         return()
       })
     })
+
+    output$viz_lflt <- leaflet::renderLeaflet({
+      req(viz_s())
+      if (r$active_viz == "table") return()
+      if (!(r$active_viz %in% c("choropleth", "bubbles"))) return()
+      viz_s()
+    })
     
     output$viz_hgch <- highcharter::renderHighchart({
       req(viz_s())
       if (r$active_viz == "table") return()
+      if (r$active_viz == "choropleth") return()
+      if (r$active_viz == "bubbles") return()
       viz_s()
     })
     
@@ -133,10 +158,13 @@ mod_load_viz_server <- function(id, r){
         div(
       if (r$active_viz == "table") {
         DT::dataTableOutput(ns("table_view"), width = 980)
-      } else {
+      } else if(r$active_viz %in% c("choropleth", "bubbles")) {
+      leaflet::leafletOutput(ns("viz_lflt"), height = 550)  
+      }else {
       highcharter::highchartOutput(ns("viz_hgch"), height = 550)
       },
-      tags$a(href="www.rstudio.com", "Fuente: Portal de datos abiertos de CDMX", target="_blank")
+      tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
+             "Fuente: Portal de datos abiertos de CDMX", target="_blank")
       )
       },
       error = function(cond) {

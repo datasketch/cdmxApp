@@ -6,6 +6,7 @@ filtros:
     - stackedId
     - axisId
     - aggId
+    - alcaldiasId
     - categoriaId
     - calidadId
     - anioId

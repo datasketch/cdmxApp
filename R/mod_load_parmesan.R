@@ -40,9 +40,19 @@ mod_load_parmesan_server <- function(id, r){
                c("Sexo", "Categoria", "Competencia", "Alcaldias"))
     })
     
-    
-    numVar <- reactive({
-      2
+    alcaldias_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      if (is.null(r$active_viz)) return()
+      if (r$quest_choose != "violencia") return()
+      if (r$active_viz == "bubbles") {
+        ddL <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
+        ch <-  unique(ddL$AlcaldiaHechos)
+      } else if (r$active_viz == "choropleth") {
+        ch <- "CDMX"
+      } else {
+        ch <- c("TODAS", "CDMX", unique(alcaldiasCdmx$AlcaldiaHechos))
+      }
+      ch
     })
     
     plotSel <- reactive({

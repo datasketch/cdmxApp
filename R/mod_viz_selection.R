@@ -23,7 +23,8 @@ mod_viz_selection_server <- function(id, r){
     
     possible_viz <- reactive({
       
-      c("bar", "treemap", "line", "pie", "table")
+      viz <- c("choropleth", "bubbles", "bar", "treemap", "line", "pie", "table")
+      viz
       
     })
     

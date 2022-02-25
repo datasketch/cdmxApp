@@ -16,11 +16,17 @@ varOtherId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [line, pie]
+      is_any_of: [line, pie, choropleth, bubbles]
   input_type: selectizeInput
   input_params:
     label: Variable a visualizar
     choices: varExtra_opts()
+alcaldiasId:
+  show: true
+  input_type: selectizeInput
+  input_params:
+    label: Zona
+    choices: alcaldias_opts()
 stackedId:
   show: true
   show_if_all:
