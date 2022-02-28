@@ -22,10 +22,11 @@ mod_questions_buttons_server <- function(id, r){
     ns <- session$ns
     
     output$general_filter <- renderUI({
-      question_buttons(c("violencia", "otra1", "otra2"), 
-                       c("Víctimas en carpetas de investigación FGJ",
-                         "Otros datos 1",
-                         "Otros datos 2")
+      question_buttons(c("violencia"),#, "otra1", "otra2"), 
+                       c("Víctimas en carpetas de investigación FGJ"#,
+                         # "Otros datos 1",
+                         # "Otros datos 2"
+                         )
       )
     })
  

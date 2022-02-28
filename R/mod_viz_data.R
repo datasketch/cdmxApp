@@ -25,20 +25,13 @@ mod_viz_data_server <- function(id, r){
       req(r$d_fil)
       df <- r$d_fil
       req(r$v_sel)
-      
+   
       var_sel <- r$v_sel
       if (r$active_viz  == "bubbles") {
         var_sel <- c("longitud", "latitud", var_sel)
       }
       
-      
-      if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "choropleth", "bubbles"))) {
-        if (is.null(r$axisId)) return()
-        if (r$axisId) {
-          var_sel <- rev(var_sel)
-        }
-      }
-      
+     
       if (length("Categoria" == var_sel) == 1) {
         if (r$categoriaId != "TODAS") {
           var_sel <- "Delito"
@@ -56,7 +49,7 @@ mod_viz_data_server <- function(id, r){
       }
       
       if (!(r$active_viz %in% c("choropleth", "bubbles"))) {
-        if (var_sel != "AlcaldiaHechos") {
+        if (!("AlcaldiaHechos" %in% var_sel)) {
         df <- df %>% dplyr::select(-AlcaldiaHechos)
         }
       }
@@ -70,8 +63,16 @@ mod_viz_data_server <- function(id, r){
         df <- df[,-indAlc] %>% tidyr::drop_na()
       }
  
+      if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "choropleth", "bubbles"))) {
+        if (is.null(r$axisId)) return()
+        #print(r$axisId)
+        if (r$axisId) {
+          var_sel <- rev(var_sel)
+          df <- df[,c(var_sel, "Víctimas")]
+        }
+      }
   
-     print(names(df))
+     #print(names(df))
       
       df
     })

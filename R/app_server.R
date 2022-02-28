@@ -33,5 +33,5 @@ app_server <- function( input, output, session ) {
   mod_load_viz_server("load_viz_ui_1", r)
   mod_click_info_server("click_info_ui_1", r)
   mod_download_viz_server("download_viz_ui_1", r)
-  
+  mod_description_modal_server("description_modal_ui_1", r)
 }

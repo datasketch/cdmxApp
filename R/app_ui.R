@@ -10,9 +10,10 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic 
     shinypanels::panelsPage(
+      mod_description_modal_ui("description_modal_ui_1"),
       shinypanels::panel(title = "Filtros",
                          id = "azul",
-                         width = 310,
+                         width = 350,
                          body = div(
                            div(style = "max-height: 300px !important; overflow: auto; margin-bottom: 5%;",
                                mod_questions_buttons_ui("questions_buttons_ui_1")

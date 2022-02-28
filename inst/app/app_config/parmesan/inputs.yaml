@@ -16,7 +16,7 @@ varOtherId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [line, pie, choropleth, bubbles]
+      is_any_of: [line, choropleth, bubbles]
   input_type: selectizeInput
   input_params:
     label: Variable a visualizar
@@ -68,6 +68,13 @@ aggId:
       - mean
       Porcentage:
       - pctg
+colorsId:
+  show: true
+  input_type: colorPaletteInput
+  input_params:
+    label: Paleta de color
+    colors: agg_palette()
+    max_colors: 6
 categoriaId:
   show: true
   show_if_all:
@@ -98,4 +105,5 @@ anioId:
     max: 2022
     step: 1
     value: [1917, 2022]
+    sep: ''
 

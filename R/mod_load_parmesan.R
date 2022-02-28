@@ -27,17 +27,27 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     var_opts <- reactive({
+      req(r$active_viz)
       if (is.null(r$d_sel)) return()
       if (r$quest_choose != "violencia") return()
+      if (!(r$active_viz %in% c("bar", "treemap"))) return() 
       setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
                c("Alcaldias", "Sexo", "Categoria", "Competencia"))
     })
     
     varExtra_opts <- reactive({
+      req(r$active_viz)
       if (is.null(r$d_sel)) return()
       if (r$quest_choose != "violencia") return()
-      setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-               c("Alcaldias", "Sexo", "Categoria", "Competencia"))
+      if (r$active_viz %in% c("bar", "treemap")) return() 
+      if (r$active_viz %in% c("bubbles", "choropleth")) {
+        ch <-  setNames(c("AlcaldiaHechos"),
+                        c("Alcaldias"))
+      } else {
+        ch <- setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
+                       c("Alcaldias", "Sexo", "Categoria", "Competencia"))
+      }
+      ch
     })
     
     alcaldias_opts <- reactive({
@@ -50,7 +60,7 @@ mod_load_parmesan_server <- function(id, r){
       } else if (r$active_viz == "choropleth") {
         ch <- "CDMX"
       } else {
-        ch <- c("TODAS", "CDMX", unique(alcaldiasCdmx$AlcaldiaHechos))
+        ch <- c("CDMX", "TODAS", unique(alcaldiasCdmx$AlcaldiaHechos))
       }
       ch
     })
@@ -73,12 +83,22 @@ mod_load_parmesan_server <- function(id, r){
       HTML("<span style='margin-left:5px; margin-top: -6px;'> Cambiar de orden las variables </span>")
     })
     
+    agg_palette <- reactive({
+      if (is.null(r$active_viz)) return()
+      if (r$active_viz %in% c("choropleth", "bubbles")) {
+        pc <- c("#7CDFEA", "#066C63")
+      } else {
+        pc <- c("#066c63", "#39d361", "#f9e928", "#0a87cc", "#eed7ba", "#d15220", "#2a2f83")
+      }
+      pc
+    })
+    
     catg_opts <- reactive({
       if (is.null(r$d_sel)) return()
       df <- r$d_sel
       c("TODAS",unique(df$Categoria))
     })
-
+    
     jur_opts <- reactive({
       if (is.null(r$d_sel)) return()
       df <- r$d_sel

@@ -5,6 +5,7 @@ filtros:
     - varOtherId
     - stackedId
     - axisId
+    - colorsId
     - aggId
     - alcaldiasId
     - categoriaId

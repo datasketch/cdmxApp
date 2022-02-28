@@ -39,7 +39,7 @@ mod_viz_type_server <- function(id, r){
        if (ncol(df) == 2) tv <- "GnmNum"
        if (ncol(df) == 3) tv <- "GnmCatNum"
       }
-      print(tv)
+      #print(tv)
       tv
     })
     
@@ -51,7 +51,7 @@ mod_viz_type_server <- function(id, r){
       } else {
       vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
       }
-      print(vp)
+      #print(vp)
       vp
     })
     

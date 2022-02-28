@@ -41,6 +41,7 @@ golem::add_module( name = "viz_type" ) # visualization type to plot
 golem::add_module( name = "load_viz" ) #  graphics to upload
 golem::add_module( name = "click_info" ) # info for id of click over plot
 golem::add_module( name = "download_viz" ) # download module
+golem::add_module( name = "description_modal" ) #  info modal description
 
 
 ## Add helper functions ----

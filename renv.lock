@@ -772,9 +772,15 @@
     "dsvizprep": {
       "Package": "dsvizprep",
       "Version": "0.1.0",
-      "Source": "unknown",
+      "Source": "GitHub",
       "Remotes": "datasketch/geodata, datasketch/homodatum, datasketch/makeup",
-      "Hash": "c61e831a36d767d8c49bf3e364dd75df",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "dsvizprep",
+      "RemoteUsername": "datasketch",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "769ab694c0d72c7d26d81d8ea9980bf01994ced6",
+      "Hash": "46b17ea3c9ec268e420983c3bd2851a8",
       "Requirements": [
         "dplyr",
         "geodata",
@@ -941,8 +947,8 @@
       "RemoteRepo": "geodata",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "f0dec2b4345c25b46e0928b2f6eceaafb40c9acd",
-      "Hash": "863fc3695fe683ae55e46f94f3fd3089",
+      "RemoteSha": "a327e1494b09d19456b402580f2b7cf945cfdc26",
+      "Hash": "1035aa2898eb5fe1a374ca25b12a455a",
       "Requirements": [
         "geojsonio",
         "purrrlyr",
@@ -1515,10 +1521,10 @@
     },
     "leaflet": {
       "Package": "leaflet",
-      "Version": "2.0.4.1",
+      "Version": "2.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e3d73becdeb92754d27172d278cbf61d",
+      "Hash": "6dfe956c509b92d7edee4f0f4bf42e64",
       "Requirements": [
         "RColorBrewer",
         "base64enc",
@@ -1572,9 +1578,15 @@
     "lfltmagic": {
       "Package": "lfltmagic",
       "Version": "0.1.0",
-      "Source": "unknown",
+      "Source": "GitHub",
       "Remotes": "datasketch/homodatum, datasketch/geodata, datasketch/makeup,\n        datasketch/paletero, datasketch/dsvizopts,\n        datasketch/dsvizprep, dreamRs/d3.format",
-      "Hash": "72882c340d2c854874ac569070a979ba",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "lfltmagic",
+      "RemoteUsername": "datasketch",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "f5351cce741f712791bf843ff9ac7efb689f98bd",
+      "Hash": "0d877bad6f0c30550afd7bb33edffa36",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2128,10 +2140,10 @@
     },
     "raster": {
       "Package": "raster",
-      "Version": "3.5-2",
+      "Version": "3.5-15",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c5df27b2de56767e7cfbc74a962ef61c",
+      "Hash": "70cf51235e017702ed77427797572ef0",
       "Requirements": [
         "Rcpp",
         "sp",
@@ -2282,10 +2294,10 @@
     },
     "rgdal": {
       "Package": "rgdal",
-      "Version": "1.5-27",
+      "Version": "1.5-28",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ab3f3a61eb777b62c1bc0d341fd1f990",
+      "Hash": "0f625c5c628af2955aef2c561413ee30",
       "Requirements": [
         "sp"
       ]

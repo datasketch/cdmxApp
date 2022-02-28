@@ -51,8 +51,6 @@ mod_filter_data_server <- function(id, r){
            df <- df %>% dplyr::filter(Año_hecho %in% i_Edad)
          }
        }
-     print(r$active_viz)
-     print(r$alcaldiasId )
      if (r$active_viz != "bubbles") {
      if (r$alcaldiasId == "CDMX") {
         idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
@@ -87,17 +85,27 @@ mod_filter_data_server <- function(id, r){
        if (is.null(r$varViewId)) return()
        varSelection$id <- r$varViewId
      }
-     if (r$active_viz %in% c("line", "pie", "choropleth", "bubbles")) {
+     if (r$active_viz %in% c("choropleth", "bubbles")) {
+       if (is.null(r$varOtherId)) return()
+       varSelection$id <- "AlcaldiaHechos"
+     }
+     if (r$active_viz %in% c("line", "pie")) {
        if (is.null(r$varOtherId)) return()
        varSelection$id <- r$varOtherId
      }
      
    })
    
+   data_summary <- reactive({
+     req(data_filter())
+     df <- data_filter() %>% dplyr::group_by(Sexo) %>% dplyr::summarise(Total = dplyr::n())
+     df
+   })
    
    observe({
      r$d_fil <- data_filter()
      r$v_sel <- varSelection$id
+     r$d_sum <- data_summary()
    })
    
     

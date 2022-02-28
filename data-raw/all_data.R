@@ -15,3 +15,7 @@ alcaldiasCdmx <- ddjoin
 alcaldiasCdmx$idAlcaldias[!is.na(alcaldiasCdmx$nomgeo)] <- "CDMX ALCALDÍAS"
 alcaldiasCdmx$idAlcaldias[is.na(alcaldiasCdmx$nomgeo)] <- "OTRAS ALCALDÍAS"
 usethis::use_data(alcaldiasCdmx, overwrite = TRUE)
+
+
+# dicViolencia <- openxlsx::read.xlsx("data-raw/diccionario-de-victimas-actualizado.xlsx")
+# usethis::use_data(dicViolencia, overwrite = TRUE)
