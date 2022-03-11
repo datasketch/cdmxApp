@@ -63,7 +63,7 @@ mod_filter_data_server <- function(id, r){
         if (r$alcaldiasId  %in% c("TODAS", "CDMX")) return()
         df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
      }
-     #print(head(df))
+
      df
      },
      error = function(cond) {

@@ -27,10 +27,11 @@ mod_viz_data_server <- function(id, r){
       req(r$v_sel)
    
       var_sel <- r$v_sel
+      if (r$active_viz == "map") {
       if (r$mapType  %in% c("bubbles", "heatmap")) {
         var_sel <- c("longitud", "latitud", var_sel)
       }
-      
+      }
  
       if (sum("Categoria" %in% var_sel) == 1) {
         if (r$categoriaId != "TODOS") {
@@ -59,14 +60,16 @@ mod_viz_data_server <- function(id, r){
         }
       }
       
+      if (r$active_viz == "map") {
       if (r$mapType %in% c("choropleth")) {
           df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
-      }
+      }}
       
+      if (r$active_viz == "map") {
       if (r$mapType %in% c("bubbles","heatmap")) {
         indAlc <- grep("AlcaldiaHechos", names(df))
         df <- df[,-indAlc] %>% tidyr::drop_na()
-      }
+      }}
  
       if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "map"))) {
         if (is.null(r$axisId)) return()
@@ -76,8 +79,7 @@ mod_viz_data_server <- function(id, r){
           df <- df[,c(var_sel, "Víctimas")]
         }
       }
-  
-     #print(head(df))
+
       
       df
     })

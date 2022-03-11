@@ -113,7 +113,7 @@ aggId:
       - sum
       Promedio:
       - mean
-      Porcentage:
+      Porcentaje:
       - pctg
     selected: sum
   update_param: selected

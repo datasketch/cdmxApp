@@ -77,6 +77,8 @@ mod_load_parmesan_server <- function(id, r){
       r$active_viz
     })
     
+
+    
     varTwoSel <- reactive({
       req(r$varViewId)
       length(r$varViewId) #== 2
@@ -179,7 +181,7 @@ mod_load_parmesan_server <- function(id, r){
       req(parmesan)
       parmesan::parmesan_input_ids(parmesan = parmesan)
     })
-    
+
     
     observe({
       r$parmesan_input <- parmesan_input()

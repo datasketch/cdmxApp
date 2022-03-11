@@ -27,7 +27,6 @@ mod_filter_index_server <- function(id, r){
     
     output$indexTest <- renderUI({
       req(r$info_inputs)
-      print(r$averZomm)
       path_dic <- cdmxApp:::app_sys("app/app_config/")
       dic_yaml <- yaml::read_yaml(paste0(path_dic, "/", list.files(pattern = ".yaml", path = path_dic)))
       parmesan::indexButtonsUI(id = "INDEXTEST", list_inputs = r$info_inputs, dic_yaml = dic_yaml)

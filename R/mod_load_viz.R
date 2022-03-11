@@ -127,8 +127,7 @@ mod_load_viz_server <- function(id, r){
     })
     
     viz_s <- reactive({
-      print("aaaaa")
-      print(r$v_type)
+
       tryCatch({
         if (r$active_viz == "table") return()
         req(optsViz())
@@ -221,6 +220,8 @@ mod_load_viz_server <- function(id, r){
       }) 
     })
     
+    
+
     
     observe({
       r$downViz <- viz_s()
