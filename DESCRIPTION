@@ -17,6 +17,7 @@ Imports:
     lfltmagic (>= 0.1.0),
     parmesan (>= 0.6.1),
     pkgload,
+    plyr,
     processx,
     renv,
     shi18ny (>= 1.1.1),

@@ -25,10 +25,18 @@ html, body {
 
 .panel-header {
  align-items: inherit !important;
+ padding: 1rem 1.5rem 0rem 2rem !important;
 }
 
 .panel-body {
  margin-top: 0rem !important;
+}
+
+.panel-footer {
+ padding: 0rem 2rem 1rem !important;
+ align-items: center !important;
+ justify-content: space-between !important;
+ width: 100% !important;
 }
 
 .btn-default {
@@ -114,9 +122,15 @@ height: 30px !important;
     color: #BC955C !important;
 }
 
+
+.js-grid-text-10 {
+  visibility: hidden !important;
+}
+
 .style_section {
     color: #BC955C !important;
-    margin-top: -2rem !important;
+    padding-top: 0rem !important;
+    /*margin-top: -2rem !important;*/
 } 
 
 
@@ -226,7 +240,8 @@ scroll STYLES
  opacity: 1;
 }
 
-#load_viz_ui_1-descripcion_modal, #load_viz_ui_1-dicc_modal, #load_viz_ui_1-recursos_modal {
+#info_footer_ui_1-descripcion_modal, #info_footer_ui_1-dicc_modal, 
+#info_footer_ui_1-recursos_modal {
 width: 103px;
  /* UI Properties */
  border: 2px solid #235B4E !important;
@@ -245,7 +260,7 @@ width: 103px;
   top: 14% !important;
   right: 3% !important;
   width: 370px;
-  height: 500px;
+  height: 73% !important;
   background: var(--unnamed-color-fefefe) 0% 0% no-repeat padding-box;
   background: #FEFEFE 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 6px #00000029;
@@ -292,4 +307,44 @@ p {
 
 .sp-cancel {
   font-family: 'Roboto' !important;
+}
+
+
+.index-buttons {
+  display: block !important;
+  padding-right: 10px !important;
+}
+
+
+.index-btn {
+  text-align: left !important;
+  font-size: 11px !important;
+  color: #A7A7A7 !important;
+  background: #F6F6F6 0% 0% no-repeat padding-box !important;
+  border-radius: 24px !important;
+  border: 0px !important;
+  padding: 5px 10px !important;
+}
+
+.index-label {
+  color: #9F2241 !important;
+  opacity: 0.55 !important;
+  font-size: 12px !important;
+  font-family: inherit !important;
+}
+
+.index-close {
+  color: #9f2241 !important;
+  /*position: absolute !important;
+  margin-top: -8px !important;
+  margin-left: 6px !important;*/
+}
+
+.shiny-bound-input, .shinyjs-resettable {
+  margin-bottom: 10px;
+}
+
+
+.leaflet-control-attribution {
+ display: none !important;
 }

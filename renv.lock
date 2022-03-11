@@ -455,10 +455,10 @@
     },
     "commonmark": {
       "Package": "commonmark",
-      "Version": "1.7",
+      "Version": "1.8.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0f22be39ec1d141fd03683c06f3a6e67",
+      "Hash": "2ba81b120c1655ab696c935ef33ea716",
       "Requirements": []
     },
     "config": {
@@ -588,13 +588,13 @@
     },
     "desc": {
       "Package": "desc",
-      "Version": "1.4.0",
+      "Version": "1.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "28763d08fadd0b733e3cee9dab4e12fe",
+      "Hash": "eebd27ee58fcc58714eedb7aa07d8ad1",
       "Requirements": [
         "R6",
-        "crayon",
+        "cli",
         "rprojroot"
       ]
     },
@@ -995,10 +995,10 @@
     },
     "geojsonsf": {
       "Package": "geojsonsf",
-      "Version": "2.0.1",
+      "Version": "2.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8bf70c1328f68761115943b68e565dc6",
+      "Hash": "1d436c89b02dc6b9bce41a084d371b6a",
       "Requirements": [
         "Rcpp",
         "geometries",
@@ -1585,8 +1585,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "f5351cce741f712791bf843ff9ac7efb689f98bd",
-      "Hash": "0d877bad6f0c30550afd7bb33edffa36",
+      "RemoteSha": "80a99ff423eda7834de99d89b365a78be3facb71",
+      "Hash": "55bfa5163c18ca322dfa0fb9328e4057",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -1770,10 +1770,10 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "1.4.6",
+      "Version": "2.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "69fdf291af288f32fd4cd93315084ea8",
+      "Hash": "cf4329aac12c2c44089974559c18e446",
       "Requirements": [
         "askpass"
       ]
@@ -1837,8 +1837,8 @@
       "RemoteRepo": "parmesan",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "710b017125e2ca00769aa2874ed2e43de2558480",
-      "Hash": "d2cdf66e7a351a80ae750ff0fbda2451",
+      "RemoteSha": "a4d98222c83b85a9cde157f484531d0f098f8af1",
+      "Hash": "d39acacee0db6731b04e1c916367beb9",
       "Requirements": [
         "dplyr",
         "shiny",
@@ -1981,6 +1981,16 @@
         "rprojroot",
         "rstudioapi",
         "withr"
+      ]
+    },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f",
+      "Requirements": [
+        "Rcpp"
       ]
     },
     "png": {
@@ -2367,10 +2377,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.0.1",
+      "Version": "1.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3bf0219f19d9f5b3c682acbb3546a151",
+      "Hash": "04884d9a75d778aca22c7154b8333ec9",
       "Requirements": []
     },
     "rlist": {
@@ -2388,11 +2398,12 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.11",
+      "Version": "2.12",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "320017b52d05a943981272b295750388",
+      "Hash": "354da5088ddfdffb73c11cc952885d88",
       "Requirements": [
+        "bslib",
         "evaluate",
         "htmltools",
         "jquerylib",
@@ -2558,10 +2569,10 @@
     },
     "sf": {
       "Package": "sf",
-      "Version": "1.0-6",
+      "Version": "1.0-7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9b7b141f7844870dda255584d62775a9",
+      "Hash": "d237b77320537f7793c7a4f83267cf50",
       "Requirements": [
         "DBI",
         "Rcpp",
@@ -2678,10 +2689,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "shinyinvoer",
-      "RemoteUsername": "CamilaAchuri",
+      "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "24591df4ee3490cdfb73058f1d07427a8c49f2fb",
-      "Hash": "18cc7986f63d590c96724558e0b15b9f",
+      "RemoteSha": "4b53481715ae54146647b26ac38c1c71173ac331",
+      "Hash": "00791050bb8d83e996e1dcc5b8da90fe",
       "Requirements": [
         "htmltools",
         "jsonlite",
@@ -3150,10 +3161,10 @@
     },
     "withr": {
       "Package": "withr",
-      "Version": "2.4.3",
+      "Version": "2.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a376b424c4817cda4920bbbeb3364e85",
+      "Hash": "c0e49a9760983e81e55cdd9be92e7182",
       "Requirements": []
     },
     "wk": {
@@ -3166,10 +3177,10 @@
     },
     "xfun": {
       "Package": "xfun",
-      "Version": "0.29",
+      "Version": "0.30",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e2e5fb1a74fbb68b27d6efc5372635dc",
+      "Hash": "e83f48136b041845e50a6658feffb197",
       "Requirements": []
     },
     "xml2": {

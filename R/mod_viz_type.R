@@ -27,17 +27,20 @@ mod_viz_type_server <- function(id, r){
       df <- r$d_viz
       tv <- "CatNum"
       if (ncol(df) == 3) tv <- "CatCatNum"
-      if ("Año_hecho" %in% names(df)) {
+      if (sum(grepl("Año",names(df)))>0) {
         tv <- "YeaNum"
         if (ncol(df) == 3) tv <- "YeaCatNum"
       }
+      if (r$active_viz == "map") {
+        req(r$mapType)
       if ("latitud" %in% names(df)) {
         if (ncol(df) == 3) tv <- "GlnGltNum"
         if (ncol(df) == 4) tv <- "GlnGltCatNum"
       }
-      if (r$active_viz == "choropleth") {
+      if ("choropleth" %in% r$mapType) {
        if (ncol(df) == 2) tv <- "GnmNum"
        if (ncol(df) == 3) tv <- "GnmCatNum"
+      }
       }
       #print(tv)
       tv
@@ -46,12 +49,13 @@ mod_viz_type_server <- function(id, r){
     viz_name <- reactive({
       req(viz_type())
       if (r$active_viz == "table") return()
-      if (r$active_viz %in% c("choropleth", "bubbles")) {
-      vp <- paste0("lfltmagic::", paste0("lflt_", r$active_viz, "_", viz_type())) 
+      if (r$active_viz %in% "map") {
+        req(r$mapType)
+      vp <- paste0("lfltmagic::", paste0("lflt_", r$mapType, "_", viz_type())) 
       } else {
       vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
       }
-      #print(vp)
+     
       vp
     })
     

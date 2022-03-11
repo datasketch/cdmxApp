@@ -40,7 +40,7 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(r$d_sel)) return()
       if (r$quest_choose != "violencia") return()
       if (r$active_viz %in% c("bar", "treemap")) return() 
-      if (r$active_viz %in% c("bubbles", "choropleth")) {
+      if (r$active_viz %in% c("map")) {
         ch <-  setNames(c("AlcaldiaHechos"),
                         c("Alcaldias"))
       } else {
@@ -54,15 +54,22 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(r$d_sel)) return()
       if (is.null(r$active_viz)) return()
       if (r$quest_choose != "violencia") return()
-      if (r$active_viz == "bubbles") {
+      if (r$active_viz == "map") {
+        req(r$mapType)
+      if (r$mapType  %in% c("bubbles", "heatmap")) {
         ddL <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
-        ch <-  unique(ddL$AlcaldiaHechos)
-      } else if (r$active_viz == "choropleth") {
+        ch <-  c("CDMX",unique(ddL$AlcaldiaHechos))
+      } else if (r$mapType == "choropleth") {
         ch <- "CDMX"
-      } else {
+      }} else {
         ch <- c("CDMX", "TODAS", unique(alcaldiasCdmx$AlcaldiaHechos))
       }
       ch
+    })
+    
+    alcaldias_sel <- reactive({
+      req(alcaldias_opts())
+      alcaldias_opts()[1]
     })
     
     plotSel <- reactive({
@@ -83,20 +90,41 @@ mod_load_parmesan_server <- function(id, r){
       HTML("<span style='margin-left:5px; margin-top: -6px;'> Cambiar de orden las variables </span>")
     })
     
+    
+    colors_default <- reactive({
+      list(
+        palette_a = c("#7CDFEA", "#50D0BE", "#35BDA4", "#22A990", "#14947F", "#0A8070", "#066C63"),
+        palette_b = c("#EED7BA", "#EDC19F", "#EAAC85", "#E6966C", "#E08053", "#D96A3A", "#D15220"),
+        palette_c = c("#066c63", "#39d361", "#f9e928", "#0a87cc", "#eed7ba", "#d15220", "#2a2f83")
+      )
+    })
+    
+    colors_show <- reactive({
+      if (is.null(colors_default())) return()
+      cd <- colors_default()
+     lc <- purrr::map(names(cd), function(palette) {
+       # palette <- "palette_a"
+        colors <- cd[[palette]]
+       as.character( div(
+        purrr::map(colors, function(color) {
+          div(style=paste0("width: 20px; height: 20px; display: inline-block; background-color:", color, ";"))
+        })
+        ))
+      }) 
+     names(lc) <- names(cd)
+     lc
+    })
+    
     agg_palette <- reactive({
       if (is.null(r$active_viz)) return()
-      if (r$active_viz %in% c("choropleth", "bubbles")) {
-        pc <- c("#7CDFEA", "#066C63")
-      } else {
-        pc <- c("#066c63", "#39d361", "#f9e928", "#0a87cc", "#eed7ba", "#d15220", "#2a2f83")
-      }
-      pc
+      if (is.null(colors_show())) return()
+      colors_show()
     })
     
     catg_opts <- reactive({
       if (is.null(r$d_sel)) return()
       df <- r$d_sel
-      c("TODAS",unique(df$Categoria))
+      c("TODOS",unique(df$Categoria))
     })
     
     jur_opts <- reactive({
@@ -104,6 +132,18 @@ mod_load_parmesan_server <- function(id, r){
       df <- r$d_sel
       c("TODAS",unique(df$CalidadJuridica))
     })
+    
+    
+    fec_opts <- reactive({
+      setNames(c("Año_hecho", "Año_inicio"),
+               c("Año en que se cometió el delito",
+                 "Año en que se hizo la denuncia"))
+    })
+    
+    fec_select <- reactive({
+      "Año_hecho"
+    })
+    
     
     # Initialize parmesan
     path <- app_sys("app/app_config/parmesan")
@@ -130,8 +170,23 @@ mod_load_parmesan_server <- function(id, r){
       }
     })
     
+    
+    li <- reactive({
+      parmesan:::index_inputs(session = session, input = input, parmesan = parmesan) %>% plyr::compact()
+    })
+    
+    id_parmesan <- reactive({
+      req(parmesan)
+      parmesan::parmesan_input_ids(parmesan = parmesan)
+    })
+    
+    
     observe({
       r$parmesan_input <- parmesan_input()
+      r$info_inputs <- li()
+      r$info_ids <- id_parmesan()
+      r$info_parmesan <- parmesan
+      r$colorsPlot <- colors_default()
     })
     
     

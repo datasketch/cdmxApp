@@ -13,11 +13,12 @@ app_ui <- function(request) {
       mod_description_modal_ui("description_modal_ui_1"),
       shinypanels::panel(title = "Filtros",
                          id = "azul",
-                         width = 350,
+                         width = 330,
                          body = div(
-                           div(style = "max-height: 300px !important; overflow: auto; margin-bottom: 5%;",
-                               mod_questions_buttons_ui("questions_buttons_ui_1")
-                           ),
+                           mod_filter_index_ui("filter_index_ui_1"),
+                           # div(style = "max-height: 300px !important; overflow: auto; margin-bottom: 5%;",
+                           #     mod_questions_buttons_ui("questions_buttons_ui_1")
+                           # ),
                            mod_load_parmesan_ui("load_parmesan_ui_1")
                          )
       ),
@@ -30,9 +31,10 @@ app_ui <- function(request) {
                                                 mod_download_viz_ui("download_viz_ui_1"))),
                          can_collapse = FALSE,
                          color = "chardonnay",
-                         body = div(shinybusy::add_busy_spinner(spin = "fading-circle"),
+                         body = div(#shinybusy::add_busy_spinner(spin = "fading-circle"),
                                     mod_load_viz_ui("load_viz_ui_1")
-                         )
+                         ),
+                         footer = mod_info_footer_ui("info_footer_ui_1")
       )#,
       # shinypanels::panel(title = "DETALLE", 
       #                    width = 290,

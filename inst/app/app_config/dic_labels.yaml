@@ -1,0 +1,21 @@
+aggId: Unidad
+categoriaId: Delito
+varViewId: Variable
+varOtherId: Variable
+mean: Promedio
+sum: Total
+pctg: Porcentaje
+AlcaldiaHechos: Alcaldias
+competencia: Competencia
+fechasId: Años
+alcaldiasId: Zona
+stackedId: Apilar
+TRUE: Si
+FALSE: No
+sortBar: Ordenar
+calidadId: Calidad
+axisId: Reordenar
+Año_hecho: Hecho
+Año_inicio: Inicio
+
+

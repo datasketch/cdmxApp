@@ -3,9 +3,12 @@ filtros:
   inputs:
     - varViewId
     - varOtherId
+    - mapType
+    - fechasId
     - stackedId
     - axisId
     - colorsId
+    - sortBar
     - aggId
     - alcaldiasId
     - categoriaId

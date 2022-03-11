@@ -36,7 +36,7 @@ mod_filter_data_server <- function(id, r){
      df <- r$d_sel
      
      
-     if (r$categoriaId != "TODAS") {
+     if (r$categoriaId != "TODOS") {
        df <- df %>% dplyr::filter(Categoria %in% r$categoriaId)
      }
      if (r$calidadId != "TODAS") {
@@ -51,7 +51,7 @@ mod_filter_data_server <- function(id, r){
            df <- df %>% dplyr::filter(Año_hecho %in% i_Edad)
          }
        }
-     if (r$active_viz != "bubbles") {
+     if (!(r$active_viz %in% c("bubbles", "heatmap"))) {
      if (r$alcaldiasId == "CDMX") {
         idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
         df <- df %>% dplyr::filter(AlcaldiaHechos %in% idAlc$AlcaldiaHechos)
@@ -85,7 +85,7 @@ mod_filter_data_server <- function(id, r){
        if (is.null(r$varViewId)) return()
        varSelection$id <- r$varViewId
      }
-     if (r$active_viz %in% c("choropleth", "bubbles")) {
+     if (r$active_viz %in% c("choropleth", "bubbles", "heatmap")) {
        if (is.null(r$varOtherId)) return()
        varSelection$id <- "AlcaldiaHechos"
      }

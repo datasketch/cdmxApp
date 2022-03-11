@@ -27,43 +27,48 @@ mod_viz_data_server <- function(id, r){
       req(r$v_sel)
    
       var_sel <- r$v_sel
-      if (r$active_viz  == "bubbles") {
+      if (r$mapType  %in% c("bubbles", "heatmap")) {
         var_sel <- c("longitud", "latitud", var_sel)
       }
       
-     
-      if (length("Categoria" == var_sel) == 1) {
-        if (r$categoriaId != "TODAS") {
+ 
+      if (sum("Categoria" %in% var_sel) == 1) {
+        if (r$categoriaId != "TODOS") {
           var_sel <- "Delito"
         }
       }
       
-      
-      df <- df[,unique(c(var_sel, "Año_hecho", "AlcaldiaHechos"))] %>%
+      varAnio <- NULL
+      if (r$active_viz == "line") {
+        req(r$fechasId)
+        varAnio  <-  r$fechasId
+      }
+      print(varAnio)
+      df <- df[,unique(c(var_sel, varAnio, "AlcaldiaHechos"))] %>%
         dplyr::group_by_all() %>%
         dplyr::summarise(Víctimas = dplyr::n())
 
-      if (length(unique(df$Año_hecho)) == 1 | r$active_viz != "line") {
-        indAnio <- grep("Año_hecho", names(df))
-        df <- df[,-indAnio]
-      }
+      # if (length(unique(df$Año_hecho)) == 1 | r$active_viz != "line") {
+      #   indAnio <- grep("Año_hecho", names(df))
+      #   df <- df[,-indAnio]
+      # }
       
-      if (!(r$active_viz %in% c("choropleth", "bubbles"))) {
+      if (!(r$active_viz %in% c("map"))) {
         if (!("AlcaldiaHechos" %in% var_sel)) {
         df <- df %>% dplyr::select(-AlcaldiaHechos)
         }
       }
       
-      if (r$active_viz %in% c("choropleth")) {
+      if (r$mapType %in% c("choropleth")) {
           df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
       }
       
-      if (r$active_viz == "bubbles") {
+      if (r$mapType %in% c("bubbles","heatmap")) {
         indAlc <- grep("AlcaldiaHechos", names(df))
         df <- df[,-indAlc] %>% tidyr::drop_na()
       }
  
-      if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "choropleth", "bubbles"))) {
+      if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "map"))) {
         if (is.null(r$axisId)) return()
         #print(r$axisId)
         if (r$axisId) {
@@ -72,7 +77,7 @@ mod_viz_data_server <- function(id, r){
         }
       }
   
-     #print(names(df))
+     #print(head(df))
       
       df
     })

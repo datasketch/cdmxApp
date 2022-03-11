@@ -24,6 +24,32 @@ app_server <- function( input, output, session ) {
   })
   
   mod_load_parmesan_server("load_parmesan_ui_1", r)
+  
+  # observeEvent(input$`load_parmesan_ui_1-aggId`, {
+  #   print("HOLAAAA LA CONCHA DE TU HERMANA")
+  # })
+  
+   
+  observe({
+    req(r$info_parmesan)
+    if (identical(list(), r$info_parmesan)) return()
+    req(r$info_ids)
+    if (identical(list(), r$info_ids)) return()
+    # print("ACSAAA ES IMPORTA")
+
+    # print(r$info_ids)
+    parmesanInputs <- r$info_parmesan
+    print("ver info param")
+    print(r$info_ids)
+    #parmesanInputs <- parmesanInputs$filtros$inputs
+    #print(parmesanInputs)
+    parmesan::indexButtonsServer(session = session, input = input,
+                                 id = "INDEXTEST", parmesan_ids = r$info_ids,
+                                 parmesan_load = parmesanInputs, module_id = "load_parmesan_ui_1-")
+
+  })
+  
+  
   mod_viz_selection_server("viz_selection_ui_1", r)
   mod_selected_data_server("selected_data_ui_1", r)
   mod_filter_data_server("filter_data_ui_1", r)
@@ -31,7 +57,8 @@ app_server <- function( input, output, session ) {
   #mod_data_to_table_server("data_to_table_ui_1", r)
   mod_viz_type_server("viz_type_ui_1", r)
   mod_load_viz_server("load_viz_ui_1", r)
-  mod_click_info_server("click_info_ui_1", r)
   mod_download_viz_server("download_viz_ui_1", r)
+  mod_info_footer_server("info_footer_ui_1", r)
   mod_description_modal_server("description_modal_ui_1", r)
+  mod_filter_index_server("filter_index_ui_1", r)
 }

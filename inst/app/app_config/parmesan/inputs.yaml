@@ -3,7 +3,7 @@ varViewId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [bar, treemap]
+      is_any_of: [bar]
   input_type: selectizeInput
   input_params:
     label: Variable a visualizar
@@ -12,21 +12,54 @@ varViewId:
     options: 
         maxItems:
         - 2
+  update_param: selected
 varOtherId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [line, choropleth, bubbles]
+      is_any_of: [line, map, treemap]
   input_type: selectizeInput
   input_params:
     label: Variable a visualizar
     choices: varExtra_opts()
+    selected: AlcaldiaHechos
+  update_param: selected
+mapType:
+  show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [map]
+  input_type: radioButtons
+  input_params:
+    label: Tipo de mapa
+    choices:
+      Coropleta:
+      - choropleth
+      Puntos:
+      - bubbles
+      Heatmap:
+      - heatmap
+    selected: choropleth
+  update_param: selected
+fechasId:
+  show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [line]
+  input_type: selectizeInput
+  input_params:
+    label: Año de interés
+    choices: fec_opts()
+    selected: fec_select()
+  update_param: selected
 alcaldiasId:
   show: true
   input_type: selectizeInput
   input_params:
     label: Zona
     choices: alcaldias_opts()
+    selected: alcaldias_sel() 
+  update_param: selected
 stackedId:
   show: true
   show_if_all:
@@ -40,6 +73,19 @@ stackedId:
     value: false
     on_label: ''
     off_label: ''
+  update_param: value
+sortBar:
+  show: true
+  show_if_all:
+    plotSel():
+      equals: bar
+    varTwoSel():
+      equals: 1
+  input_type: checkboxInput
+  input_params:
+    label: Ordenar
+    value: false
+  update_param: value
 axisId:
   show: true
   show_if_all:
@@ -53,6 +99,7 @@ axisId:
     value: false
     on_label: ''
     off_label: ''
+  update_param: value
 aggId: 
   show: true
   show_if_all:
@@ -60,7 +107,7 @@ aggId:
       equals: violencia
   input_type: radioButtons
   input_params:
-    label: Agregación
+    label: Tipo de unidad
     choices:
       Total:
       - sum
@@ -68,13 +115,14 @@ aggId:
       - mean
       Porcentage:
       - pctg
+    selected: sum
+  update_param: selected
 colorsId:
   show: true
-  input_type: colorPaletteInput
+  input_type: radioButtonsInput
   input_params:
     label: Paleta de color
-    colors: agg_palette()
-    max_colors: 6
+    choices: agg_palette()
 categoriaId:
   show: true
   show_if_all:
@@ -84,6 +132,8 @@ categoriaId:
   input_params:
     label: Tipo de delito
     choices: catg_opts()
+    selected: TODOS
+  update_param: selected
 calidadId:
   show: true
   show_if_all:
@@ -93,6 +143,8 @@ calidadId:
   input_params:
     label: Calidad juridica
     choices: jur_opts()
+    selected: TODAS
+  update_param: selected
 anioId:
   show: true
   show_if_all:
@@ -106,4 +158,4 @@ anioId:
     step: 1
     value: [1917, 2022]
     sep: ''
-
+  update_param: value
