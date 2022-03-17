@@ -1,28 +1,22 @@
 ---
 varViewId:
   show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [bar]
   input_type: selectizeInput
   input_params:
-    label: Variable a visualizar
+    label: Selección de variable a visualizar
     choices: var_opts()
     selected: AlcaldiaHechos
-    options: 
-        maxItems:
-        - 2
   update_param: selected
-varOtherId:
+desagregacionId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [line, map, treemap]
-  input_type: selectizeInput
+      is_any_of: [bar, treemap]
+  input_type: radioButtons
   input_params:
-    label: Variable a visualizar
-    choices: varExtra_opts()
-    selected: AlcaldiaHechos
+    label: 'Desagregar por:'
+    choices: desVarOpts()
+    selected: ninguna
   update_param: selected
 mapType:
   show: true
@@ -66,7 +60,7 @@ stackedId:
     plotSel():
       equals: bar
     varTwoSel():
-      equals: 2
+      equals: true
   input_type: toggleSwitchInput
   input_params:
     label: stackLabel()
@@ -80,7 +74,7 @@ sortBar:
     plotSel():
       equals: bar
     varTwoSel():
-      equals: 1
+      equals: false
   input_type: checkboxInput
   input_params:
     label: Ordenar
@@ -92,7 +86,7 @@ axisId:
     plotSel():
       is_any_of: [bar, treemap]
     varTwoSel():
-      equals: 2
+      equals: true
   input_type: toggleSwitchInput
   input_params:
     label: axisLabel()

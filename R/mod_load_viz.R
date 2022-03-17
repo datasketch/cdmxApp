@@ -12,7 +12,7 @@ mod_load_viz_ui <- function(id){
   tagList(
     uiOutput(ns("viz_plot")),
     tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
-           "Fuente: Portal de datos abiertos de CDMX", target="_blank", style = "float: right !important;")
+           "Fuente: Portal de datos abiertos de CDMX", target="_blank")
   )
 }
 
@@ -36,7 +36,7 @@ mod_load_viz_server <- function(id, r){
           dataViz$content <- r$d_viz  
         } else {
           nsample <- nrow(r$d_viz)
-          if (nsample > 10000) nsample <- 10000
+          if (nsample > 7000) nsample <- 7000
           dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),] 
         }
       } else {
@@ -82,7 +82,12 @@ mod_load_viz_server <- function(id, r){
           grid_x_width = 0,
           border_weight = 1,
           map_zoom = 10,
-          map_min_zoom = 10
+          map_min_zoom = 10,
+          legend_position = "topright",
+          legend_layout = "vertical",
+          legend_align = "right",
+          legend_verticalAlign = "middle"
+          
         )
         
         if (r$active_viz %in% c("treemap", "pie")) {

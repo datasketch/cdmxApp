@@ -95,10 +95,10 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.8",
+      "Version": "1.0.8.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "22b546dd7e337f6c0c58a39983a496bc",
+      "Hash": "6d93fbe4e93e43cbf59fd90d7932c5fb",
       "Requirements": []
     },
     "TTR": {
@@ -1837,8 +1837,8 @@
       "RemoteRepo": "parmesan",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "a4d98222c83b85a9cde157f484531d0f098f8af1",
-      "Hash": "d39acacee0db6731b04e1c916367beb9",
+      "RemoteSha": "b533bdc80010a75762d35a61c70139d2f84fbdd1",
+      "Hash": "47034f969d9099e9c3f27253d6eff43a",
       "Requirements": [
         "dplyr",
         "shiny",
@@ -2689,10 +2689,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "shinyinvoer",
-      "RemoteUsername": "datasketch",
+      "RemoteUsername": "camilaachuri",
       "RemoteRef": "HEAD",
-      "RemoteSha": "4b53481715ae54146647b26ac38c1c71173ac331",
-      "Hash": "00791050bb8d83e996e1dcc5b8da90fe",
+      "RemoteSha": "4bde4f1be9b4ff417136d30dd9f158c4f62caf84",
+      "Hash": "85ff27f987089835bc3550bc68c625f4",
       "Requirements": [
         "htmltools",
         "jsonlite",
@@ -3114,10 +3114,10 @@
     },
     "waldo": {
       "Package": "waldo",
-      "Version": "0.3.1",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ad8cfff5694ac5b3c354f8f2044bd976",
+      "Hash": "035fba89d0c86e2113120f93301b98ad",
       "Requirements": [
         "cli",
         "diffobj",

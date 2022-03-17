@@ -1,7 +1,8 @@
 aggId: Unidad
 categoriaId: Delito
 varViewId: Variable
-varOtherId: Variable
+desagregacionId: Desagregar
+anioId: Hechos
 mean: Promedio
 sum: Total
 pctg: Porcentaje

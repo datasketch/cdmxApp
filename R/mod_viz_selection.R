@@ -23,8 +23,9 @@ mod_viz_selection_server <- function(id, r){
     
     possible_viz <- reactive({
       
-      viz <- c("map", "bar", "treemap", "line", "table")
-      viz
+      # viz <- c("map", "bar", "treemap", "line", "table")
+      # viz
+      c("map", "bar",  "treemap", "line", "table")
       
     })
     
@@ -51,7 +52,11 @@ mod_viz_selection_server <- function(id, r){
                                       " ",#div(class="title-data-select", "Selecciona tipo de visualización"),
                                       images = possible_viz,
                                       path = app_sys("app/www/viz_icons/"),#app_sys(paste0("app/www/viz_icons/", "reconocimientoFacialApp")),
-                                      active = actual_but$active
+                                      active = actual_but$active,
+                                      imageStyle = list(borderColor = "#ffffff",
+                                                        borderSize = "1px",
+                                                        padding = "7px",
+                                                        shadow = TRUE)
         )
       )
     })

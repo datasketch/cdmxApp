@@ -24,9 +24,11 @@ mod_viz_data_server <- function(id, r){
     data_viz <- reactive({
       req(r$d_fil)
       df <- r$d_fil
+     
       req(r$v_sel)
    
       var_sel <- r$v_sel
+      
       if (r$active_viz == "map") {
       if (r$mapType  %in% c("bubbles", "heatmap")) {
         var_sel <- c("longitud", "latitud", var_sel)
@@ -44,7 +46,7 @@ mod_viz_data_server <- function(id, r){
         req(r$fechasId)
         varAnio  <-  r$fechasId
       }
-      print(varAnio)
+   
       df <- df[,unique(c(var_sel, varAnio, "AlcaldiaHechos"))] %>%
         dplyr::group_by_all() %>%
         dplyr::summarise(Víctimas = dplyr::n())
@@ -53,7 +55,7 @@ mod_viz_data_server <- function(id, r){
       #   indAnio <- grep("Año_hecho", names(df))
       #   df <- df[,-indAnio]
       # }
-      
+   
       if (!(r$active_viz %in% c("map"))) {
         if (!("AlcaldiaHechos" %in% var_sel)) {
         df <- df %>% dplyr::select(-AlcaldiaHechos)
@@ -79,8 +81,7 @@ mod_viz_data_server <- function(id, r){
           df <- df[,c(var_sel, "Víctimas")]
         }
       }
-
-      
+   
       df
     })
     

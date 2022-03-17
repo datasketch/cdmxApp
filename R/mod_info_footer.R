@@ -10,7 +10,7 @@
 mod_info_footer_ui <- function(id){
   ns <- NS(id)
   tagList(
-    div(style = "display:flex;align-items: center;justify-content: space-between;",
+    div(style = "display:flex;align-items: center;background: #F7F7F7;justify-content: space-between;",
         uiOutput(ns("summaryInfo")),
         uiOutput(ns("infoButt"))
     )
@@ -43,7 +43,7 @@ mod_info_footer_server <- function(id, r){
     })
     
     output$infoButt <- renderUI({
-      div(style = "display: flex;gap:20px;margin-right: 0 !important;",
+      div(style = "display: flex;gap:20px; margin: 1px 20px 1px 0px;",
           actionButton(ns("descripcion_modal"), "Descripción"),
           actionButton(ns("dicc_modal"), "Diccionario"),
           actionButton(ns("recursos_modal"), "Recursos")
