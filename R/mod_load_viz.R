@@ -53,10 +53,10 @@ mod_load_viz_server <- function(id, r){
         if (is.null(dataViz$content)) return()
         df <- dataViz$content
         
-        print(head(df))
+        #print(head(df))
         opts_viz <- list(
           data = df,
-          palette_colors = r$colorsPlot[[r$colorsId]],#c("#066c63", "#39d361", "#f9e928", "#0a87cc", "#eed7ba", "#d15220", "#2a2f83"),
+          palette_colors = r$colorsPlot[[r$colorsId]],
           na_color = "#b8b4b3",
           hor_title = " ",
           ver_title = " ",
@@ -80,7 +80,7 @@ mod_load_viz_server <- function(id, r){
           #sort = "desc", ##dbd9d9 grid color
           grid_y_color = "#bcccca",
           grid_x_width = 0,
-          border_weight = 1,
+          border_weight = 0.5,
           map_zoom = 10,
           map_min_zoom = 10,
           legend_position = "topright",
@@ -90,28 +90,7 @@ mod_load_viz_server <- function(id, r){
           
         )
         
-        if (r$active_viz %in% c("treemap", "pie")) {
-          opts_viz$color_by <- names(r$d_viz)[1]
-          opts_viz$legend_show <- FALSE 
-        }
         
-        if (r$active_viz %in% c("map")) {
-          opts_viz$map_name <- "mex_mayors"
-          opts_viz$map_tiles <- "CartoDB.Voyager"
-          opts_viz$topo_fill_opacity <- 0
-          opts_viz$na_color <- "transparent"
-          #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
-        }
-        
-        if (r$active_viz %in% "bar") {
-          if (r$sortBar) {
-            opts_viz$sort <- "desc" 
-          }
-        }
-        
-        opts_viz$agg <- "sum"
-        opts_viz$percentage <- FALSE
-        opts_viz$graph_type <- "grouped"
         if (r$aggId == "pctg") {
           opts_viz$percentage <- TRUE 
         } else {
@@ -123,6 +102,39 @@ mod_load_viz_server <- function(id, r){
             opts_viz$graph_type <-  "stacked"
           }
         }
+        
+        if (r$active_viz %in% c("treemap", "pie")) {
+          opts_viz$color_by <- names(r$d_viz)[1]
+          opts_viz$legend_show <- FALSE 
+          opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
+        }
+        
+        if (r$active_viz %in% c("map")) {
+          req(r$v_sel)
+          opts_viz$map_name <- "mex_mayors"
+          opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
+          if (r$aggId == "pctg") {
+            opts_viz$format_sample_num <- "1,234.34"
+            opts_viz$tooltip <- "AlcaldiaHechos: {AlcaldiaHechos} </br> Víctimas: {%}"
+            if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "ColoniaHechos: {ColoniaHechos}</br> Víctimas: {%}"
+            opts_viz$suffix <- "%"
+          }
+          if (length(r$v_sel) >= 2) opts_viz$map_name <- "cdmx_colonies"
+          #print(opts_viz$map_name)
+          opts_viz$map_tiles <- "CartoDB.Voyager"
+          opts_viz$topo_fill_opacity <- 0.7
+          opts_viz$na_color <- "transparent"
+          #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
+        }
+        
+        if (r$active_viz %in% "bar") {
+          if (r$sortBar) {
+            opts_viz$sort <- "desc" 
+          }
+        }
+        
+        
+        
         #print(opts_viz$agg)
         opts_viz
       },
@@ -185,7 +197,7 @@ mod_load_viz_server <- function(id, r){
       req(r$d_fil)
       if (r$active_viz != "table") return()
       df <- r$d_fil
-      
+      df <- df %>% dplyr::select(-FechaInicioR, -FechaHechoR)
       dtable <- DT::datatable(df,
                               rownames = F,
                               options = list(
@@ -194,7 +206,9 @@ mod_load_viz_server <- function(id, r){
                                 #                        lengthChange = F,
                                 #                        pageLength = 4,
                                 scrollX = T,
-                                scrollY = T#,
+                                fixedColumns = TRUE,
+                                fixedHeader = TRUE,
+                                scrollY = "500px"#,
                                 #                        initComplete = htmlwidgets::JS(
                                 #                          "function(settings, json) {",
                                 #                          "$(this.api().table().header()).css({'background-color': '#a13e1f', 'color': '#fff'});",
@@ -212,11 +226,11 @@ mod_load_viz_server <- function(id, r){
         #print(r$parmesan_input)
         if (r$quest_choose != "violencia") return()
         if (r$active_viz == "table") {
-          vv <- DT::dataTableOutput(ns("table_view"), width = 980)
+          vv <- DT::dataTableOutput(ns("table_view"), width = 950)
         } else if(r$active_viz %in% c("map")) {
-          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 530)  
+          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 590)  
         }else {
-          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 530)
+          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 590)
         }
         vv
       },

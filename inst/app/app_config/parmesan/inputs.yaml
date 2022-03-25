@@ -1,17 +1,20 @@
 ---
 varViewId:
   show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [map, bar, treemap, line, scatter, area]
   input_type: selectizeInput
   input_params:
-    label: Selección de variable a visualizar
+    label: Víctimas
     choices: var_opts()
-    selected: AlcaldiaHechos
+    selected: varDef()
   update_param: selected
 desagregacionId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [bar, treemap]
+      is_any_of: [map, bar, treemap]
   input_type: radioButtons
   input_params:
     label: 'Desagregar por:'
@@ -42,7 +45,7 @@ fechasId:
       is_any_of: [line]
   input_type: selectizeInput
   input_params:
-    label: Año de interés
+    label: Fecha de interés
     choices: fec_opts()
     selected: fec_select()
   update_param: selected
@@ -53,6 +56,14 @@ alcaldiasId:
     label: Zona
     choices: alcaldias_opts()
     selected: alcaldias_sel() 
+  update_param: selected
+sexoId:
+  show: true
+  input_type: selectizeInput
+  input_params:
+    label: Sexo
+    choices: sexo_opts()
+    selected: sexo_sel() 
   update_param: selected
 stackedId:
   show: true
@@ -73,8 +84,8 @@ sortBar:
   show_if_all:
     plotSel():
       equals: bar
-    varTwoSel():
-      equals: false
+ #   varTwoSel():
+ #    equals: false
   input_type: checkboxInput
   input_params:
     label: Ordenar
@@ -97,6 +108,8 @@ axisId:
 aggId: 
   show: true
   show_if_all:
+    plotSel():
+      is_any_of: [bar, treemap, line, map, area, scatter]
     dataId():
       equals: violencia
   input_type: radioButtons
@@ -105,17 +118,20 @@ aggId:
     choices:
       Total:
       - sum
-      Promedio:
-      - mean
+      #Promedio:
+      #- mean
       Porcentaje:
       - pctg
     selected: sum
   update_param: selected
 colorsId:
   show: true
+  show_if_all:
+    plotSel():
+      is_any_of: [bar, treemap, line, map, area, scatter]
   input_type: radioButtonsInput
   input_params:
-    label: Paleta de color
+    label: Colores
     choices: agg_palette()
 categoriaId:
   show: true
@@ -144,12 +160,21 @@ anioId:
   show_if_all:
     dataId():
       equals: violencia
-  input_type: sliderInput
+  input_type: airDatepickerInput
   input_params:
-    label: Año del hecho
-    min: 1917
-    max: 2022
-    step: 1
-    value: [1917, 2022]
-    sep: ''
-  update_param: value
+    label: Fecha denuncia
+    #value: null
+    maxDate: maxIn()
+    minDate: minIn()
+    placeholder: anioHolder()
+    separator: ' al '
+    view: 'months'
+    minView: 'months'
+    dateFormat: 'yyyy-mm'
+    multiple: Inf
+   # clearButton: true
+    range: true
+    language: es
+    width: '100%'
+  #update_param: value
+

@@ -33,6 +33,8 @@ mod_filter_data_server <- function(id, r){
             req(r$categoriaId)
             req(r$calidadId)
             req(r$alcaldiasId)
+            req(r$sexoId)
+            
             df <- r$d_sel
             
             
@@ -42,27 +44,40 @@ mod_filter_data_server <- function(id, r){
             if (r$calidadId != "TODAS") {
                df <- df %>% dplyr::filter(CalidadJuridica %in% r$calidadId)
             }
-            cambioEdad <- !all(c(1917, 2022) %in% r$anioId)
-            if (cambioEdad) {
-               if (length(r$anioId) == 1) {
-                  df <- df %>% dplyr::filter(Año_hecho == r$anioId)
-               } else {
-                  i_Edad <- r$anioId[1]:r$anioId[2]
-                  df <- df %>% dplyr::filter(Año_hecho %in% i_Edad)
+            
+            df$FechaInicio <- lubridate::dmy(df$FechaInicio)
+            if (!is.null(r$anioId)) {
+               cambioEdad <- !all(df$FechaInicio %in% r$anioId)
+               if (cambioEdad) {
+                  if (length(r$anioId) == 1) {
+                     df <- df %>% dplyr::filter(FechaInicioR %in% format(r$anioId, format="%Y-%m"))
+                  } else {
+                     print(format(r$anioId[1], format="%Y-%m"))
+                     df <- df %>% dplyr::filter(FechaInicioR >= format(r$anioId[1], format="%Y-%m") & FechaInicioR <= format(r$anioId[2], format="%Y-%m"))
+                  }
                }
             }
-            if (!(r$active_viz %in% c("bubbles", "heatmap"))) {
-               if (r$alcaldiasId == "CDMX") {
-                  idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
-                  df <- df %>% dplyr::filter(AlcaldiaHechos %in% idAlc$AlcaldiaHechos)
-               }
-               if (!(r$alcaldiasId %in% c("TODAS", "CDMX"))) {
-                  df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
-               }
-            } else {
-               if (r$alcaldiasId  %in% c("TODAS", "CDMX")) return()
-               df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
+            
+            if (r$alcaldiasId != "TODAS") {
+               df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId) 
             }
+            
+            if (r$sexoId != "TODOS") {
+               df <- df %>% dplyr::filter(Sexo %in% r$sexoId) 
+            }
+            
+            # if (!(r$active_viz %in% c("bubbles", "heatmap"))) {
+            #    if (r$alcaldiasId == "CDMX") {
+            #       idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
+            #       df <- df %>% dplyr::filter(AlcaldiaHechos %in% idAlc$AlcaldiaHechos)
+            #    }
+            #    if (!(r$alcaldiasId %in% c("TODAS", "CDMX"))) {
+            #       df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
+            #    }
+            # } else {
+            #    if (r$alcaldiasId  %in% c("TODAS", "CDMX")) return()
+            #    df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
+            # }
             
             df
          },
@@ -78,23 +93,23 @@ mod_filter_data_server <- function(id, r){
       
       
       
-      varSelection <- reactiveValues(id = "AlcaldiaHechos")
+      varSelection <- reactiveValues(id = NULL)
       observe({
          if (is.null(r$active_viz)) return()
-         if (r$active_viz %in% c("bar", "treemap", "line")) {
+         if (r$active_viz %in% c("bar", "treemap", "map")) {
             if (is.null(r$varViewId)) return()
             if (is.null(r$desagregacionId)) return()
             varAdd <- r$desagregacionId
+            if (varAdd == "cdmx") return()
             if (r$desagregacionId == "ninguna") varAdd <- NULL
-            varSelection$id <- c(r$varViewId, varAdd)
-         }
-         if (r$active_viz %in% c( "line")) {
+            varSelection$id <- c(varAdd, r$varViewId)
+         } else if (r$active_viz %in% c( "line")) {
             if (is.null(r$varViewId)) return()
             varSelection$id <- r$varViewId
-         }
-         if (r$active_viz %in% c("map")) {
+         } else {
+            return()
             #if (is.null(r$varOtherId)) return()
-            varSelection$id <- "AlcaldiaHechos"
+            #varSelection$id <- "AlcaldiaHechos"
          }
          
       })

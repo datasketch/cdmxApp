@@ -25,10 +25,18 @@ mod_viz_selection_server <- function(id, r){
       
       # viz <- c("map", "bar", "treemap", "line", "table")
       # viz
-      c("map", "bar",  "treemap", "line", "table")
+      c("map", "bar",  "treemap", "line",  "table")
       
     })
     
+    
+    viz_tool <- reactive({
+      if (is.null(possible_viz())) return()
+      df_viz <- data.frame(id = c("map", "bar",  "treemap", "line",  "table"),
+                           label = c("Mapa", "Barras", "Treemap", "Líneas", "Tabla"))
+      df_viz <- df_viz %>% dplyr::filter(id %in% possible_viz())
+      df_viz$label
+    })
     
     actual_but <- reactiveValues(active = NULL)
     
@@ -53,6 +61,7 @@ mod_viz_selection_server <- function(id, r){
                                       images = possible_viz,
                                       path = app_sys("app/www/viz_icons/"),#app_sys(paste0("app/www/viz_icons/", "reconocimientoFacialApp")),
                                       active = actual_but$active,
+                                      tooltips = viz_tool(),
                                       imageStyle = list(borderColor = "#ffffff",
                                                         borderSize = "1px",
                                                         padding = "7px",
@@ -66,7 +75,7 @@ mod_viz_selection_server <- function(id, r){
       r$active_viz <- actual_but$active
     })
     
-    
+   
   })
 }
 

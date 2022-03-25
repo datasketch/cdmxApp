@@ -2,14 +2,15 @@ filtros:
   label: 
   inputs:
     - varViewId
+    - fechasId
     - desagregacionId
     - aggId
+    - anioId
     - alcaldiasId
+    - sexoId
     - categoriaId
     - calidadId
-    - anioId
     - mapType
-    - fechasId
     - stackedId
     - axisId
     - colorsId

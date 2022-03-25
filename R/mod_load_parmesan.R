@@ -33,6 +33,9 @@ mod_load_parmesan_server <- function(id, r){
       if (r$active_viz %in% c("map")) {
         ch <-  setNames(c("AlcaldiaHechos"),
                         c("Alcaldias"))
+      } else if (r$active_viz %in% c("line", "area")) {
+        ch <- setNames(c("cdmx", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
+                       c("Histórico CDMX", "Alcaldias", "Sexo", "Categoria", "Competencia"))
       } else {
         ch <- setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
                        c("Alcaldias", "Sexo", "Categoria", "Competencia"))
@@ -40,46 +43,70 @@ mod_load_parmesan_server <- function(id, r){
       ch
     })
     
+    varDef <- reactive({
+      req(var_opts())
+      var_opts()[1]
+    })
+    
     desVarOpts <- reactive({
       req(r$varViewId)
+      req(r$active_viz)
       
       varPsel <- data.frame(id = c("ninguna", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
                             label = c("Ninguna", "Alcaldias", "Sexo", "Categoria", "Competencia"))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)
       
-      setNames(varPsel$id, varPsel$label)
+      if (req(r$active_viz) == "map")  {
+        setNames(c("ninguna","ColoniaHechos"), c("Ninguna", "Colonia"))
+      } else {
+        setNames(varPsel$id, varPsel$label)
+      }
       
       
     })
+    
+    
+    
     
     alcaldias_opts <- reactive({
       if (is.null(r$d_sel)) return()
       if (is.null(r$active_viz)) return()
       if (r$quest_choose != "violencia") return()
-      if (r$active_viz == "map") {
-        req(r$mapType)
-      if (r$mapType  %in% c("bubbles", "heatmap")) {
-        ddL <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
-        ch <-  c("CDMX",unique(ddL$AlcaldiaHechos))
-      } else if (r$mapType == "choropleth") {
-        ch <- "CDMX"
-      }} else {
-        ch <- c("CDMX", "TODAS", unique(alcaldiasCdmx$AlcaldiaHechos))
-      }
+      df <- r$d_sel
+      df <- df %>% tidyr::drop_na(AlcaldiaHechos)
+      ch <- c("TODAS", sort(unique(df$AlcaldiaHechos)))
       ch
     })
+    
     
     alcaldias_sel <- reactive({
       req(alcaldias_opts())
       alcaldias_opts()[1]
     })
     
+    
+    sexo_opts <- reactive({
+      if (is.null(r$d_sel)) return()
+      if (is.null(r$active_viz)) return()
+      if (r$quest_choose != "violencia") return()
+      df <- r$d_sel
+      df <- df %>% tidyr::drop_na(Sexo)
+      ch <- c("TODOS", sort(unique(df$Sexo)))
+      ch 
+    })
+    
+    sexo_sel <- reactive({
+      req(sexo_opts())
+      sexo_opts()[1]
+    })
+    
+    
     plotSel <- reactive({
       req(r$active_viz)
       r$active_viz
     })
     
-
+    
     
     varTwoSel <- reactive({
       req(r$desagregacionId)
@@ -97,49 +124,84 @@ mod_load_parmesan_server <- function(id, r){
     
     colors_default <- reactive({
       req(r$active_viz)
-      if (r$active_viz != "bar") {
-      list(
-        palette_a = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),
-        palette_b = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
-        palette_c = c("#0E709E", "#568BB2", "#709ABC", "#88A9C7", "#9FBAD2", "#B5CADD", "#CBDBE8", "#E0EDF3"),
-        palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
-        palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
-        palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
-        
-      )
-      } else {
-        req(r$desagregacionId)
-        if (r$desagregacionId != "ninguna") {
+      if (r$active_viz %in% c("map")) {
+        req(r$mapType)
+        if (r$mapType == "bubbles") {
+          list(
+            palette_a = c("#3E9FCC"),
+            palette_b = c("#93D0F1"),
+            palette_c = c("#19719F")
+          )
+        } else {
+          list(
+            palette_a = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),
+            palette_b = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
+            palette_c = c("#0E709E", "#568BB2", "#709ABC", "#88A9C7", "#9FBAD2", "#B5CADD", "#CBDBE8", "#E0EDF3"),
+            palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
+            palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
+            palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
+          )
+        }
+      } else if (r$active_viz %in% c("treemap")) {
+        list(
+          palette_a = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),
+          palette_b = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
+          palette_c = c("#0E709E", "#568BB2", "#709ABC", "#88A9C7", "#9FBAD2", "#B5CADD", "#CBDBE8", "#E0EDF3"),
+          palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
+          palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
+          palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
+          
+        ) 
+    } else if (r$active_viz == "bar"){
+      req(r$desagregacionId)
+      if (r$desagregacionId != "ninguna") {
         list(
           palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
           palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
           palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
         )
-        } else {
+      } else {
         list(
-            palette_a = c("#3E9FCC"),
-            palette_b = c("#93D0F1"),
-            palette_c = c("#19719F")
-          )
-        }
-      } 
-      
-    })
+          palette_a = c("#3E9FCC"),
+          palette_b = c("#93D0F1"),
+          palette_c = c("#19719F")
+        )
+      }
+    } else if (r$active_viz %in% c("line", "area")) {
+      req(r$v_sel)
+      if(r$v_sel == "cdmx") {
+        list(
+          palette_a = c("#3E9FCC"),
+          palette_b = c("#93D0F1"),
+          palette_c = c("#19719F")
+        ) 
+      } else {
+        list(
+          palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
+          palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
+          palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
+        )
+      }
+    } else {
+      return()
+    } 
+    
+  })
     
     colors_show <- reactive({
       if (is.null(colors_default())) return()
       cd <- colors_default()
-     lc <- purrr::map(names(cd), function(palette) {
-       # palette <- "palette_a"
+      lc <- purrr::map(names(cd), function(palette) {
+        # palette <- "palette_a"
         colors <- cd[[palette]]
-       as.character( div(
-        purrr::map(colors, function(color) {
-          div(style=paste0("width: 20px; height: 20px; display: inline-block; background-color:", color, ";"))
-        })
+        as.character( div(
+          purrr::map(colors, function(color) {
+            div(style=paste0("width: 20px; height: 20px; display: inline-block; background-color:", color, ";"))
+          })
         ))
       }) 
-     names(lc) <- names(cd)
-     lc
+      names(lc) <- names(cd)
+      lc
     })
     
     agg_palette <- reactive({
@@ -162,13 +224,35 @@ mod_load_parmesan_server <- function(id, r){
     
     
     fec_opts <- reactive({
-      setNames(c("Año_hecho", "Año_inicio"),
-               c("Año en que se cometió el delito",
-                 "Año en que se hizo la denuncia"))
+      setNames(c("FechaInicioR", "Año_hecho"),
+               c("Fecha en que se hizo la denuncia", 
+                 "Fecha en que se cometió el delito"))
     })
     
     fec_select <- reactive({
-      "Año_hecho"
+      #req(fec_opts())
+      #fec_opts()[1]
+      "FechaInicioR"
+    })
+    
+    maxIn <- reactive({
+      req(r$d_sel)
+      df <- r$d_sel
+      max(lubridate::dmy(df$FechaInicio), na.rm = TRUE)
+    })
+    
+    minIn <- reactive({
+      req(r$d_sel)
+      df <- r$d_sel
+      min(lubridate::dmy(df$FechaInicio), na.rm = TRUE)
+    })
+    
+    
+    anioHolder <- reactive({
+      req(maxIn())
+      req(minIn())
+      #c(minIn(), maxIn())
+      paste0(format(minIn(), format="%Y-%m"), " al ", format(maxIn(), format="%Y-%m"))
     })
     
     
@@ -206,7 +290,7 @@ mod_load_parmesan_server <- function(id, r){
       req(parmesan)
       parmesan::parmesan_input_ids(parmesan = parmesan)
     })
-
+    
     
     observe({
       r$parmesan_input <- parmesan_input()
@@ -218,8 +302,8 @@ mod_load_parmesan_server <- function(id, r){
     
     
     
-  })
-}
+})
+  }
 
 ## To be copied in the UI
 # mod_load_parmesan_ui("load_parmesan_ui_1")

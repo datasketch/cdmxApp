@@ -2,7 +2,7 @@
 
 html, body {
   font-family: 'Roboto' !important;
-  color: #3A3C6A !important;
+  color: #435b69 !important;
 }
 
 a {
@@ -253,18 +253,19 @@ scroll STYLES
  width: 480px !important;
 }
 
-.selectize-control.single .selectize-input {
+.selectize-control.single .selectize-input, #load_parmesan_ui_1-anioId {
     cursor: pointer;
     background: #FFFFFF;
     border: 1.38462px solid rgba(104, 103, 103, 0.15) !important;
     box-sizing: border-box;
     border-radius: 5.53846px !important;
+    font-family: 'Roboto' !important;
     font-weight: 400;
     font-size: 12px;
     line-height: 14px;
     display: flex;
     align-items: center;
-}
+}m
 
 .selectize-control.multi .selectize-input.has-items {
   cursor: pointer;
@@ -414,6 +415,18 @@ p {
   align-items: center;
 }
 
+.input-group {
+  flex-direction: initial !important;
+  margin-bottom: 7px;
+}
+
+#load_parmesan_ui_1-anioId_button {
+  background: #235B4E !important;
+  cursor: initial !important;
+  padding: 6px 7px !important;
+}
+
+
 .index-btn {
   text-align: left !important;
   font-size: 11px !important;
@@ -454,3 +467,18 @@ input[type='radio']:checked:after {
         display: inline-block;
         visibility: visible;
 }
+
+
+
+.leaflet-top, .leaflet-right {
+  z-index: 0 !important;
+}
+
+
+.dataTables_scrollHead {
+  overflow: auto !important; 
+}
+
+
+  
+

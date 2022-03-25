@@ -26,7 +26,7 @@ mod_selected_data_server <- function(id, r){
      qs <- r$quest_choose
      df <- NULL
      if (qs == "violencia") {
-       df <- dataViolencia
+       df <- dataVictimas
      } 
      df
      },

@@ -10,10 +10,10 @@
 mod_viz_type_ui <- function(id){
   ns <- NS(id)
   tagList(
-    
+ 
   )
 }
-
+    
 #' viz_type Server Functions
 #'
 #' @noRd 
@@ -27,22 +27,23 @@ mod_viz_type_server <- function(id, r){
       df <- r$d_viz
       tv <- "CatNum"
       if (ncol(df) == 3) tv <- "CatCatNum"
-      if (sum(grepl("Año",names(df)))>0) {
+      if (sum(grepl("Fecha|Año",names(df)))>0) {
         tv <- "YeaNum"
-        if (ncol(df) == 3) tv <- "YeaCatNum"
+        if (ncol(df) == 3) tv <- "CatYeaNum"
       }
       if (r$active_viz == "map") {
         req(r$mapType)
-        if ("latitud" %in% names(df)) {
-          if (ncol(df) == 3) tv <- "GlnGltNum"
-          if (ncol(df) == 4) tv <- "GlnGltCatNum"
-        }
-        if ("choropleth" %in% r$mapType) {
-          if (ncol(df) == 2) tv <- "GnmNum"
-          if (ncol(df) == 3) tv <- "GnmCatNum"
-        }
+      if ("latitud" %in% names(df)) {
+        if (ncol(df) == 3) tv <- "GlnGltNum"
+        if (ncol(df) == 4) tv <- "GlnGltCatNum"
       }
-      #print(tv)
+      if ("choropleth" %in% r$mapType) {
+       #if (ncol(df) == 2) 
+       tv <- "GnmNum"
+       #if (ncol(df) == 3) tv <- "GnmCatNum"
+      }
+      }
+      print(tv)
       tv
     })
     
@@ -51,11 +52,11 @@ mod_viz_type_server <- function(id, r){
       if (r$active_viz == "table") return()
       if (r$active_viz %in% "map") {
         req(r$mapType)
-        vp <- paste0("lfltmagic::", paste0("lflt_", r$mapType, "_", viz_type())) 
+      vp <- paste0("lfltmagic::", paste0("lflt_", r$mapType, "_", viz_type())) 
       } else {
-        vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
+      vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
       }
-      
+     
       vp
     })
     
@@ -66,9 +67,9 @@ mod_viz_type_server <- function(id, r){
     
   })
 }
-
+    
 ## To be copied in the UI
 # mod_viz_type_ui("viz_type_ui_1")
-
+    
 ## To be copied in the server
 # mod_viz_type_server("viz_type_ui_1")
