@@ -66,7 +66,7 @@ mod_viz_selection_server <- function(id, r){
       r$active_viz <- actual_but$active
     })
     
-   
+    
   })
 }
 
