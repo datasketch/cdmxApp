@@ -95,10 +95,10 @@
     },
     "Rcpp": {
       "Package": "Rcpp",
-      "Version": "1.0.8.2",
+      "Version": "1.0.8.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6d93fbe4e93e43cbf59fd90d7932c5fb",
+      "Hash": "32e79b908fda56ee57fe518a8d37b864",
       "Requirements": []
     },
     "TTR": {
@@ -779,8 +779,8 @@
       "RemoteRepo": "dsvizprep",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "769ab694c0d72c7d26d81d8ea9980bf01994ced6",
-      "Hash": "46b17ea3c9ec268e420983c3bd2851a8",
+      "RemoteSha": "d09b565f461b6575ee4fde3ca008e105d171f45d",
+      "Hash": "adf6a0532727709ad837f7d75e5050c4",
       "Requirements": [
         "dplyr",
         "geodata",
@@ -947,8 +947,8 @@
       "RemoteRepo": "geodata",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "a327e1494b09d19456b402580f2b7cf945cfdc26",
-      "Hash": "1035aa2898eb5fe1a374ca25b12a455a",
+      "RemoteSha": "370932f2076034a02851391888a6bf279f1de74d",
+      "Hash": "bf697eef41074d4308acd17ebd7f75df",
       "Requirements": [
         "geojsonio",
         "purrrlyr",
@@ -1415,10 +1415,10 @@
     },
     "jqr": {
       "Package": "jqr",
-      "Version": "1.2.2",
+      "Version": "1.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6c7d4d7b1499b55a7bef9e0c995cec56",
+      "Hash": "a0637f1eb368d00f3c561552f52b39f3",
       "Requirements": [
         "lazyeval",
         "magrittr"
@@ -1585,8 +1585,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "80a99ff423eda7834de99d89b365a78be3facb71",
-      "Hash": "55bfa5163c18ca322dfa0fb9328e4057",
+      "RemoteSha": "e5cdc5fee09597b1f77d2920ba7f4b4beabcc335",
+      "Hash": "1823a1b10fbf04f8b35cb0bec4ebd9ba",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -1668,10 +1668,10 @@
     },
     "maptools": {
       "Package": "maptools",
-      "Version": "1.1-2",
+      "Version": "1.1-3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "41e7097a7a02db986344eeca0d8a49ac",
+      "Hash": "bce4aa20c50cf15aaf3e7070b115d060",
       "Requirements": [
         "foreign",
         "lattice",
@@ -1790,14 +1790,6 @@
         "zip"
       ]
     },
-    "packrat": {
-      "Package": "packrat",
-      "Version": "0.6.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "0d6cc4c357e7602bb3eee299f4cfc2a5",
-      "Requirements": []
-    },
     "paletero": {
       "Package": "paletero",
       "Version": "0.1.0",
@@ -1835,10 +1827,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "parmesan",
-      "RemoteUsername": "datasketch",
+      "RemoteUsername": "CamilaAchuri",
       "RemoteRef": "HEAD",
-      "RemoteSha": "b533bdc80010a75762d35a61c70139d2f84fbdd1",
-      "Hash": "47034f969d9099e9c3f27253d6eff43a",
+      "RemoteSha": "a4774db3a1f2d54e6e0ec4a98fc44b49649da1e3",
+      "Hash": "c1df9e5271cf865e09e26dd3eda8fd25",
       "Requirements": [
         "dplyr",
         "shiny",
@@ -2398,10 +2390,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.12",
+      "Version": "2.13",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "354da5088ddfdffb73c11cc952885d88",
+      "Hash": "ac78f4d2e0289d4cba73b88af567b8b1",
       "Requirements": [
         "bslib",
         "evaluate",
@@ -2444,22 +2436,6 @@
       "Repository": "CRAN",
       "Hash": "249d8cd1e74a8f6a26194a91b47f21d1",
       "Requirements": []
-    },
-    "rsconnect": {
-      "Package": "rsconnect",
-      "Version": "0.8.24",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5e21fd77eb844fa1ff1d23cb04e1d753",
-      "Requirements": [
-        "curl",
-        "digest",
-        "jsonlite",
-        "openssl",
-        "packrat",
-        "rstudioapi",
-        "yaml"
-      ]
     },
     "rstudioapi": {
       "Package": "rstudioapi",
@@ -3051,10 +3027,10 @@
     },
     "uuid": {
       "Package": "uuid",
-      "Version": "1.0-3",
+      "Version": "1.0-4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2097822ba5e4440b81a0c7525d0315ce",
+      "Hash": "99c959c7424be995ddca19b5736c8dd0",
       "Requirements": []
     },
     "vctrs": {
