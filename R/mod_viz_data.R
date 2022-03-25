@@ -24,17 +24,17 @@ mod_viz_data_server <- function(id, r){
     data_viz <- reactive({
       req(r$d_fil)
       df <- r$d_fil
-     
+      
       req(r$v_sel)
-   
+      
       var_sel <- r$v_sel
       
       if (r$active_viz == "map") {
-      if (r$mapType  %in% c("bubbles", "heatmap")) {
-        var_sel <- c("longitud", "latitud", var_sel)
+        if (r$mapType  %in% c("bubbles", "heatmap")) {
+          var_sel <- c("longitud", "latitud", var_sel)
+        }
       }
-      }
- 
+      
       if (sum("Categoria" %in% var_sel) == 1) {
         if (r$categoriaId != "TODOS") {
           var_sel <- "Delito"
@@ -46,33 +46,33 @@ mod_viz_data_server <- function(id, r){
         req(r$fechasId)
         varAnio  <-  r$fechasId
       }
-   
+      
       df <- df[,unique(c(var_sel, varAnio, "AlcaldiaHechos"))] %>%
         dplyr::group_by_all() %>%
         dplyr::summarise(Víctimas = dplyr::n())
-
+      
       # if (length(unique(df$Año_hecho)) == 1 | r$active_viz != "line") {
       #   indAnio <- grep("Año_hecho", names(df))
       #   df <- df[,-indAnio]
       # }
-   
+      
       if (!(r$active_viz %in% c("map"))) {
         if (!("AlcaldiaHechos" %in% var_sel)) {
-        df <- df %>% dplyr::select(-AlcaldiaHechos)
+          df <- df %>% dplyr::select(-AlcaldiaHechos)
         }
       }
       
       if (r$active_viz == "map") {
-      if (r$mapType %in% c("choropleth")) {
+        if (r$mapType %in% c("choropleth")) {
           df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
-      }}
+        }}
       
       if (r$active_viz == "map") {
-      if (r$mapType %in% c("bubbles","heatmap")) {
-        indAlc <- grep("AlcaldiaHechos", names(df))
-        df <- df[,-indAlc] %>% tidyr::drop_na()
-      }}
- 
+        if (r$mapType %in% c("bubbles","heatmap")) {
+          indAlc <- grep("AlcaldiaHechos", names(df))
+          df <- df[,-indAlc] %>% tidyr::drop_na()
+        }}
+      
       if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "map"))) {
         if (is.null(r$axisId)) return()
         #print(r$axisId)
@@ -81,7 +81,7 @@ mod_viz_data_server <- function(id, r){
           df <- df[,c(var_sel, "Víctimas")]
         }
       }
-   
+      
       df
     })
     

@@ -132,7 +132,7 @@ mod_load_viz_server <- function(id, r){
     })
     
     viz_s <- reactive({
-
+      
       tryCatch({
         if (r$active_viz == "table") return()
         req(optsViz())
@@ -143,7 +143,7 @@ mod_load_viz_server <- function(id, r){
         library(hgchmagic)
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
         
-
+        
         lv
       },
       error = function(cond) {
@@ -151,7 +151,7 @@ mod_load_viz_server <- function(id, r){
       })
     })
     
-
+    
     
     output$viz_lflt <- leaflet::renderLeaflet({
       req(viz_s())
@@ -164,12 +164,12 @@ mod_load_viz_server <- function(id, r){
     observe({
       if (is.null(r$active_viz)) return()
       if (r$active_viz == "map") {
-      if (is.null(r$mapType)) return()
-      if (r$mapType %in% c("bubbles", "heatmap")) {
-        leaflet::leafletProxy("viz_lflt") %>% 
-          leaflet::setView(lng = median(dataViz$content$longitud, na.rm = TRUE),
-                           lat = median(dataViz$content$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
-      }
+        if (is.null(r$mapType)) return()
+        if (r$mapType %in% c("bubbles", "heatmap")) {
+          leaflet::leafletProxy("viz_lflt") %>% 
+            leaflet::setView(lng = median(dataViz$content$longitud, na.rm = TRUE),
+                             lat = median(dataViz$content$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
+        }
       }
     })
     
@@ -226,7 +226,7 @@ mod_load_viz_server <- function(id, r){
     })
     
     
-
+    
     
     observe({
       r$downViz <- viz_s()
