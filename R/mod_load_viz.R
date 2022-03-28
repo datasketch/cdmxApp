@@ -123,6 +123,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$map_tiles <- "CartoDB.Voyager"
           opts_viz$topo_fill_opacity <- 0.7
           opts_viz$na_color <- "transparent"
+          opts_viz$map_cluster <- "markerClusterOptions()"
           #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
         }
         

@@ -481,10 +481,10 @@
     },
     "crayon": {
       "Package": "crayon",
-      "Version": "1.5.0",
+      "Version": "1.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "741c2e098e98afe3dc26a7b0e5489f4e",
+      "Hash": "8dc45fd8a1ee067a92b85ef274e66d6a",
       "Requirements": []
     },
     "credentials": {
@@ -760,8 +760,8 @@
       "RemoteRepo": "dsvizopts",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ec11c67d4d807d08cc5373f3de446afa0aa1fc0b",
-      "Hash": "496631fc56d8569ed9fe48faaa8d832b",
+      "RemoteSha": "c8b1c6e49a5411aa15c34c91453294dd4812523b",
+      "Hash": "97b4fcf07516ca3e435e7272a065c9d6",
       "Requirements": [
         "dplyr",
         "purrr",
@@ -1521,10 +1521,10 @@
     },
     "leaflet": {
       "Package": "leaflet",
-      "Version": "2.1.0",
+      "Version": "2.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6dfe956c509b92d7edee4f0f4bf42e64",
+      "Hash": "97fadb60ef6eb8524b9f6e2c4a69ee93",
       "Requirements": [
         "RColorBrewer",
         "base64enc",
@@ -1585,8 +1585,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "e5cdc5fee09597b1f77d2920ba7f4b4beabcc335",
-      "Hash": "1823a1b10fbf04f8b35cb0bec4ebd9ba",
+      "RemoteSha": "d676c7013edea79c7096439d219a4636c3c34e2e",
+      "Hash": "c36844fc8c6192ecd06baa80d92b2de7",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2304,10 +2304,10 @@
     },
     "rgdal": {
       "Package": "rgdal",
-      "Version": "1.5-28",
+      "Version": "1.5-29",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0f625c5c628af2955aef2c561413ee30",
+      "Hash": "37d3572bfcec1d8a21bd33355e485069",
       "Requirements": [
         "sp"
       ]
@@ -2998,10 +2998,10 @@
     },
     "tzdb": {
       "Package": "tzdb",
-      "Version": "0.2.0",
+      "Version": "0.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "5e069fb033daf2317bd628d3100b75c5",
+      "Hash": "b2e1cbce7c903eaf23ec05c58e59fb5e",
       "Requirements": [
         "cpp11"
       ]
