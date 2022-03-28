@@ -22,39 +22,31 @@ mod_filter_data_server <- function(id, r){
       ns <- session$ns
       
       
+      dataFilter <- reactiveValues(info = NULL)
       
-      data_filter <- reactive({
+      observe({
          tryCatch({
             qs <- r$quest_choose
             
             if (qs != "violencia") return()
             
             req(r$d_sel)
-            req(r$categoriaId)
-            req(r$calidadId)
-            req(r$alcaldiasId)
-            req(r$sexoId)
-            
             df <- r$d_sel
+            vars_f <- r$vars_f
             
-       
-            if (r$categoriaId != "TODOS") {
-               df <- df %>% dplyr::filter(Categoria %in% r$categoriaId)
-            }
-            
-            if (r$calidadId != "TODAS") {
-               df <- df %>% dplyr::filter(CalidadJuridica %in% r$calidadId)
-            }
-            
-            if (r$alcaldiasId != "TODAS") {
-               df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId) 
-            }
-            
-            if (r$sexoId != "TODOS") {
-               df <- df %>% dplyr::filter(Sexo %in% r$sexoId) 
-            }
-            
-            
+            for (i in 1:nrow(vars_f)){
+               if (is.null(r[[vars_f$id[i]]])) {
+                  naInd <- is.na(df[[vars_f$vars[i]]])
+                  if (any(naInd)) {
+                     df <- df[naInd,]
+                  }
+               } else {
+                  if (!all(r$allCats[[vars_f$vars[i]]] %in% r[[vars_f$id[i]]])) {
+                     catInd <- grep(paste0(r[[vars_f$id[i]]], collapse = "|"), df[[vars_f$vars[i]]])
+                     df <- df[catInd,]
+                  }
+               }
+            }   
             df$FechaInicio <- lubridate::dmy(df$FechaInicio)
             if (!is.null(r$anioId)) {
                cambioEdad <- !all(df$FechaInicio %in% r$anioId)
@@ -67,11 +59,8 @@ mod_filter_data_server <- function(id, r){
                   }
                }
             }
-            
-
-            
-            
-            df
+            if (is.null(df) | nrow(df) == 0) return()
+            dataFilter$info <- df
          },
          error = function(cond) {
             return()
@@ -83,8 +72,8 @@ mod_filter_data_server <- function(id, r){
       
       
       
-      
-      
+
+
       varSelection <- reactiveValues(id = NULL)
       observe({
          if (is.null(r$active_viz)) return()
@@ -103,17 +92,17 @@ mod_filter_data_server <- function(id, r){
             #if (is.null(r$varOtherId)) return()
             #varSelection$id <- "AlcaldiaHechos"
          }
-         
+
       })
-      
+
       data_summary <- reactive({
-         req(data_filter())
-         df <- data_filter() %>% dplyr::group_by(Sexo) %>% dplyr::summarise(Total = dplyr::n())
+         req(dataFilter$info)
+         df <- dataFilter$info %>% dplyr::group_by(Sexo) %>% dplyr::summarise(Total = dplyr::n())
          df
       })
-      
+
       observe({
-         r$d_fil <- data_filter()
+         r$d_fil <- dataFilter$info
          r$v_sel <- varSelection$id
          r$d_sum <- data_summary()
       })
