@@ -1790,6 +1790,14 @@
         "zip"
       ]
     },
+    "packrat": {
+      "Package": "packrat",
+      "Version": "0.6.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0d6cc4c357e7602bb3eee299f4cfc2a5",
+      "Requirements": []
+    },
     "paletero": {
       "Package": "paletero",
       "Version": "0.1.0",
@@ -2437,6 +2445,22 @@
       "Hash": "249d8cd1e74a8f6a26194a91b47f21d1",
       "Requirements": []
     },
+    "rsconnect": {
+      "Package": "rsconnect",
+      "Version": "0.8.24",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5e21fd77eb844fa1ff1d23cb04e1d753",
+      "Requirements": [
+        "curl",
+        "digest",
+        "jsonlite",
+        "openssl",
+        "packrat",
+        "rstudioapi",
+        "yaml"
+      ]
+    },
     "rstudioapi": {
       "Package": "rstudioapi",
       "Version": "0.13",
@@ -2629,6 +2653,20 @@
       "RemoteSha": "54af3b09cd66701e8c75d4aa9860affed3e33de4",
       "Hash": "d9c5bee1b914b150e4483751c5befdd8",
       "Requirements": [
+        "shiny"
+      ]
+    },
+    "shinyWidgets": {
+      "Package": "shinyWidgets",
+      "Version": "0.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "9bdabea3a78fd6a0768c2a319d36264e",
+      "Requirements": [
+        "bslib",
+        "htmltools",
+        "jsonlite",
+        "sass",
         "shiny"
       ]
     },
