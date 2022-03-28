@@ -10,9 +10,10 @@
 mod_load_viz_ui <- function(id){
   ns <- NS(id)
   tagList(
-    uiOutput(ns("viz_plot")),
-    tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
-           "Fuente: Portal de datos abiertos de CDMX", target="_blank")
+    verbatimTextOutput(ns("avertt"))
+    # uiOutput(ns("viz_plot")),
+    # tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
+    #        "Fuente: Portal de datos abiertos de CDMX", target="_blank")
   )
 }
 
@@ -24,6 +25,9 @@ mod_load_viz_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
+    output$avertt <- renderPrint({
+      r$labelChange
+    })
     
     dataViz <- reactiveValues(content = NULL)
     

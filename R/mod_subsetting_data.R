@@ -21,61 +21,35 @@ mod_subsetting_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-  
-    # subsett <- reactive({
-    #   if (is.null(r$d_sel)) return()
-    #   
-    #   df <- r$d_sel
-    #   
-    #   if (!(all(is.null(r$alcaldiasId)))) {
-    #     df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
-    #   }
-    #   #print("sexo")
-    #   #print(r$sexoId)
-    #   #print(setdiff(r$sexoId, unique(df$Sexo)))
-    #   if (!(all(is.null(r$sexoId)))) {
-    #     # if (anyNA(r$sexoId)) {
-    #     #   
-    #     # }
-    #     print("fefefe")
-    #     print(r$sexoId)
-    #     df <- df %>% dplyr::filter(Sexo %in% gsub("1", "",r$sexoId))
-    #   }
-    #   
-    #   isolate(df)
-    # })
-    # 
-    # 
-    # sexoSubSett <- reactive({
-    #   req(r$d_sel)
-    #   req(subsett())
-    #   df_o <- data.frame(Sexo = setdiff(unique(r$d_sel$Sexo), NA))
-    #   df <- subsett() %>% 
-    #          dplyr::group_by(Sexo) %>%
-    #            dplyr::summarise(total = dplyr::n()) %>%
-    #              dplyr::mutate(label = paste0(Sexo, " (", total, ")"))
-    #   df <- df_o %>% dplyr::left_join(df)
-    #   df$id <- df$Sexo
-    #   if (!identical(which(is.na(df$label)), integer())) {
-    #     indNa <- which(is.na(df$label))
-    #     print(indNa)
-    #     for (i in 1:length(indNa)) {
-    #       df$id[indNa[i]] <- paste0(df$Sexo[indNa[i]], i)
-    #       df$label[indNa[i]] <- paste0(df$Sexo[indNa[i]], " (0)")
-    #     }
-    #   }
-    #   # df$id <- ifelse(is.na(df$label), paste0(df$Sexo, "1"), df$id)
-    #   # df$label <- ifelse(is.na(df$label), paste0(df$Sexo, " (0)"), df$label)
-    #   
-    #   print("hola")
-    #   print(df)
-    #   setNames(df$id, df$label)
-    # })
-    # 
-    #   observe({
-    #    r$dataSubSett <- subsett()
-    #    r$dataSexo <- sexoSubSett()
-    # })
+    
+    labelVal <- reactiveValues(change = NULL)
+    
+    observe({
+      req(r$d_fil)
+      req(r$allCats)
+      req(r$vars_f)
+      df <- r$d_fil
+      varsF <- r$vars_f
+      l_lb <- 
+        purrr::map(1:nrow(varsF), function(i) {
+          df_o <- data.frame(id = r$allCats[[varsF$vars[i]]])
+          df_o$labelAdd <- paste0(df_o$id, " (0)")
+          df_s <- df %>% 
+            dplyr::group_by_(id = varsF$vars[i]) %>% 
+            dplyr::summarise(total = dplyr::n()) %>%
+            tidyr::drop_na() %>%
+            dplyr::mutate(label = paste0(id, " (", total, ")"))
+          if (nrow(df_s) > 0  | !is.null(df_s)) {
+            df_o <- df_o %>% dplyr::left_join(df_s)
+            df_o$label <- dplyr::coalesce(df_o$label, df_o$labelAdd)
+          }
+        })
+      
+      labelVal$change <- l_lb
+      r$labelChange <- labelVal$change
+    })
+    
+
     
   })
 }
