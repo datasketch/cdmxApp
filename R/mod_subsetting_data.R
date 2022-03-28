@@ -43,8 +43,14 @@ mod_subsetting_data_server <- function(id, r){
             df_o <- df_o %>% dplyr::left_join(df_s)
             df_o$label <- dplyr::coalesce(df_o$label, df_o$labelAdd)
           }
-        })
+        }) %>% plyr::compact()
       
+      if (identical(l_lb, list())) {
+        labelVal$change <- NULL
+      } else {
+        names(l_lb) <- varsF$vars
+        labelVal$change <- l_lb
+      }
       labelVal$change <- l_lb
       r$labelChange <- labelVal$change
     })
