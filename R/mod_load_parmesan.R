@@ -282,9 +282,9 @@ mod_load_parmesan_server <- function(id, r){
     observe({
       for(parmesan_input in parmesan_inputs){
         get_input <- input[[parmesan_input]]
-        if(!is.null(get_input)){
+        #if(!is.null(get_input)){
           r[[parmesan_input]] <- get_input
-        }
+        #}
       }
     })
     
