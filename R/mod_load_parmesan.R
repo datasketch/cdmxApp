@@ -66,39 +66,58 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     
+
+# Filtros q afectan la base -----------------------------------------------
+
+ 
+    alcOpts <- reactive({
+      req(r$allCats)
+      r$allCats$AlcaldiaHechos
+    })
     
-    
-    alcaldias_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      if (is.null(r$active_viz)) return()
-      if (r$quest_choose != "violencia") return()
-      df <- r$d_sel
-      df <- df %>% tidyr::drop_na(AlcaldiaHechos)
-      ch <- c("TODAS", sort(unique(df$AlcaldiaHechos)))
-      ch
+    alcVal <- reactive({
+      req(r$allCats)
+      r$allCats$AlcaldiaHechos
     })
     
     
-    alcaldias_sel <- reactive({
-      req(alcaldias_opts())
-      alcaldias_opts()[1]
+    genOpts <- reactive({
+      req(r$allCats)
+      r$allCats$Sexo
+    })
+    
+    genVal <- reactive({
+      req(r$allCats)
+      r$allCats$Sexo
     })
     
     
-    sexo_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      if (is.null(r$active_viz)) return()
-      if (r$quest_choose != "violencia") return()
-      df <- r$d_sel
-      df <- df %>% tidyr::drop_na(Sexo)
-      ch <- c("TODOS", sort(unique(df$Sexo)))
-      ch 
+    delOpts <- reactive({
+      req(r$allCats)
+      r$allCats$Categoria
     })
     
-    sexo_sel <- reactive({
-      req(sexo_opts())
-      sexo_opts()[1]
+    delVal <- reactive({
+      req(r$allCats)
+      r$allCats$Categoria
     })
+    
+    
+    jurOpts <- reactive({
+      req(r$allCats)
+      r$allCats$CalidadJuridica
+    })
+    
+    jurVal <- reactive({
+      req(r$allCats)
+      r$allCats$CalidadJuridica
+    })
+    
+    
+###########################################################################    
+    
+    
+ 
     
     
     plotSel <- reactive({
@@ -208,18 +227,6 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(r$active_viz)) return()
       if (is.null(colors_show())) return()
       colors_show()
-    })
-    
-    catg_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      df <- r$d_sel
-      c("TODOS",unique(df$Categoria))
-    })
-    
-    jur_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      df <- r$d_sel
-      c("TODAS",unique(df$CalidadJuridica))
     })
     
     
