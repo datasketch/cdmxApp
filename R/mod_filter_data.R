@@ -37,13 +37,23 @@ mod_filter_data_server <- function(id, r){
             
             df <- r$d_sel
             
-            
+       
             if (r$categoriaId != "TODOS") {
                df <- df %>% dplyr::filter(Categoria %in% r$categoriaId)
             }
+            
             if (r$calidadId != "TODAS") {
                df <- df %>% dplyr::filter(CalidadJuridica %in% r$calidadId)
             }
+            
+            if (r$alcaldiasId != "TODAS") {
+               df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId) 
+            }
+            
+            if (r$sexoId != "TODOS") {
+               df <- df %>% dplyr::filter(Sexo %in% r$sexoId) 
+            }
+            
             
             df$FechaInicio <- lubridate::dmy(df$FechaInicio)
             if (!is.null(r$anioId)) {
@@ -58,26 +68,8 @@ mod_filter_data_server <- function(id, r){
                }
             }
             
-            if (r$alcaldiasId != "TODAS") {
-               df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId) 
-            }
+
             
-            if (r$sexoId != "TODOS") {
-               df <- df %>% dplyr::filter(Sexo %in% r$sexoId) 
-            }
-            
-            # if (!(r$active_viz %in% c("bubbles", "heatmap"))) {
-            #    if (r$alcaldiasId == "CDMX") {
-            #       idAlc <- alcaldiasCdmx %>% dplyr::filter(idAlcaldias == "CDMX ALCALDÍAS")
-            #       df <- df %>% dplyr::filter(AlcaldiaHechos %in% idAlc$AlcaldiaHechos)
-            #    }
-            #    if (!(r$alcaldiasId %in% c("TODAS", "CDMX"))) {
-            #       df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
-            #    }
-            # } else {
-            #    if (r$alcaldiasId  %in% c("TODAS", "CDMX")) return()
-            #    df <- df %>% dplyr::filter(AlcaldiaHechos %in% r$alcaldiasId)
-            # }
             
             df
          },

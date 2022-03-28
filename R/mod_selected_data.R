@@ -36,8 +36,30 @@ mod_selected_data_server <- function(id, r){
    })
    
    
+   varsToFilter <- reactive({
+     data.frame(
+       id = c("alcaldiasId", "calidadId", "categoriaId", "sexoId"),
+       vars = c("AlcaldiaHechos", "CalidadJuridica", "Categoria", "Sexo")
+     )
+   })
+   
+   
+   catsToFilter <- reactive({
+     req(data_select())
+     req(varsToFilter())
+     df <- data_select()
+     lCats <- 
+     purrr::map(varsToFilter()$vars, function(var){
+       setdiff(unique(df[[var]]), NA)
+     })
+     names(lCats) <- varsToFilter()$vars
+     lCats
+   })
+   
    observe({
      r$d_sel <- data_select()
+     r$vars_f <- varsToFilter()
+     r$allCats <- catsToFilter()
    })
     
   })
