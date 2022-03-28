@@ -116,6 +116,20 @@ mod_load_parmesan_server <- function(id, r){
     
 ###########################################################################    
     
+    observe({
+      if (is.null(r$labelChange)) return()
+      req(r$vars_f)
+      varS <- r$vars_f 
+      purrr::map(1:nrow(varS), function(i) {
+      updateCheckboxGroupInput(session,
+                               inputId = varS$id[i],
+                               choiceNames = r$labelChange[[varS$vars[i]]],
+                               choiceValues = paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
+                               selected = input[[varS$id[i]]]
+      )
+      })
+    })
+    
     
  
     
