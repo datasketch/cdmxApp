@@ -27,6 +27,7 @@ mod_load_viz_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    
     dataViz <- reactiveValues(content = NULL)
     
     observe({

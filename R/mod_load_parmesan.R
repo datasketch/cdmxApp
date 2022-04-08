@@ -75,18 +75,7 @@ mod_load_parmesan_server <- function(id, r){
       r$allCats$AlcaldiaHechos
     })
     
-    alcVal <- reactive({
-      req(r$allCats)
-      r$allCats$AlcaldiaHechos
-    })
-    
-    
     genOpts <- reactive({
-      req(r$allCats)
-      r$allCats$Sexo
-    })
-    
-    genVal <- reactive({
       req(r$allCats)
       r$allCats$Sexo
     })
@@ -97,21 +86,13 @@ mod_load_parmesan_server <- function(id, r){
       r$allCats$Categoria
     })
     
-    delVal <- reactive({
-      req(r$allCats)
-      r$allCats$Categoria
-    })
-    
-    
+  
     jurOpts <- reactive({
       req(r$allCats)
       r$allCats$CalidadJuridica
     })
     
-    jurVal <- reactive({
-      req(r$allCats)
-      r$allCats$CalidadJuridica
-    })
+  
     
     
 ###########################################################################    
@@ -121,10 +102,10 @@ mod_load_parmesan_server <- function(id, r){
       req(r$vars_f)
       varS <- r$vars_f 
       purrr::map(1:nrow(varS), function(i) {
-      updateCheckboxGroupInput(session,
+      updateSelectizeInput(session,
                                inputId = varS$id[i],
-                               choiceNames = r$labelChange[[varS$vars[i]]],
-                               choiceValues = paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
+                               choices = setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
+                                                  r$labelChange[[varS$vars[i]]]),
                                selected = input[[varS$id[i]]]
       )
       })

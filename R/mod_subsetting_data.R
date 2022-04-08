@@ -39,6 +39,9 @@ mod_subsetting_data_server <- function(id, r){
             dplyr::summarise(total = dplyr::n()) %>%
             tidyr::drop_na() %>%
             dplyr::mutate(label = paste0(id, " (", total, ")"))
+          df_s <- dplyr::bind_rows(
+                   data.frame(id = "Todas", label = paste0("Todas (", sum(df_s$total, na.rm = T), ")")),
+                   df_s)
           if (nrow(df_s) > 0  | !is.null(df_s)) {
             df_o <- df_o %>% dplyr::left_join(df_s)
             df_o$label <- dplyr::coalesce(df_o$label, df_o$labelAdd)

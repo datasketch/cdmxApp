@@ -51,45 +51,41 @@ fechasId:
   update_param: selected
 alcaldiasId:
   show: true
-  input_type: checkboxGroupInput
+  input_type: selectizeInput
   input_params:
     label: Zona
-    choiceNames: alcOpts()
-    choiceValues: alcVal()
-    selected: alcVal()
+    choices: alcOpts()
+    selected: Todas
   update_param: selected
 sexoId:
   show: true
-  input_type: checkboxGroupInput
+  input_type: selectizeInput
   input_params:
     label: Sexo
-    choiceNames: genOpts()
-    choiceValues: genVal()
-    selected: genVal()
+    choices: genOpts()
+    selected: Todas
   update_param: selected
 categoriaId:
   show: true
   show_if_all:
     dataId():
       equals: violencia
-  input_type: checkboxGroupInput
+  input_type: selectizeInput
   input_params:
     label: Tipo de delito
-    choiceNames: delOpts()
-    choiceValues: delVal()
-    selected: delVal()
+    choices: delOpts()
+    selected: Todas
   update_param: selected
 calidadId:
   show: true
   show_if_all:
     dataId():
       equals: violencia
-  input_type: checkboxGroupInput
+  input_type: selectizeInput
   input_params:
     label: Calidad jurídica
-    choiceNames: jurOpts()
-    choiceValues: jurVal()
-    selected: jurVal()
+    choices: jurOpts()
+    selected: Todas
   update_param: selected
 stackedId:
   show: true

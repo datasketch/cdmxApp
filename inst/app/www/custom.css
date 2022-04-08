@@ -36,7 +36,7 @@ a {
 }
 
 .control-label#load_parmesan_ui_1-desagregacionId-label,#load_parmesan_ui_1-mapType-label,
-#load_parmesan_ui_1-aggId-label,#load_parmesan_ui_1-alcaldiasId-label,#load_parmesan_ui_1-sexoId-label,#load_parmesan_ui_1-categoriaId-label,#load_parmesan_ui_1-calidadId-label{
+#load_parmesan_ui_1-aggId-label{
   background: #BC955C;
   border-radius: 4px;
   padding: 7px;

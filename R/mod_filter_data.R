@@ -34,12 +34,14 @@ mod_filter_data_server <- function(id, r){
             df <- r$d_sel
             vars_f <- r$vars_f
             
-            for (i in 1:nrow(vars_f)){
+            for (i in 1:nrow(vars_f)) {
                if (is.null(r[[vars_f$id[i]]])) {
                   naInd <- is.na(df[[vars_f$vars[i]]])
                   if (any(naInd)) {
                      df <- df[naInd,]
                   }
+               } else if (r[[vars_f$id[i]]] == "Todas") {
+                   df <- df 
                } else {
                   if (!all(r$allCats[[vars_f$vars[i]]] %in% r[[vars_f$id[i]]])) {
                      catInd <- grep(paste0(r[[vars_f$id[i]]], collapse = "|"), df[[vars_f$vars[i]]])
