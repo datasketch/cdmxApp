@@ -65,6 +65,8 @@ golem_add_external_resources <- function(){
     'viz_icons', app_sys('app/viz_icons')
   )
   
+
+  
   tags$head(
     favicon(),
     shinyjs::useShinyjs(),

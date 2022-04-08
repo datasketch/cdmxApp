@@ -108,8 +108,34 @@ mod_description_modal_server <- function(id, r){
       shinypanels::showModal(ns("modal_rec_info"))
     })
 
+    output$PdfReclasificacion <- downloadHandler(
+      filename = "nota-reclasificacion.pdf",
+      content = function(file) {
+        file.copy(app_sys("app/www/recursos/nota-reclasificacion.pdf"), file)
+      }
+    )
+    
+    output$PdfUpdate <- downloadHandler(
+      filename = "nota-actualizacion.pdf",
+      content = function(file) {
+        file.copy(app_sys("app/www/recursos/nota-actualizacion.pdf"), file)
+      }
+    )
+    
+    
+    output$PdfOldUpdate <- downloadHandler(
+      filename = "nota-actualizacion-290720.pdf",
+      content = function(file) {
+        file.copy(app_sys("app/www/recursos/nota-actualizacion-290720.pdf"), file)
+      }
+    )
+    
     output$info_recs <- renderUI({
-      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."
+      div(style="display: inline-grid;gap: 21px;",
+      downloadLink(ns("PdfReclasificacion"), "Nota Reclasificación"),
+      downloadLink(ns("PdfUpdate"), "Nota para la Actualización"),
+      downloadLink(ns("PdfOldUpdate"), "Nota Actualización 29/07/20")
+      )
     })
     
   })

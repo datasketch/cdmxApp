@@ -15,6 +15,11 @@ a {
  letter-spacing: -0.1px;
 }
 
+a#description_modal_ui_1-PdfReclasificacion,#description_modal_ui_1-PdfUpdate,#description_modal_ui_1-PdfOldUpdate {
+ color: #435b69 !important; 
+ font-size: 13px !important;
+}
+
 .shinybusy, .shinybusy-ready {
  top: 30% !important;
  right: 50% !important;
