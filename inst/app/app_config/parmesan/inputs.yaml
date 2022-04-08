@@ -34,8 +34,8 @@ mapType:
       - choropleth
       Puntos:
       - bubbles
-      Heatmap:
-      - heatmap
+     # Heatmap:
+     #- heatmap
     selected: choropleth
   update_param: selected
 fechasId:
