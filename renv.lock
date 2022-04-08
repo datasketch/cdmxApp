@@ -27,10 +27,10 @@
     },
     "DT": {
       "Package": "DT",
-      "Version": "0.20",
+      "Version": "0.22",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0163cd2ce6c7995005a0fc363d570963",
+      "Hash": "fc53164de9ee32692eef6fdd14115381",
       "Requirements": [
         "crosstalk",
         "htmltools",
@@ -77,10 +77,10 @@
     },
     "RColorBrewer": {
       "Package": "RColorBrewer",
-      "Version": "1.1-2",
+      "Version": "1.1-3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e031418365a7f7a766181ab5a41a5716",
+      "Hash": "45f0398006e83a5b10b72a90663d8d8c",
       "Requirements": []
     },
     "RCurl": {
@@ -360,7 +360,7 @@
       "Version": "0.0.0.9000",
       "Source": "unknown",
       "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shi18ny, datasketch/shinypanels,\n        datasketch/dsmodules, datasketch/lfltmagic,\n        datasketch/hgchmagic",
-      "Hash": "bcd366eef1b47d3a145496c42b43090a",
+      "Hash": "a5ee51d4f9814bfdbf254c0794427a6f",
       "Requirements": [
         "DT",
         "airtabler",
@@ -374,10 +374,12 @@
         "lfltmagic",
         "parmesan",
         "pkgload",
+        "plyr",
         "processx",
         "renv",
         "shi18ny",
         "shiny",
+        "shinyWidgets",
         "shinybusy",
         "shinydisconnect",
         "shinyinvoer",
@@ -645,25 +647,6 @@
       "Hash": "cf6b206a045a684728c3267ef7596190",
       "Requirements": []
     },
-    "dockerfiler": {
-      "Package": "dockerfiler",
-      "Version": "0.1.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e96dd3b237b2f38a2955f4bf41e047a1",
-      "Requirements": [
-        "R6",
-        "attempt",
-        "cli",
-        "desc",
-        "fs",
-        "glue",
-        "jsonlite",
-        "pkgbuild",
-        "remotes",
-        "usethis"
-      ]
-    },
     "dotenv": {
       "Package": "dotenv",
       "Version": "1.0.3",
@@ -760,8 +743,8 @@
       "RemoteRepo": "dsvizopts",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "c8b1c6e49a5411aa15c34c91453294dd4812523b",
-      "Hash": "97b4fcf07516ca3e435e7272a065c9d6",
+      "RemoteSha": "ced585ed32ba97f6246a0d5d0a5c71df69e09e0a",
+      "Hash": "fd33cc1b706f142ba1368e8bcc12ada2",
       "Requirements": [
         "dplyr",
         "purrr",
@@ -1019,10 +1002,10 @@
     },
     "gert": {
       "Package": "gert",
-      "Version": "1.5.0",
+      "Version": "1.6.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8fddce7cbd59467106266a6e93e253b4",
+      "Hash": "98c014c4c933f23ea5a0321a4d0b588b",
       "Requirements": [
         "askpass",
         "credentials",
@@ -1083,28 +1066,24 @@
     },
     "golem": {
       "Package": "golem",
-      "Version": "0.3.1",
+      "Version": "0.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0eaf594de1dcbcd37c6d79806d57b473",
+      "Hash": "b396a44b56209da3733a4a906b0cc457",
       "Requirements": [
         "attempt",
+        "brio",
         "cli",
         "config",
         "crayon",
         "desc",
-        "dockerfiler",
         "fs",
         "here",
         "htmltools",
-        "jsonlite",
         "pkgload",
-        "remotes",
-        "rlang",
         "roxygen2",
         "rstudioapi",
         "shiny",
-        "testthat",
         "usethis",
         "yaml"
       ]
@@ -1455,10 +1434,10 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.37",
+      "Version": "1.38",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "a4ec675eb332a33fe7b7fe26f70e1f98",
+      "Hash": "10b3dc3c6acb925910edda5d0543b3a2",
       "Requirements": [
         "evaluate",
         "highr",
@@ -1585,8 +1564,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "d676c7013edea79c7096439d219a4636c3c34e2e",
-      "Hash": "c36844fc8c6192ecd06baa80d92b2de7",
+      "RemoteSha": "8341dbd4a0257804846844f56aacb6e16f0629ce",
+      "Hash": "c08f17c02620d26b112a76496f234882",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -1643,10 +1622,10 @@
     },
     "magrittr": {
       "Package": "magrittr",
-      "Version": "2.0.2",
+      "Version": "2.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "cdc87ecd81934679d1557633d8e1fe51",
+      "Hash": "7ce2733a9826b3aeb1775d56fd305472",
       "Requirements": []
     },
     "makeup": {
@@ -1835,10 +1814,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "parmesan",
-      "RemoteUsername": "camilaachuri",
+      "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "3b1632e6578b6b63829e5b4ee754212d7f7435f6",
-      "Hash": "90a4f81a6687020f6fbe55ae947776e2",
+      "RemoteSha": "acd38027e4fa49d801bec1a6f9e6cc7b37f9a93e",
+      "Hash": "729c217041941250a1b2b0504ed9e265",
       "Requirements": [
         "dplyr",
         "shiny",
@@ -1985,10 +1964,10 @@
     },
     "plyr": {
       "Package": "plyr",
-      "Version": "1.8.6",
+      "Version": "1.8.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ec0e5ab4e5f851f6ef32cd1d1984957f",
+      "Hash": "9c17c6ee41639ebdc1d7266546d3b627",
       "Requirements": [
         "Rcpp"
       ]
@@ -2019,10 +1998,10 @@
     },
     "processx": {
       "Package": "processx",
-      "Version": "3.5.2",
+      "Version": "3.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0cbca2bc4d16525d009c4dbba156b37c",
+      "Hash": "8bbae1a548d0d3fdf6647bdd9d35bf6d",
       "Requirements": [
         "R6",
         "ps"
@@ -2277,10 +2256,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.15.2",
+      "Version": "0.15.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "206c4ef8b7ad6fb1060d69aa7b9dfe69",
+      "Hash": "c1078316e1d4f70275fc1ea60c0bc431",
       "Requirements": []
     },
     "reprex": {
@@ -2439,10 +2418,10 @@
     },
     "rprojroot": {
       "Package": "rprojroot",
-      "Version": "2.0.2",
+      "Version": "2.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "249d8cd1e74a8f6a26194a91b47f21d1",
+      "Hash": "1de7ab598047a87bba48434ba35d497d",
       "Requirements": []
     },
     "rsconnect": {
@@ -2658,10 +2637,10 @@
     },
     "shinyWidgets": {
       "Package": "shinyWidgets",
-      "Version": "0.6.2",
+      "Version": "0.6.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "9bdabea3a78fd6a0768c2a319d36264e",
+      "Hash": "02fba70d7c5c1ab0754d9c0108c029eb",
       "Requirements": [
         "bslib",
         "htmltools",
@@ -2672,10 +2651,10 @@
     },
     "shinybusy": {
       "Package": "shinybusy",
-      "Version": "0.2.2",
+      "Version": "0.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "c38fc071d4def5e642c8dc34c3a082e4",
+      "Hash": "f64f08367358906d34a0ff490838d71c",
       "Requirements": [
         "htmltools",
         "htmlwidgets",
@@ -2703,10 +2682,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "shinyinvoer",
-      "RemoteUsername": "camilaachuri",
+      "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "4bde4f1be9b4ff417136d30dd9f158c4f62caf84",
-      "Hash": "85ff27f987089835bc3550bc68c625f4",
+      "RemoteSha": "4b53481715ae54146647b26ac38c1c71173ac331",
+      "Hash": "00791050bb8d83e996e1dcc5b8da90fe",
       "Requirements": [
         "htmltools",
         "jsonlite",
@@ -2861,10 +2840,10 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.1.2",
+      "Version": "3.1.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "32454e5780e8dbe31e4b61b13d8918fe",
+      "Hash": "affcf9db2c99dd2c7e6459ef55ed3385",
       "Requirements": [
         "R6",
         "brio",
@@ -3073,12 +3052,12 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.8",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ecf749a1b39ea72bd9b51b76292261f1",
+      "Hash": "95c2573b232eac82df562f9e300f9790",
       "Requirements": [
-        "ellipsis",
+        "cli",
         "glue",
         "rlang"
       ]
