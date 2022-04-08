@@ -11,8 +11,11 @@ mod_load_viz_ui <- function(id){
   ns <- NS(id)
   tagList(
     uiOutput(ns("viz_plot")),
+    div(style="display: flex;justify-content: space-between;",
     tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
-           "Fuente: Portal de datos abiertos de CDMX", target="_blank")
+           "Fuente: Portal de datos abiertos de CDMX", target="_blank"),
+    uiOutput(ns("logos_add"))
+    )
   )
 }
 
@@ -23,8 +26,7 @@ mod_load_viz_server <- function(id, r){
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    
-    
+
     dataViz <- reactiveValues(content = NULL)
     
     observe({
@@ -33,14 +35,14 @@ mod_load_viz_server <- function(id, r){
       if (r$active_viz == "map") {
         if (is.null(r$mapType)) return()
         if (r$mapType %in% "choropleth") {
-          dataViz$content <- r$d_viz  
+          dataViz$content <- r$d_viz
         } else {
           nsample <- nrow(r$d_viz)
           if (nsample > 7000) nsample <- 7000
-          dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),] 
+          dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),]
         }
       } else {
-        dataViz$content <- r$d_viz
+        dataViz$content <- r$d_viz#[1:100,]
       }
     })
     
@@ -86,8 +88,10 @@ mod_load_viz_server <- function(id, r){
           legend_position = "topright",
           legend_layout = "vertical",
           legend_align = "right",
-          legend_verticalAlign = "middle"
-          
+          legend_verticalAlign = "middle",
+          map_canvas = TRUE#,
+          # map_tiles_zoom_update = TRUE,
+          # map_tiles_id_update = FALSE
         )
         
         
@@ -110,6 +114,9 @@ mod_load_viz_server <- function(id, r){
         }
         
         if (r$active_viz %in% c("map")) {
+          if (r$mapType %in% c("bubbles", "heatmap")) {
+            opts_viz$legend_show <- FALSE
+          }
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
@@ -124,6 +131,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$map_tiles <- "CartoDB.Voyager"
           opts_viz$topo_fill_opacity <- 0.7
           opts_viz$na_color <- "transparent"
+          opts_viz$map_cluster <- "markerClusterOptions()"
           #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
         }
         
@@ -173,17 +181,17 @@ mod_load_viz_server <- function(id, r){
     })
     
     
-    observe({
-      if (is.null(r$active_viz)) return()
-      if (r$active_viz == "map") {
-        if (is.null(r$mapType)) return()
-        if (r$mapType %in% c("bubbles", "heatmap")) {
-          leaflet::leafletProxy("viz_lflt") %>% 
-            leaflet::setView(lng = median(dataViz$content$longitud, na.rm = TRUE),
-                             lat = median(dataViz$content$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
-        }
-      }
-    })
+    # observe({
+    #   if (is.null(r$active_viz)) return()
+    #   if (r$active_viz == "map") {
+    #     if (is.null(r$mapType)) return()
+    #     if (r$mapType %in% c("bubbles", "heatmap")) {
+    #       leaflet::leafletProxy("viz_lflt") %>% 
+    #         leaflet::setView(lng = median(dataViz$content$longitud, na.rm = TRUE),
+    #                          lat = median(dataViz$content$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
+    #     }
+    #   }
+    # })
     
     output$viz_hgch <- highcharter::renderHighchart({
       req(viz_s())
@@ -228,9 +236,9 @@ mod_load_viz_server <- function(id, r){
         if (r$active_viz == "table") {
           vv <- DT::dataTableOutput(ns("table_view"), width = 950)
         } else if(r$active_viz %in% c("map")) {
-          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 590)  
+          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 630)  
         }else {
-          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 590)
+          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 630)
         }
         vv
       },
@@ -240,11 +248,19 @@ mod_load_viz_server <- function(id, r){
     })
     
     
+    output$logos_add <- renderUI({
+      HTML(
+        paste0(
+          '<div style="display:flex; align-items: baseline;">
+        <img src="www/img/licence.svg">
+        <img src="www/img/creative.svg">
+        <img src="www/img/open.svg"></div>')
+      )
+    })
     
     
     observe({
       r$downViz <- viz_s()
-      r$averZomm <- input$viz_lflt_zoom
     })
     
   })

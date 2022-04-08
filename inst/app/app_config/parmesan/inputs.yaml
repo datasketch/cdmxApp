@@ -34,8 +34,8 @@ mapType:
       - choropleth
       Puntos:
       - bubbles
-      Heatmap:
-      - heatmap
+     # Heatmap:
+     #- heatmap
     selected: choropleth
   update_param: selected
 fechasId:
@@ -51,19 +51,45 @@ fechasId:
   update_param: selected
 alcaldiasId:
   show: true
-  input_type: selectizeInput
+  input_type: checkboxGroupInput
   input_params:
     label: Zona
-    choices: alcaldias_opts()
-    selected: alcaldias_sel() 
+    choiceNames: alcOpts()
+    choiceValues: alcVal()
+    selected: alcVal()
   update_param: selected
 sexoId:
   show: true
-  input_type: selectizeInput
+  input_type: checkboxGroupInput
   input_params:
     label: Sexo
-    choices: sexo_opts()
-    selected: sexo_sel() 
+    choiceNames: genOpts()
+    choiceValues: genVal()
+    selected: genVal()
+  update_param: selected
+categoriaId:
+  show: true
+  show_if_all:
+    dataId():
+      equals: violencia
+  input_type: checkboxGroupInput
+  input_params:
+    label: Tipo de delito
+    choiceNames: delOpts()
+    choiceValues: delVal()
+    selected: delVal()
+  update_param: selected
+calidadId:
+  show: true
+  show_if_all:
+    dataId():
+      equals: violencia
+  input_type: checkboxGroupInput
+  input_params:
+    label: Calidad jurídica
+    choiceNames: jurOpts()
+    choiceValues: jurVal()
+    selected: jurVal()
   update_param: selected
 stackedId:
   show: true
@@ -133,28 +159,6 @@ colorsId:
   input_params:
     label: Colores
     choices: agg_palette()
-categoriaId:
-  show: true
-  show_if_all:
-    dataId():
-      equals: violencia
-  input_type: selectizeInput
-  input_params:
-    label: Tipo de delito
-    choices: catg_opts()
-    selected: TODOS
-  update_param: selected
-calidadId:
-  show: true
-  show_if_all:
-    dataId():
-      equals: violencia
-  input_type: selectizeInput
-  input_params:
-    label: Calidad juridica
-    choices: jur_opts()
-    selected: TODAS
-  update_param: selected
 anioId:
   show: true
   show_if_all:

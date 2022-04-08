@@ -32,13 +32,13 @@ mod_load_parmesan_server <- function(id, r){
       if (r$quest_choose != "violencia") return()
       if (r$active_viz %in% c("map")) {
         ch <-  setNames(c("AlcaldiaHechos"),
-                        c("Alcaldias"))
+                        c("Alcaldías"))
       } else if (r$active_viz %in% c("line", "area")) {
         ch <- setNames(c("cdmx", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                       c("Histórico CDMX", "Alcaldias", "Sexo", "Categoria", "Competencia"))
+                       c("Histórico CDMX", "Alcaldías", "Sexo", "Categoria", "Competencia"))
       } else {
         ch <- setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                       c("Alcaldias", "Sexo", "Categoria", "Competencia"))
+                       c("Alcaldías", "Sexo", "Categoria", "Competencia"))
       }
       ch
     })
@@ -53,7 +53,7 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       
       varPsel <- data.frame(id = c("ninguna", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                            label = c("Ninguna", "Alcaldias", "Sexo", "Categoria", "Competencia"))
+                            label = c("Ninguna", "Alcaldías", "Sexo", "Categoria", "Competencia"))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)
       
       if (req(r$active_viz) == "map")  {
@@ -66,39 +66,72 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     
+
+# Filtros q afectan la base -----------------------------------------------
+
+ 
+    alcOpts <- reactive({
+      req(r$allCats)
+      r$allCats$AlcaldiaHechos
+    })
     
-    
-    alcaldias_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      if (is.null(r$active_viz)) return()
-      if (r$quest_choose != "violencia") return()
-      df <- r$d_sel
-      df <- df %>% tidyr::drop_na(AlcaldiaHechos)
-      ch <- c("TODAS", sort(unique(df$AlcaldiaHechos)))
-      ch
+    alcVal <- reactive({
+      req(r$allCats)
+      r$allCats$AlcaldiaHechos
     })
     
     
-    alcaldias_sel <- reactive({
-      req(alcaldias_opts())
-      alcaldias_opts()[1]
+    genOpts <- reactive({
+      req(r$allCats)
+      r$allCats$Sexo
+    })
+    
+    genVal <- reactive({
+      req(r$allCats)
+      r$allCats$Sexo
     })
     
     
-    sexo_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      if (is.null(r$active_viz)) return()
-      if (r$quest_choose != "violencia") return()
-      df <- r$d_sel
-      df <- df %>% tidyr::drop_na(Sexo)
-      ch <- c("TODOS", sort(unique(df$Sexo)))
-      ch 
+    delOpts <- reactive({
+      req(r$allCats)
+      r$allCats$Categoria
     })
     
-    sexo_sel <- reactive({
-      req(sexo_opts())
-      sexo_opts()[1]
+    delVal <- reactive({
+      req(r$allCats)
+      r$allCats$Categoria
     })
+    
+    
+    jurOpts <- reactive({
+      req(r$allCats)
+      r$allCats$CalidadJuridica
+    })
+    
+    jurVal <- reactive({
+      req(r$allCats)
+      r$allCats$CalidadJuridica
+    })
+    
+    
+###########################################################################    
+    
+    observe({
+      if (is.null(r$labelChange)) return()
+      req(r$vars_f)
+      varS <- r$vars_f 
+      purrr::map(1:nrow(varS), function(i) {
+      updateCheckboxGroupInput(session,
+                               inputId = varS$id[i],
+                               choiceNames = r$labelChange[[varS$vars[i]]],
+                               choiceValues = paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
+                               selected = input[[varS$id[i]]]
+      )
+      })
+    })
+    
+    
+ 
     
     
     plotSel <- reactive({
@@ -210,18 +243,6 @@ mod_load_parmesan_server <- function(id, r){
       colors_show()
     })
     
-    catg_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      df <- r$d_sel
-      c("TODOS",unique(df$Categoria))
-    })
-    
-    jur_opts <- reactive({
-      if (is.null(r$d_sel)) return()
-      df <- r$d_sel
-      c("TODAS",unique(df$CalidadJuridica))
-    })
-    
     
     fec_opts <- reactive({
       setNames(c("FechaInicioR", "Año_hecho"),
@@ -275,9 +296,9 @@ mod_load_parmesan_server <- function(id, r){
     observe({
       for(parmesan_input in parmesan_inputs){
         get_input <- input[[parmesan_input]]
-        if(!is.null(get_input)){
+        #if(!is.null(get_input)){
           r[[parmesan_input]] <- get_input
-        }
+        #}
       }
     })
     
