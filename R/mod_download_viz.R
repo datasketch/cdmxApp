@@ -25,9 +25,9 @@ mod_download_viz_server <- function(id, r){
       
       if (is.null(r$active_viz)) return()
       if (r$active_viz != "table") {
-        dsmodules::downloadImageUI(ns("download_viz"), dropdownLabel ="Descargar", formats = c("jpeg", "pdf", "png", "html"), display = "dropdown")
+        dsmodules::downloadImageUI(ns("download_viz"), dropdownLabel ="Descargar", text = "Descargar", formats = c("jpeg", "pdf", "png", "html"), display = "dropdown")
       } else {
-        dsmodules::downloadTableUI(ns("dropdown_table"), dropdownLabel = "Descargar", formats = c("csv", "xlsx", "json"), display = "dropdown")
+        dsmodules::downloadTableUI(ns("dropdown_table"), dropdownLabel = "Descargar", text = "Descargar", formats = c("csv", "xlsx", "json"), display = "dropdown")
       }
     })
     

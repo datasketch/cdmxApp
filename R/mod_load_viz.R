@@ -123,8 +123,8 @@ mod_load_viz_server <- function(id, r){
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
           if (r$aggId == "pctg") {
             opts_viz$format_sample_num <- "1,234.34"
-            opts_viz$tooltip <- "AlcaldiaHechos: {AlcaldiaHechos} </br> Víctimas: {%}"
-            if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "ColoniaHechos: {ColoniaHechos}</br> Víctimas: {%}"
+            opts_viz$tooltip <- "AlcaldiaHechos: {Alcaldía} </br> Víctimas: {%}"
+            if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "ColoniaHechos: {Colonia}</br> Víctimas: {%}"
             opts_viz$suffix <- "%"
           }
           if (length(r$v_sel) >= 2) opts_viz$map_name <- "cdmx_colonies"

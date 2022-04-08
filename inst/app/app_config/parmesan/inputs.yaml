@@ -53,7 +53,7 @@ alcaldiasId:
   show: true
   input_type: selectizeInput
   input_params:
-    label: Zona
+    label: Alcaldía
     choices: alcOpts()
     selected: Todas
   update_param: selected

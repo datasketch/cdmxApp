@@ -35,10 +35,10 @@ mod_load_parmesan_server <- function(id, r){
                         c("Alcaldías"))
       } else if (r$active_viz %in% c("line", "area")) {
         ch <- setNames(c("cdmx", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                       c("Histórico CDMX", "Alcaldías", "Sexo", "Categoria", "Competencia"))
+                       c("Histórico CDMX", "Alcaldías", "Sexo", "Categoría", "Competencia"))
       } else {
         ch <- setNames(c("AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                       c("Alcaldías", "Sexo", "Categoria", "Competencia"))
+                       c("Alcaldías", "Sexo", "Categoría", "Competencia"))
       }
       ch
     })
@@ -53,7 +53,7 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       
       varPsel <- data.frame(id = c("ninguna", "AlcaldiaHechos", "Sexo", "Categoria", "competencia"),
-                            label = c("Ninguna", "Alcaldías", "Sexo", "Categoria", "Competencia"))
+                            label = c("Ninguna", "Alcaldías", "Sexo", "Categoría", "Competencia"))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)
       
       if (req(r$active_viz) == "map")  {

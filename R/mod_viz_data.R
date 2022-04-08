@@ -56,7 +56,7 @@ mod_viz_data_server <- function(id, r){
       df <- df[,unique(c(var_sel, varAnio, varAdd))] %>%
         dplyr::group_by_all() %>%
         dplyr::summarise(Víctimas = dplyr::n())
-      print(head(df))
+      #print(head(df))
       
      
       
@@ -88,8 +88,13 @@ mod_viz_data_server <- function(id, r){
           df <- df[,c(var_sel, "Víctimas")]
         }
       }
-      print("varrr sell")
-      print(var_sel)
+  
+      if (any(dicVictimas$id %in% names(df))) {
+        dicViz <- data.frame(id = names(df))
+        dicViz <- dicViz %>% dplyr::left_join(dicVictimas)
+        dicViz$label <- dplyr::coalesce(dicViz$label, dicViz$id)
+        names(df) <- dicViz$label
+      }
       print("ultimo df")
       print(df)
       df

@@ -26,5 +26,7 @@ dataVictimas$FechaHechoR <- as.character(format(lubridate::dmy(dataVictimas$Fech
 dataVictimas$FechaInicioR <- as.character(format(lubridate::dmy(dataVictimas$FechaInicio), format="%Y-%m"))
 usethis::use_data(dataVictimas, overwrite = TRUE)
 
-
+dicVictimas <- data.frame(id = c("AlcaldiaHechos", "ColoniaHechos", "Categoria", "FechaInicioR", "Año_hecho"), 
+                          label = c("Alcaldía", "Colonia", "Categoría", "Mes de Denuncia", "Año de los Hechos"))
+usethis::use_data(dicVictimas, overwrite = T)
 dataScatter <- read_csv("data-raw/victimas-scatter-datasketch.csv", locale=locale(encoding="latin1"))
