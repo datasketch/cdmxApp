@@ -236,9 +236,9 @@ mod_load_viz_server <- function(id, r){
         if (r$active_viz == "table") {
           vv <- DT::dataTableOutput(ns("table_view"), width = 950)
         } else if(r$active_viz %in% c("map")) {
-          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 590)  
+          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 630)  
         }else {
-          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 590)
+          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 630)
         }
         vv
       },
