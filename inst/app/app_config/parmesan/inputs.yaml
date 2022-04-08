@@ -86,7 +86,7 @@ calidadId:
       equals: violencia
   input_type: checkboxGroupInput
   input_params:
-    label: Calidad juridica
+    label: Calidad jurídica
     choiceNames: jurOpts()
     choiceValues: jurVal()
     selected: jurVal()
