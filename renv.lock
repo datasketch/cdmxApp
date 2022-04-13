@@ -978,10 +978,15 @@
     },
     "geojsonsf": {
       "Package": "geojsonsf",
-      "Version": "2.0.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1d436c89b02dc6b9bce41a084d371b6a",
+      "Version": "2.0.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "geojsonsf",
+      "RemoteUsername": "SymbolixAU",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "0550dbe1b0fb7b05e7d0312e209688882a57db16",
+      "Hash": "1f13193bd1699702e62a0ef91f1cf67e",
       "Requirements": [
         "Rcpp",
         "geometries",
@@ -992,10 +997,15 @@
     },
     "geometries": {
       "Package": "geometries",
-      "Version": "0.2.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "be29054e97e756ade56d13a89c6d5243",
+      "Version": "0.2.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "geometries",
+      "RemoteUsername": "dcooley",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "2ffd841a5b4204d2460c278fe1430ac8f309fa01",
+      "Hash": "cf6f85b6a809050c5a04e89b74225920",
       "Requirements": [
         "Rcpp"
       ]
@@ -2563,10 +2573,15 @@
     },
     "sfheaders": {
       "Package": "sfheaders",
-      "Version": "0.4.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c1bd5fbd6bed3c16a20df15d9bc20c55",
+      "Version": "0.4.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "sfheaders",
+      "RemoteUsername": "dcooley",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "bab52ea8e4b356b2dd25d9ca5505fff3bcb1460d",
+      "Hash": "59658a14b07c2d0080696dcfea9fe653",
       "Requirements": [
         "Rcpp",
         "geometries"
@@ -2684,8 +2699,8 @@
       "RemoteRepo": "shinyinvoer",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "4b53481715ae54146647b26ac38c1c71173ac331",
-      "Hash": "00791050bb8d83e996e1dcc5b8da90fe",
+      "RemoteSha": "64acb3fb386a2acc7fa6c19fa452de0ce8f12ec2",
+      "Hash": "924d79de2575fb9d523f5910da2167d7",
       "Requirements": [
         "htmltools",
         "jsonlite",

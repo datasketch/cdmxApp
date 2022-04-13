@@ -262,19 +262,21 @@ scroll STYLES
  width: 480px !important;
 }
 
-.selectize-control.single .selectize-input, #load_parmesan_ui_1-anioId {
+/*label calendario */
+.flatpickr-input[readonly] {
     cursor: pointer;
     background: #FFFFFF;
-    border: 1.38462px solid rgba(104, 103, 103, 0.15) !important;
+    border: 1.38462px solid rgba(104, 103, 103, 0.15);
     box-sizing: border-box;
-    border-radius: 5.53846px !important;
-    font-family: 'Roboto' !important;
-    font-weight: 400;
+    border-radius: 5.53846px;
+    color: #000;
     font-size: 12px;
-    line-height: 14px;
-    display: flex;
-    align-items: center;
-}m
+    font-weight: 400;
+    font-family: 'Roboto';
+    margin-bottom: 15px;
+    padding: 7px;
+    width: 100%;
+}
 
 .selectize-control.multi .selectize-input.has-items {
   cursor: pointer;

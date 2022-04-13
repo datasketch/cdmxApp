@@ -160,21 +160,14 @@ anioId:
   show_if_all:
     dataId():
       equals: violencia
-  input_type: airDatepickerInput
+  input_type: dateRangeInput
   input_params:
     label: Fecha denuncia
-    #value: null
-    maxDate: maxIn()
-    minDate: minIn()
-    placeholder: anioHolder()
-    separator: ' al '
-    view: 'months'
-    minView: 'months'
-    dateFormat: 'yyyy-mm'
-    multiple: Inf
-   # clearButton: true
-    range: true
-    language: es
-    width: '100%'
-  #update_param: value
+    start: minIn()
+    end: maxIn()
+    max: maxIn()
+    min: minIn()
+    startLabel: Inicio del rango
+    endLabel: Final del rango
+
 
