@@ -278,6 +278,24 @@ scroll STYLES
     width: 100%;
 }
 
+.shinyinvoer-date-range-container p {
+  color: #545454;
+  font-family: 'Roboto';
+  margin-bottom: 1px !important;
+}
+
+.shinyinvoer-date-range-input label {
+  color: #435b69;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.25px;
+}
+
 .selectize-control.multi .selectize-input.has-items {
   cursor: pointer;
   border: 1px solid #3A3C6A !important;
