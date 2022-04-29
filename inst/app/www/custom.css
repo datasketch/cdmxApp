@@ -362,9 +362,9 @@ scroll STYLES
   border-radius: 10.011px !important;
   color: #235B4E !important;
   font-weight: 700;
-  font-size: 8.75965px;
-  line-height: 13px;
-  padding: 2px !important;
+  font-size: 11px;
+  line-height: 15px;
+  padding: 5px !important;
 }
 
 /* MODAL STYLES */
@@ -377,7 +377,7 @@ scroll STYLES
   top: 14% !important;
   right: 3% !important;
   width: 370px;
-  height: 73% !important;
+  height: 75% !important;
   background: var(--unnamed-color-fefefe) 0% 0% no-repeat padding-box;
   background: #FEFEFE 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 6px #00000029;

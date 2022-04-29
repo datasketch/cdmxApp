@@ -10,6 +10,7 @@ AlcaldiaHechos: Alcaldías
 competencia: Competencia
 fechasId: Años
 alcaldiasId: Zona
+sexoId: Sexo
 stackedId: Apilar
 TRUE: Si
 FALSE: No

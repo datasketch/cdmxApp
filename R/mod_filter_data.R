@@ -41,7 +41,7 @@ mod_filter_data_server <- function(id, r){
                      df <- df[naInd,]
                   }
                } else if (r[[vars_f$id[i]]] == "Todas") {
-                   df <- df 
+                  df <- df 
                } else {
                   if (!all(r$allCats[[vars_f$vars[i]]] %in% r[[vars_f$id[i]]])) {
                      catInd <- grep(paste0(r[[vars_f$id[i]]], collapse = "|"), df[[vars_f$vars[i]]])
@@ -74,35 +74,43 @@ mod_filter_data_server <- function(id, r){
       
       
       
-
-
+      
+      
       varSelection <- reactiveValues(id = NULL)
       observe({
-         if (is.null(r$active_viz)) return()
-         if (r$active_viz %in% c("bar", "treemap", "map")) {
-            if (is.null(r$varViewId)) return()
-            if (is.null(r$desagregacionId)) return()
-            varAdd <- r$desagregacionId
-            if (varAdd == "cdmx") return()
-            if (r$desagregacionId == "ninguna") varAdd <- NULL
-            varSelection$id <- c(varAdd, r$varViewId)
-         } else if (r$active_viz %in% c( "line")) {
-            if (is.null(r$varViewId)) return()
-            varSelection$id <- r$varViewId
-         } else {
+         tryCatch({
+            if (is.null(r$active_viz)) return()
+            if (r$active_viz %in% c("bar", "treemap", "map")) {
+               if (is.null(r$varViewId)) return()
+               if (is.null(r$desagregacionId)) return()
+               varAdd <- r$desagregacionId
+               if (varAdd == "cdmx") return()
+               if (r$desagregacionId == "ninguna") varAdd <- NULL
+               varSelection$id <- c(varAdd, r$varViewId)
+            } else if (r$active_viz %in% c( "line")) {
+               if (is.null(r$varViewId)) return()
+               varSelection$id <- r$varViewId
+            } else {
+               return()
+               #if (is.null(r$varOtherId)) return()
+               #varSelection$id <- "AlcaldiaHechos"
+            }
+         },
+         error = function(cond) {
             return()
-            #if (is.null(r$varOtherId)) return()
-            #varSelection$id <- "AlcaldiaHechos"
-         }
-
+         })
       })
-
+      
       data_summary <- reactive({
+         tryCatch({
          req(dataFilter$info)
          df <- dataFilter$info %>% dplyr::group_by(Sexo) %>% dplyr::summarise(Total = dplyr::n())
-         df
+         df},
+         error = function(cond) {
+            return()
+         })
       })
-
+      
       observe({
          r$d_fil <- dataFilter$info
          r$v_sel <- varSelection$id

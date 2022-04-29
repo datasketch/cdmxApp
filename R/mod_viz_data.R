@@ -28,21 +28,15 @@ mod_viz_data_server <- function(id, r){
       req(r$v_sel)
       var_sel <- r$v_sel
       if ("cdmx" %in% var_sel) var_sel <- NULL
-      
+      print(r$active_viz)
       if (r$active_viz == "map") {
-        # print(var_sel)
+        print("tipo de mapa")
+         print(r$mapType)
         if (r$mapType  %in% c("bubbles", "heatmap")) {
-          var_sel <- c("longitud", "latitud", var_sel)
+          var_sel <- c("longitud", "latitud", unique(c(var_sel, "AlcaldiaHechos", "ColoniaHechos")))
         }
       }
-      
-      
-      # if (sum("Categoria" %in% var_sel) == 1) {
-      #   if (r$categoriaId != "TODOS") {
-      #     var_sel <- "Delito"
-      #   }
-      # }
-      
+
       varAnio <- NULL
       varAdd <- "AlcaldiaHechos"
       if (r$active_viz == "line") {
@@ -69,14 +63,18 @@ mod_viz_data_server <- function(id, r){
       if (r$active_viz == "map") {
         if (r$mapType %in% c("choropleth")) {
           df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
+          if ("ColoniaHechos" %in% names(df)) {
+            df <- df %>% dplyr::select(ColoniaHechos, dplyr::everything())
+          }
         }
         if (r$mapType %in% c("bubbles","heatmap")) {
-          indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
-          df <- df[,-indAlc] %>% tidyr::drop_na()
+          #indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
+          df <- df %>% dplyr::group_by(ColoniaHechos) %>% 
+             dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>% 
+             dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = Víctimas/(sum(Víctimas)))
+          df <- df %>% dplyr::select(lon, lat, Víctimas, everything())
         }
-        if ("ColoniaHechos" %in% names(df)) {
-          df <- df %>% dplyr::select(ColoniaHechos, dplyr::everything())
-        }
+       
       }
       
       
@@ -95,8 +93,8 @@ mod_viz_data_server <- function(id, r){
         dicViz$label <- dplyr::coalesce(dicViz$label, dicViz$id)
         names(df) <- dicViz$label
       }
-      print("ultimo df")
-      print(df)
+      # print("ultimo df")
+      # print(df)
       df
       },
       error = function(cond) {

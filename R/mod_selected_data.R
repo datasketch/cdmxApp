@@ -8,61 +8,66 @@
 #'
 #' @importFrom shiny NS tagList 
 mod_selected_data_ui <- function(id){
-  ns <- NS(id)
-  tagList(
-    
-  )
+   ns <- NS(id)
+   tagList(
+      
+   )
 }
 
 #' selected_data Server Functions
 #'
 #' @noRd 
 mod_selected_data_server <- function(id, r){
-  moduleServer( id, function(input, output, session){
-    ns <- session$ns
-    
-   data_select <- reactive({
-     tryCatch({
-     qs <- r$quest_choose
-     df <- NULL
-     if (qs == "violencia") {
-       df <- dataVictimas
-     } 
-     df
-     },
-     error = function(cond) {
-       return()
-     })
+   moduleServer( id, function(input, output, session){
+      ns <- session$ns
+      
+      data_select <- reactive({
+         tryCatch({
+            qs <- r$quest_choose
+            df <- NULL
+            if (qs == "violencia") {
+               df <- dataVictimas
+            } 
+            df
+         },
+         error = function(cond) {
+            return()
+         })
+      })
+      
+      
+      varsToFilter <- reactive({
+         data.frame(
+            id = c("alcaldiasId", "calidadId", "categoriaId", "sexoId"),
+            vars = c("AlcaldiaHechos", "CalidadJuridica", "Categoria", "Sexo")
+         )
+      })
+      
+      
+      catsToFilter <- reactive({
+         tryCatch({
+            req(data_select())
+            req(varsToFilter())
+            df <- data_select()
+            lCats <- 
+               purrr::map(varsToFilter()$vars, function(var){
+                  c("Todas", setdiff(unique(df[[var]]), NA))
+               })
+            names(lCats) <- varsToFilter()$vars
+            lCats
+         },
+         error = function(cond) {
+            return()
+         })
+      })
+      
+      observe({
+         r$d_sel <- data_select()
+         r$vars_f <- varsToFilter()
+         r$allCats <- catsToFilter()
+      })
+      
    })
-   
-   
-   varsToFilter <- reactive({
-     data.frame(
-       id = c("alcaldiasId", "calidadId", "categoriaId", "sexoId"),
-       vars = c("AlcaldiaHechos", "CalidadJuridica", "Categoria", "Sexo")
-     )
-   })
-   
-   
-   catsToFilter <- reactive({
-     req(data_select())
-     req(varsToFilter())
-     df <- data_select()
-     lCats <- 
-     purrr::map(varsToFilter()$vars, function(var){
-       c("Todas", setdiff(unique(df[[var]]), NA))
-     })
-     names(lCats) <- varsToFilter()$vars
-     lCats
-   })
-   
-   observe({
-     r$d_sel <- data_select()
-     r$vars_f <- varsToFilter()
-     r$allCats <- catsToFilter()
-   })
-    
-  })
 }
 
 ## To be copied in the UI

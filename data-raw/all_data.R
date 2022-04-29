@@ -22,6 +22,7 @@
 
 
 dataVictimas <- read_csv("data-raw/victimas-demo-datasketch.csv", locale=locale(encoding="latin1"))
+dataVictimas$Sexo <- dplyr::recode(dataVictimas$Sexo,Masculino = "Hombres", Femenino = "Mujeres")
 dataVictimas$FechaHechoR <- as.character(format(lubridate::dmy(dataVictimas$FechaHecho), format="%Y-%m"))
 dataVictimas$FechaInicioR <- as.character(format(lubridate::dmy(dataVictimas$FechaInicio), format="%Y-%m"))
 usethis::use_data(dataVictimas, overwrite = TRUE)
@@ -30,3 +31,22 @@ dicVictimas <- data.frame(id = c("AlcaldiaHechos", "ColoniaHechos", "Categoria",
                           label = c("Alcaldía", "Colonia", "Categoría", "Mes de Denuncia", "Año de los Hechos"))
 usethis::use_data(dicVictimas, overwrite = T)
 dataScatter <- read_csv("data-raw/victimas-scatter-datasketch.csv", locale=locale(encoding="latin1"))
+
+# dd <- dd %>% separate(geo_point_2d, c("lat", "long"), sep = ",") 
+# #dd$geo_shape <- dd$geojson
+# 
+# dd <- read_csv("data-raw/e4a9b05f-c480-45fb-a62c-6d4e39c5180e.csv")
+# 
+# leaflet(dd) %>%
+#   addTiles() %>% 
+#   addGeoJSON(geojson = dd$geo_shape[1]) %>% setView(lng = dd$long[1], lat = dd$lat[1], 10)
+# 
+# dd <- dd %>% select(id, geo_name = nomgeo, geo_code = cvegeo, lat, long, geo_geojson = geo_shape)
+# 
+# 
+# leaflet() %>%
+#   addTiles() %>% 
+#   addTopoJSON(topojson = readLines("data-raw/ejm.topojson")) %>% setView(lng = dd$long[1], lat = dd$lat[1], 10)
+mayorsCdmx <- readLines("data-raw/mayors-cdmx.topojson")
+usethis::use_data(mayorsCdmx, overwrite = T)
+

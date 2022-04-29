@@ -13,8 +13,8 @@ filtros:
     - mapType
     - stackedId
     - axisId
-    - colorsId
     - sortBar
+    - colorsId
     
 
     

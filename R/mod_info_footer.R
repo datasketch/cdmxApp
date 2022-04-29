@@ -16,7 +16,7 @@ mod_info_footer_ui <- function(id){
     )
   )
 }
-    
+
 #' info_footer Server Functions
 #'
 #' @noRd 
@@ -25,21 +25,25 @@ mod_info_footer_server <- function(id, r){
     ns <- session$ns
     
     output$summaryInfo <- renderUI({
-      req(r$d_sum)
-      #print(r$d_sum)
-      Fmv <- r$d_sum %>% dplyr::filter(Sexo == "Femenino")
-      Mmv <- r$d_sum %>% dplyr::filter(Sexo == "Masculino")
-      Nmv <- r$d_sum %>% dplyr::filter(is.na(Sexo))
-      
-      HTML(paste0(
-        "<div class = 'dataSummary'>",
-        "<div class = 'infoAll'>",format(sum(r$d_sum$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Víctimas</span></div>",
-        "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Fmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Mujeres</span></div>",
-        "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Mmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Hombres</span></div>",
-        "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>
+      tryCatch({
+        req(r$d_sum)
+        #print(r$d_sum)
+        Fmv <- r$d_sum %>% dplyr::filter(Sexo == "Mujeres")
+        Mmv <- r$d_sum %>% dplyr::filter(Sexo == "Hombres")
+        Nmv <- r$d_sum %>% dplyr::filter(is.na(Sexo))
+        
+        HTML(paste0(
+          "<div class = 'dataSummary'>",
+          "<div class = 'infoAll'>",format(sum(r$d_sum$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Víctimas</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Fmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Mujeres</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Mmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Hombres</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>
         </div>"
-      ))
-      
+        ))
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     output$infoButt <- renderUI({
@@ -60,11 +64,11 @@ mod_info_footer_server <- function(id, r){
     
   })
   
-
+  
 }
-    
+
 ## To be copied in the UI
 # mod_info_footer_ui("info_footer_ui_1")
-    
+
 ## To be copied in the server
 # mod_info_footer_server("info_footer_ui_1")

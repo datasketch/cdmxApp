@@ -66,10 +66,10 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     
-
-# Filtros q afectan la base -----------------------------------------------
-
- 
+    
+    # Filtros q afectan la base -----------------------------------------------
+    
+    
     alcOpts <- reactive({
       req(r$allCats)
       r$allCats$AlcaldiaHechos
@@ -86,33 +86,38 @@ mod_load_parmesan_server <- function(id, r){
       r$allCats$Categoria
     })
     
-  
+    
     jurOpts <- reactive({
       req(r$allCats)
       r$allCats$CalidadJuridica
     })
     
-  
     
     
-###########################################################################    
+    
+    ###########################################################################    
     
     observe({
-      if (is.null(r$labelChange)) return()
-      req(r$vars_f)
-      varS <- r$vars_f 
-      purrr::map(1:nrow(varS), function(i) {
-      updateSelectizeInput(session,
+      tryCatch({
+        if (is.null(r$labelChange)) return()
+        req(r$vars_f)
+        varS <- r$vars_f 
+        purrr::map(1:nrow(varS), function(i) {
+          updateSelectizeInput(session,
                                inputId = varS$id[i],
-                               choices = setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
-                                                  r$labelChange[[varS$vars[i]]]),
-                               selected = input[[varS$id[i]]]
-      )
+                               choices = isolate({setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
+                                                           r$labelChange[[varS$vars[i]]])}),
+                               selected = isolate({input[[varS$id[i]]]})
+          )
+        })
+      },
+      error = function(cond) {
+        return()
       })
     })
     
     
- 
+    
     
     
     plotSel <- reactive({
@@ -132,7 +137,11 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     axisLabel <- reactive({
-      HTML("<span style='margin-left:5px; margin-top: -6px;'> Cambiar de orden las variables </span>")
+      HTML("<span style='margin-left:5px; margin-top: -6px;'> Invertir selección de Variables </span>")
+    })
+    
+    sortLabel <- reactive({
+      HTML("<span style='margin-left:5px; margin-top: -6px;'> Ordenar </span>")
     })
     
     
@@ -166,41 +175,41 @@ mod_load_parmesan_server <- function(id, r){
           palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
           
         ) 
-    } else if (r$active_viz == "bar"){
-      req(r$desagregacionId)
-      if (r$desagregacionId != "ninguna") {
-        list(
-          palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
-          palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
-          palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
-        )
+      } else if (r$active_viz == "bar"){
+        req(r$desagregacionId)
+        if (r$desagregacionId != "ninguna") {
+          list(
+            palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
+            palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
+            palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
+          )
+        } else {
+          list(
+            palette_a = c("#3E9FCC"),
+            palette_b = c("#93D0F1"),
+            palette_c = c("#19719F")
+          )
+        }
+      } else if (r$active_viz %in% c("line", "area")) {
+        req(r$v_sel)
+        if(r$v_sel == "cdmx") {
+          list(
+            palette_a = c("#3E9FCC"),
+            palette_b = c("#93D0F1"),
+            palette_c = c("#19719F")
+          ) 
+        } else {
+          list(
+            palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
+            palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
+            palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
+          )
+        }
       } else {
-        list(
-          palette_a = c("#3E9FCC"),
-          palette_b = c("#93D0F1"),
-          palette_c = c("#19719F")
-        )
-      }
-    } else if (r$active_viz %in% c("line", "area")) {
-      req(r$v_sel)
-      if(r$v_sel == "cdmx") {
-        list(
-          palette_a = c("#3E9FCC"),
-          palette_b = c("#93D0F1"),
-          palette_c = c("#19719F")
-        ) 
-      } else {
-        list(
-          palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
-          palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
-          palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
-        )
-      }
-    } else {
-      return()
-    } 
-    
-  })
+        return()
+      } 
+      
+    })
     
     colors_show <- reactive({
       if (is.null(colors_default())) return()
@@ -276,9 +285,10 @@ mod_load_parmesan_server <- function(id, r){
     
     observe({
       for(parmesan_input in parmesan_inputs){
+        
         get_input <- input[[parmesan_input]]
         #if(!is.null(get_input)){
-          r[[parmesan_input]] <- get_input
+        r[[parmesan_input]] <- isolate(get_input)
         #}
       }
     })
@@ -304,8 +314,8 @@ mod_load_parmesan_server <- function(id, r){
     
     
     
-})
-  }
+  })
+}
 
 ## To be copied in the UI
 # mod_load_parmesan_ui("load_parmesan_ui_1")

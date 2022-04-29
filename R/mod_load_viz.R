@@ -28,24 +28,24 @@ mod_load_viz_server <- function(id, r){
     ns <- session$ns
 
     
-    dataViz <- reactiveValues(content = NULL)
-    
-    observe({
-      if (is.null(r$d_viz)) return()
-      if (is.null(r$active_viz)) return()
-      if (r$active_viz == "map") {
-        if (is.null(r$mapType)) return()
-        if (r$mapType %in% "choropleth") {
-          dataViz$content <- r$d_viz
-        } else {
-          nsample <- nrow(r$d_viz)
-          if (nsample > 7000) nsample <- 7000
-          dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),]
-        }
-      } else {
-        dataViz$content <- r$d_viz#[1:100,]
-      }
-    })
+    # dataViz <- reactiveValues(content = NULL)
+    # 
+    # observe({
+    #   if (is.null(r$d_viz)) return()
+    #   if (is.null(r$active_viz)) return()
+    #   if (r$active_viz == "map") {
+    #     if (is.null(r$mapType)) return()
+    #     if (r$mapType %in% "choropleth") {
+    #       dataViz$content <- r$d_viz
+    #     } else {
+    #       nsample <- nrow(r$d_viz)
+    #       if (nsample > 7000) nsample <- 7000
+    #       dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),]
+    #     }
+    #   } else {
+    #     dataViz$content <- r$d_viz#[1:100,]
+    #   }
+    # })
     
     
     optsViz <- reactive({
@@ -53,10 +53,9 @@ mod_load_viz_server <- function(id, r){
         if (is.null(r$active_viz)) return()
         if (is.null(r$colorsPlot)) return()
         if (is.null(r$colorsId)) return()
-        if (is.null(dataViz$content)) return()
-        df <- dataViz$content
-        
-        #print(head(df))
+        if (is.null(r$d_viz)) return()
+        df <- r$d_viz
+        print(head(df))
         opts_viz <- list(
           data = df,
           palette_colors = r$colorsPlot[[r$colorsId]],
@@ -84,13 +83,15 @@ mod_load_viz_server <- function(id, r){
           grid_y_color = "#bcccca",
           grid_x_width = 0,
           border_weight = 0.5,
-          map_zoom = 10,
-          map_min_zoom = 10,
+          map_zoom = 11,
+          # map_min_zoom = 10,
           legend_position = "topright",
           legend_layout = "vertical",
           legend_align = "right",
           legend_verticalAlign = "middle",
-          map_canvas = TRUE#,
+          map_canvas = TRUE,
+          map_min_size = 3,
+          map_max_size = 10
           # map_tiles_zoom_update = TRUE,
           # map_tiles_id_update = FALSE
         )
@@ -115,8 +116,10 @@ mod_load_viz_server <- function(id, r){
         }
         
         if (r$active_viz %in% c("map")) {
+          req(r$mapType )
           if (r$mapType %in% c("bubbles", "heatmap")) {
             opts_viz$legend_show <- FALSE
+            opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {Víctimas}"
           }
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"
@@ -124,7 +127,11 @@ mod_load_viz_server <- function(id, r){
           if (r$aggId == "pctg") {
             opts_viz$format_sample_num <- "1,234.34"
             opts_viz$tooltip <- "AlcaldiaHechos: {Alcaldía} </br> Víctimas: {%}"
-            if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "ColoniaHechos: {Colonia}</br> Víctimas: {%}"
+            if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {%}"
+            if (r$mapType %in% c("bubbles", "heatmap")) {
+              opts_viz$format_sample_num <- "1,234.348902"
+              opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {pctg}"
+            }
             opts_viz$suffix <- "%"
           }
           if (length(r$v_sel) >= 2) opts_viz$map_name <- "cdmx_colonies"
@@ -132,7 +139,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$map_tiles <- "CartoDB.Voyager"
           opts_viz$topo_fill_opacity <- 0.7
           opts_viz$na_color <- "transparent"
-          opts_viz$map_cluster <- "markerClusterOptions()"
+          #opts_viz$map_cluster <- "markerClusterOptions(maxClusterRadius = 20)"
           #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
         }
         
@@ -143,7 +150,7 @@ mod_load_viz_server <- function(id, r){
         }
         
         
-        
+      
         #print(opts_viz$agg)
         opts_viz
       },
@@ -159,9 +166,9 @@ mod_load_viz_server <- function(id, r){
         req(optsViz())
         req(r$v_type)
         req(r$d_viz)
-        req(r$mapType)
         
         library(hgchmagic)
+
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
         
         
@@ -188,8 +195,8 @@ mod_load_viz_server <- function(id, r){
     #     if (is.null(r$mapType)) return()
     #     if (r$mapType %in% c("bubbles", "heatmap")) {
     #       leaflet::leafletProxy("viz_lflt") %>% 
-    #         leaflet::setView(lng = median(dataViz$content$longitud, na.rm = TRUE),
-    #                          lat = median(dataViz$content$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
+    #         leaflet::setView(lng = median(r$d_viz$longitud, na.rm = TRUE),
+    #                          lat = median(r$d_viz$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
     #     }
     #   }
     # })
@@ -232,7 +239,7 @@ mod_load_viz_server <- function(id, r){
     
     output$viz_plot <- renderUI({
       tryCatch({
-        #print(r$parmesan_input)
+      #print(r$parmesan_input)
         if (r$quest_choose != "violencia") return()
         if (r$active_viz == "table") {
           vv <- DT::dataTableOutput(ns("table_view"), width = 950)
@@ -245,7 +252,7 @@ mod_load_viz_server <- function(id, r){
       },
       error = function(cond) {
         return()
-      }) 
+      })
     })
     
     

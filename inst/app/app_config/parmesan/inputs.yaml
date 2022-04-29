@@ -6,7 +6,7 @@ varViewId:
       is_any_of: [map, bar, treemap, line, scatter, area]
   input_type: selectizeInput
   input_params:
-    label: Víctimas
+    label: Selección de variable a visualizar
     choices: var_opts()
     selected: varDef()
   update_param: selected
@@ -72,7 +72,7 @@ categoriaId:
       equals: violencia
   input_type: selectizeInput
   input_params:
-    label: Tipo de delito
+    label: Delito
     choices: delOpts()
     selected: Todas
   update_param: selected
@@ -108,10 +108,12 @@ sortBar:
       equals: bar
  #   varTwoSel():
  #    equals: false
-  input_type: checkboxInput
+  input_type: toggleSwitchInput
   input_params:
-    label: Ordenar
+    label: sortLabel()
     value: false
+    on_label: ''
+    off_label: ''
   update_param: value
 axisId:
   show: true

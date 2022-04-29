@@ -22,6 +22,7 @@ mod_viz_type_server <- function(id, r){
     ns <- session$ns
     
     viz_type <- reactive({
+      tryCatch({
       req(r$d_viz)
       req(r$active_viz)
       df <- r$d_viz
@@ -33,9 +34,9 @@ mod_viz_type_server <- function(id, r){
       }
       if (r$active_viz == "map") {
         req(r$mapType)
-      if ("latitud" %in% names(df)) {
-        if (ncol(df) == 3) tv <- "GlnGltNum"
-        if (ncol(df) == 4) tv <- "GlnGltCatNum"
+      if ("bubbles" %in% r$mapType) {
+        tv <- "GlnGltNum"
+        #if (ncol(df) == 4) tv <- "GlnGltCatNum"
       }
       if ("choropleth" %in% r$mapType) {
        #if (ncol(df) == 2) 
@@ -43,21 +44,27 @@ mod_viz_type_server <- function(id, r){
        #if (ncol(df) == 3) tv <- "GnmCatNum"
       }
       }
-      print(tv)
       tv
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     viz_name <- reactive({
+      tryCatch({
       req(viz_type())
       if (r$active_viz == "table") return()
       if (r$active_viz %in% "map") {
-        req(r$mapType)
       vp <- paste0("lfltmagic::", paste0("lflt_", r$mapType, "_", viz_type())) 
       } else {
       vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
       }
-     
       vp
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     observe({
