@@ -24,6 +24,7 @@ mod_subsetting_data_server <- function(id, r){
     
     labelVal <- reactiveValues(change = NULL)
     
+    tryCatch({
     observe({
         req(r$d_fil)
         req(r$allCats)
@@ -57,6 +58,14 @@ mod_subsetting_data_server <- function(id, r){
         labelVal$change <- l_lb
         r$labelChange <- isolate(labelVal$change)
       })
+      },
+      error = function(cond) {
+        return()
+      })
+    
+    
+    
+    
   })
 }
 

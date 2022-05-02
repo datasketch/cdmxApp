@@ -12,9 +12,9 @@ mod_load_viz_ui <- function(id){
   tagList(
     uiOutput(ns("viz_plot")),
     div(style="display: flex;justify-content: space-between;",
-    tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
-           "Fuente: Portal de datos abiertos de CDMX", target="_blank"),
-    uiOutput(ns("logos_add"))
+        tags$a(href="https://datos.cdmx.gob.mx/dataset/victimas-en-carpetas-de-investigacion-fgj",
+               "Fuente: Portal de datos abiertos de CDMX", target="_blank"),
+        uiOutput(ns("logos_add"))
     )
   )
 }
@@ -26,27 +26,85 @@ mod_load_viz_server <- function(id, r){
   
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
     
-    # dataViz <- reactiveValues(content = NULL)
-    # 
-    # observe({
-    #   if (is.null(r$d_viz)) return()
-    #   if (is.null(r$active_viz)) return()
-    #   if (r$active_viz == "map") {
-    #     if (is.null(r$mapType)) return()
-    #     if (r$mapType %in% "choropleth") {
-    #       dataViz$content <- r$d_viz
-    #     } else {
-    #       nsample <- nrow(r$d_viz)
-    #       if (nsample > 7000) nsample <- 7000
-    #       dataViz$content <- r$d_viz[sample(1:nrow(r$d_viz), nsample, replace = FALSE),]
-    #     }
-    #   } else {
-    #     dataViz$content <- r$d_viz#[1:100,]
-    #   }
-    # })
     
+    dataMap <- reactive({
+      if (is.null(r$d_viz)) return()
+      if (r$active_viz %in% c("map")) {
+        req(r$mapType )
+        if (r$mapType == "choropleth") return()
+      }
+      df <- r$d_viz
+      df
+    })
+    
+    output$map1 <- leaflet::renderLeaflet({
+      tryCatch({
+      if (r$active_viz %in% c("map")) {
+        req(r$mapType )
+        if (r$mapType == "choropleth") return()
+      }
+      
+      leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5, 
+                                                         zoomDelta = 0.5
+      )) %>% 
+        leaflet::addProviderTiles("CartoDB.Voyager") %>% 
+        leaflet::addTopoJSON(topojson = mayorsCdmx, 
+                             weight = 1, opacity = 0.5, 
+                             fillColor = "transparent",
+                             color = "#000000") %>% 
+        leaflet::setView(lng = -99.2, lat = 19.3, 11)
+      },
+      error = function(cond) {
+        return()
+      })
+    })
+    
+  
+    
+    tryCatch({
+    observe({
+      req(r$active_viz)
+      if (r$active_viz != "map") return()
+      if (r$active_viz %in% c("map")) {
+        req(r$mapType )
+        if (r$mapType == "choropleth") return()
+      }
+      if (is.null(input$map1_zoom)) return()
+      req(dataMap())
+      lf <- leaflet::leafletProxy("map1", data = dataMap()) %>% 
+        leaflet::clearMarkers() 
+      lf <- lf %>%  
+        # leaflet::removeMarkerCluster(layerId = ~Colonia) %>% 
+        # leaflet::removeMarker(layerId = ~Colonia) %>% 
+        leaflet::addCircleMarkers(
+          lng = ~lon,
+          lat = ~lat,
+          label = ~label,
+          options = leaflet::markerOptions(victimas = ~Víctimas),
+          clusterOptions = leaflet::markerClusterOptions(
+            iconCreateFunction=JS("function (cluster) {    
+    var markers = cluster.getAllChildMarkers();
+    var sum = 0; 
+    for (i = 0; i < markers.length; i++) {
+      sum += Number(markers[i].options.victimas);
+    }
+    if(!sum)  return undefined;
+    return new L.DivIcon({ html: '<div><span>' + sum + '</span></div>', className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40,40)});
+  }"),  maxClusterRadius = 100,
+            showCoverageOnHover = TRUE,
+            spiderfyDistanceMultiplier = 1.5,
+            spiderLegPolylineOptions = list(weight = 0),
+            #zoomToBoundsOnClick = TRUE,
+            spiderfyOnMaxZoom = TRUE,
+            removeOutsideVisibleBounds = TRUE
+          )
+        )
+    })
+    },
+    error = function(cond) {
+      return()
+    })
     
     optsViz <- reactive({
       tryCatch({
@@ -54,8 +112,12 @@ mod_load_viz_server <- function(id, r){
         if (is.null(r$colorsPlot)) return()
         if (is.null(r$colorsId)) return()
         if (is.null(r$d_viz)) return()
+        if (r$active_viz %in% c("map")) {
+          req(r$mapType )
+          if (r$mapType %in% c("bubbles", "heatmap")) return()
+        }
         df <- r$d_viz
-        print(head(df))
+        if (any(c("lon", "longitud") %in% names(df))) return()
         opts_viz <- list(
           data = df,
           palette_colors = r$colorsPlot[[r$colorsId]],
@@ -82,8 +144,10 @@ mod_load_viz_server <- function(id, r){
           #sort = "desc", ##dbd9d9 grid color
           grid_y_color = "#bcccca",
           grid_x_width = 0,
-          border_weight = 0.5,
-          map_zoom = 11,
+          border_weight = 0.2,
+          # map_zoom_snap = 0.01,
+          # map_zoom_delta = 0.01,
+          #map_zoom = 11,
           # map_min_zoom = 10,
           legend_position = "topright",
           legend_layout = "vertical",
@@ -116,11 +180,6 @@ mod_load_viz_server <- function(id, r){
         }
         
         if (r$active_viz %in% c("map")) {
-          req(r$mapType )
-          if (r$mapType %in% c("bubbles", "heatmap")) {
-            opts_viz$legend_show <- FALSE
-            opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {Víctimas}"
-          }
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
@@ -128,16 +187,12 @@ mod_load_viz_server <- function(id, r){
             opts_viz$format_sample_num <- "1,234.34"
             opts_viz$tooltip <- "AlcaldiaHechos: {Alcaldía} </br> Víctimas: {%}"
             if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {%}"
-            if (r$mapType %in% c("bubbles", "heatmap")) {
-              opts_viz$format_sample_num <- "1,234.348902"
-              opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {pctg}"
-            }
             opts_viz$suffix <- "%"
           }
           if (length(r$v_sel) >= 2) opts_viz$map_name <- "cdmx_colonies"
           #print(opts_viz$map_name)
           opts_viz$map_tiles <- "CartoDB.Voyager"
-          opts_viz$topo_fill_opacity <- 0.7
+          opts_viz$fill_opacity <- 0.3
           opts_viz$na_color <- "transparent"
           #opts_viz$map_cluster <- "markerClusterOptions(maxClusterRadius = 20)"
           #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
@@ -150,7 +205,7 @@ mod_load_viz_server <- function(id, r){
         }
         
         
-      
+        
         #print(opts_viz$agg)
         opts_viz
       },
@@ -168,7 +223,7 @@ mod_load_viz_server <- function(id, r){
         req(r$d_viz)
         
         library(hgchmagic)
-
+        
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
         
         
@@ -182,30 +237,33 @@ mod_load_viz_server <- function(id, r){
     
     
     output$viz_lflt <- leaflet::renderLeaflet({
-      req(viz_s())
-      if (r$active_viz == "table") return()
-      if (!(r$active_viz %in% c("map"))) return()
-      viz_s()
+      tryCatch({      
+        req(viz_s())
+        if (r$active_viz == "table") return()
+        if (!(r$active_viz %in% c("map"))) return()
+        req(r$mapType )
+        if (r$mapType == "bubbles") return()
+        
+        viz_s() %>% 
+          leaflet::setView(lng = -99.2, lat = 19.3, 10.5)
+        
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     
-    # observe({
-    #   if (is.null(r$active_viz)) return()
-    #   if (r$active_viz == "map") {
-    #     if (is.null(r$mapType)) return()
-    #     if (r$mapType %in% c("bubbles", "heatmap")) {
-    #       leaflet::leafletProxy("viz_lflt") %>% 
-    #         leaflet::setView(lng = median(r$d_viz$longitud, na.rm = TRUE),
-    #                          lat = median(r$d_viz$latitud, na.rm = TRUE), zoom = input$viz_lflt_zoom)
-    #     }
-    #   }
-    # })
-    
     output$viz_hgch <- highcharter::renderHighchart({
-      req(viz_s())
-      if (r$active_viz == "table") return()
-      if (r$active_viz == "map") return()
-      viz_s()
+      tryCatch({
+        req(viz_s())
+        if (r$active_viz == "table") return()
+        if (r$active_viz == "map") return()
+        viz_s()
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     
@@ -239,12 +297,17 @@ mod_load_viz_server <- function(id, r){
     
     output$viz_plot <- renderUI({
       tryCatch({
-      #print(r$parmesan_input)
+        #print(r$parmesan_input)
         if (r$quest_choose != "violencia") return()
         if (r$active_viz == "table") {
           vv <- DT::dataTableOutput(ns("table_view"), width = 950)
         } else if(r$active_viz %in% c("map")) {
-          vv <-leaflet::leafletOutput(ns("viz_lflt"), height = 630)  
+          req(r$mapType )
+          if (r$mapType == "bubbles") {
+            vv <-  leaflet::leafletOutput(ns("map1"), height = 630) 
+          } else {
+            vv <- leaflet::leafletOutput(ns("viz_lflt"), height = 630) 
+          }
         }else {
           vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 630)
         }

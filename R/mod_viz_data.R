@@ -69,10 +69,11 @@ mod_viz_data_server <- function(id, r){
         }
         if (r$mapType %in% c("bubbles","heatmap")) {
           #indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
-          df <- df %>% dplyr::group_by(ColoniaHechos) %>% 
-             dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>% 
-             dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = Víctimas/(sum(Víctimas)))
-          df <- df %>% dplyr::select(lon, lat, Víctimas, everything())
+          df <- df %>% dplyr::group_by(ColoniaHechos) %>%
+          dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>%
+          dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = Víctimas/(sum(Víctimas)))
+          df$label <- paste0(df$ColoniaHechos, " :", df$Víctimas)
+          df <- df %>% dplyr::select(lon, lat, Víctimas, dplyr::everything())
         }
        
       }
@@ -93,8 +94,8 @@ mod_viz_data_server <- function(id, r){
         dicViz$label <- dplyr::coalesce(dicViz$label, dicViz$id)
         names(df) <- dicViz$label
       }
-      # print("ultimo df")
-      # print(df)
+      print("ultimo df")
+      print(df)
       df
       },
       error = function(cond) {

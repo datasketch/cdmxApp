@@ -657,10 +657,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.0.8",
+      "Version": "1.0.9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ef47665e64228a17609d6df877bf86f2",
+      "Hash": "f0bda1627a7f5d3f9a0b5add931596ac",
       "Requirements": [
         "R6",
         "generics",
@@ -743,8 +743,8 @@
       "RemoteRepo": "dsvizopts",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ced585ed32ba97f6246a0d5d0a5c71df69e09e0a",
-      "Hash": "fd33cc1b706f142ba1368e8bcc12ada2",
+      "RemoteSha": "41fb6e48cc54e76a1c0c553b9d28257f544f6d77",
+      "Hash": "50acbbdf6a8c2fe53d7488600cf02823",
       "Requirements": [
         "dplyr",
         "purrr",
@@ -762,8 +762,8 @@
       "RemoteRepo": "dsvizprep",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "d09b565f461b6575ee4fde3ca008e105d171f45d",
-      "Hash": "adf6a0532727709ad837f7d75e5050c4",
+      "RemoteSha": "2f9d3e0aeb2b826a65e3899e2c1360c1aae3e11f",
+      "Hash": "9d0719bedcd9b06cd520b6a6907e556e",
       "Requirements": [
         "dplyr",
         "geodata",
@@ -1495,10 +1495,10 @@
     },
     "leafem": {
       "Package": "leafem",
-      "Version": "0.1.6",
+      "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "39682b851cfb151d02be19c5575bdc00",
+      "Hash": "db6e565a81ce81f137660467644e6fcd",
       "Requirements": [
         "base64enc",
         "geojsonsf",
@@ -1576,8 +1576,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "8341dbd4a0257804846844f56aacb6e16f0629ce",
-      "Hash": "c08f17c02620d26b112a76496f234882",
+      "RemoteSha": "15dbee46e50cdd139951ab6ab424af2d6d0b82b1",
+      "Hash": "602b6169b7247a25174f11f8261c71d7",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2752,10 +2752,10 @@
     },
     "sp": {
       "Package": "sp",
-      "Version": "1.4-6",
+      "Version": "1.4-7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ce8613f4e8c84ef4da9eba65b874ebe9",
+      "Hash": "c5dad1d43440f0c426a6d29b30b333fa",
       "Requirements": [
         "lattice"
       ]
