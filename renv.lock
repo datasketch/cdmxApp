@@ -743,8 +743,8 @@
       "RemoteRepo": "dsvizopts",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "41fb6e48cc54e76a1c0c553b9d28257f544f6d77",
-      "Hash": "50acbbdf6a8c2fe53d7488600cf02823",
+      "RemoteSha": "c76fa5e04683d302cc4654c413b849a5de7c72c6",
+      "Hash": "ba157f159fc178a9e00b6d64e26bf0ed",
       "Requirements": [
         "dplyr",
         "purrr",
@@ -1027,10 +1027,10 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.3.5",
+      "Version": "3.3.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d7566c471c7b17e095dd023b9ef155ad",
+      "Hash": "0fb26d0674c82705c6b701d1a61e02ea",
       "Requirements": [
         "MASS",
         "digest",
@@ -1576,8 +1576,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "15dbee46e50cdd139951ab6ab424af2d6d0b82b1",
-      "Hash": "602b6169b7247a25174f11f8261c71d7",
+      "RemoteSha": "8d7230f548633d59ba2a4dea3cfb0e27d1041e57",
+      "Hash": "4f22778801b789477485e364bc098b31",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2295,10 +2295,10 @@
     },
     "rgdal": {
       "Package": "rgdal",
-      "Version": "1.5-29",
+      "Version": "1.5-31",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "37d3572bfcec1d8a21bd33355e485069",
+      "Hash": "3ea75f292fceaa9ba09a88a70f8d1085",
       "Requirements": [
         "sp"
       ]
@@ -2886,10 +2886,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "3.1.6",
+      "Version": "3.1.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "8a8f02d1934dfd6431c671361510dd0b",
+      "Hash": "08415af406e3dd75049afef9552e7355",
       "Requirements": [
         "ellipsis",
         "fansi",

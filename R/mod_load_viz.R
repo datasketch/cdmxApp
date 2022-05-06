@@ -45,6 +45,7 @@ mod_load_viz_server <- function(id, r){
         if (r$mapType == "choropleth") return()
       }
       
+        lm <-
       leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5, 
                                                          zoomDelta = 0.5
       )) %>% 
@@ -52,8 +53,9 @@ mod_load_viz_server <- function(id, r){
         leaflet::addTopoJSON(topojson = mayorsCdmx, 
                              weight = 1, opacity = 0.5, 
                              fillColor = "transparent",
-                             color = "#000000") %>% 
+                             color = "#000000")  %>% 
         leaflet::setView(lng = -99.2, lat = 19.3, 11)
+          lm
       },
       error = function(cond) {
         return()
@@ -72,8 +74,9 @@ mod_load_viz_server <- function(id, r){
       }
       if (is.null(input$map1_zoom)) return()
       req(dataMap())
-      lf <- leaflet::leafletProxy("map1", data = dataMap()) %>% 
-        leaflet::clearMarkers() 
+      lf <- leaflet::leafletProxy("map1", data = dataMap()) #%>% 
+        #leaflet::clearMarkers() 
+   
       lf <- lf %>%  
         # leaflet::removeMarkerCluster(layerId = ~Colonia) %>% 
         # leaflet::removeMarker(layerId = ~Colonia) %>% 
@@ -145,10 +148,11 @@ mod_load_viz_server <- function(id, r){
           grid_y_color = "#bcccca",
           grid_x_width = 0,
           border_weight = 0.2,
-          # map_zoom_snap = 0.01,
-          # map_zoom_delta = 0.01,
+          map_zoom_snap = 0.25,
+          map_zoom_delta = 0.25,
           #map_zoom = 11,
-          # map_min_zoom = 10,
+          map_min_zoom = 10,
+          map_max_zoom = 14,
           legend_position = "topright",
           legend_layout = "vertical",
           legend_align = "right",
@@ -189,8 +193,11 @@ mod_load_viz_server <- function(id, r){
             if (length(r$v_sel) >= 2)  opts_viz$tooltip <- "Colonia: {Colonia}</br> Víctimas: {%}"
             opts_viz$suffix <- "%"
           }
-          if (length(r$v_sel) >= 2) opts_viz$map_name <- "cdmx_colonies"
-          #print(opts_viz$map_name)
+          if (length(r$v_sel) >= 2) {
+          opts_viz$map_name <- "cdmx_colonies"
+          opts_viz$map_extra_layer <- TRUE
+          opts_viz$map_name_extra <- "mex_mayors"
+          }
           opts_viz$map_tiles <- "CartoDB.Voyager"
           opts_viz$fill_opacity <- 0.3
           opts_viz$na_color <- "transparent"
@@ -245,7 +252,7 @@ mod_load_viz_server <- function(id, r){
         if (r$mapType == "bubbles") return()
         
         viz_s() %>% 
-          leaflet::setView(lng = -99.2, lat = 19.3, 10.5)
+          leaflet::setView(lng = -99.2, lat = 19.33, 10.70)
         
       },
       error = function(cond) {
