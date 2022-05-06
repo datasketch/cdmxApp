@@ -44,49 +44,40 @@ mod_load_viz_server <- function(id, r){
         req(r$mapType )
         if (r$mapType == "choropleth") return()
       }
-      
+      req(r$colorsPlot)
+      req(r$desagregacionId)
         lm <-
-      leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5, 
-                                                         zoomDelta = 0.5
+      leaflet::leaflet(data = dataMap(),
+                       options = leaflet::leafletOptions(zoomSnap = 0.25, 
+                                                         zoomDelta = 0.25,
+                                                         minZoom = 10,
+                                                         maxZoom = 14
       )) %>% 
         leaflet::addProviderTiles("CartoDB.Voyager") %>% 
         leaflet::addTopoJSON(topojson = mayorsCdmx, 
                              weight = 1, opacity = 0.5, 
                              fillColor = "transparent",
-                             color = "#000000")  %>% 
-        leaflet::setView(lng = -99.2, lat = 19.3, 11)
-          lm
-      },
-      error = function(cond) {
-        return()
-      })
-    })
-    
-  
-    
-    tryCatch({
-    observe({
-      req(r$active_viz)
-      if (r$active_viz != "map") return()
-      if (r$active_viz %in% c("map")) {
-        req(r$mapType )
-        if (r$mapType == "choropleth") return()
-      }
-      if (is.null(input$map1_zoom)) return()
-      req(dataMap())
-      lf <- leaflet::leafletProxy("map1", data = dataMap()) #%>% 
-        #leaflet::clearMarkers() 
-   
-      lf <- lf %>%  
-        # leaflet::removeMarkerCluster(layerId = ~Colonia) %>% 
-        # leaflet::removeMarker(layerId = ~Colonia) %>% 
-        leaflet::addCircleMarkers(
-          lng = ~lon,
-          lat = ~lat,
-          label = ~label,
-          options = leaflet::markerOptions(victimas = ~Víctimas),
-          clusterOptions = leaflet::markerClusterOptions(
-            iconCreateFunction=JS("function (cluster) {    
+                             color = "#000000")  
+        
+        
+        if (r$desagregacionId == "ColoniaHechos") {
+          lm <- lm %>% 
+            leaflet::addTopoJSON(topojson = coloniaCdmx, 
+                                 weight = 1, opacity = 0.5, 
+                                 fillColor = "transparent",
+                                 color = "#000000")  
+        }
+        
+        lm <- lm %>% 
+        leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>% 
+          leaflet::addCircleMarkers(
+            lng = ~lon,
+            lat = ~lat,
+            label = ~label,
+            color = r$colorsPlot[[r$colorsId]],
+            options = leaflet::markerOptions(victimas = ~Víctimas),
+            clusterOptions = leaflet::markerClusterOptions(
+              iconCreateFunction=JS("function (cluster) {    
     var markers = cluster.getAllChildMarkers();
     var sum = 0; 
     for (i = 0; i < markers.length; i++) {
@@ -95,20 +86,23 @@ mod_load_viz_server <- function(id, r){
     if(!sum)  return undefined;
     return new L.DivIcon({ html: '<div><span>' + sum + '</span></div>', className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40,40)});
   }"),  maxClusterRadius = 100,
-            showCoverageOnHover = TRUE,
-            spiderfyDistanceMultiplier = 1.5,
-            spiderLegPolylineOptions = list(weight = 0),
-            #zoomToBoundsOnClick = TRUE,
-            spiderfyOnMaxZoom = TRUE,
-            removeOutsideVisibleBounds = TRUE
+              showCoverageOnHover = TRUE,
+              spiderfyDistanceMultiplier = 1.5,
+              spiderLegPolylineOptions = list(weight = 0),
+              #zoomToBoundsOnClick = TRUE,
+              spiderfyOnMaxZoom = TRUE,
+              removeOutsideVisibleBounds = TRUE
+            )
           )
-        )
-    })
-    },
-    error = function(cond) {
-      return()
+          lm
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
+  
+  
     optsViz <- reactive({
       tryCatch({
         if (is.null(r$active_viz)) return()

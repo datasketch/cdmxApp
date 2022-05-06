@@ -71,9 +71,14 @@ mod_viz_data_server <- function(id, r){
           #indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
           df <- df %>% dplyr::group_by(ColoniaHechos) %>%
           dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>%
-          dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = Víctimas/(sum(Víctimas)))
+          dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = (Víctimas/(sum(Víctimas)))*100)
           df$label <- paste0(df$ColoniaHechos, " :", df$Víctimas)
           df <- df %>% dplyr::select(lon, lat, Víctimas, dplyr::everything())
+          df$pctg <- round(df$pctg, 2)
+          req(r$aggId)
+          if (r$aggId == "pctg") {
+           df$label <-  paste0(df$ColoniaHechos, " :", df$Víctimas, " (", df$pctg, "%)")
+          }
         }
        
       }
