@@ -40,24 +40,24 @@ mod_load_viz_server <- function(id, r){
     
     output$map1 <- leaflet::renderLeaflet({
       tryCatch({
-      if (r$active_viz %in% c("map")) {
-        req(r$mapType )
-        if (r$mapType == "choropleth") return()
-      }
-      req(r$colorsPlot)
-      req(r$desagregacionId)
+        if (r$active_viz %in% c("map")) {
+          req(r$mapType )
+          if (r$mapType == "choropleth") return()
+        }
+        req(r$colorsPlot)
+        req(r$desagregacionId)
         lm <-
-      leaflet::leaflet(data = dataMap(),
-                       options = leaflet::leafletOptions(zoomSnap = 0.25, 
-                                                         zoomDelta = 0.25,
-                                                         minZoom = 10,
-                                                         maxZoom = 14
-      )) %>% 
-        leaflet::addProviderTiles("CartoDB.Voyager") %>% 
-        leaflet::addTopoJSON(topojson = mayorsCdmx, 
-                             weight = 1, opacity = 0.5, 
-                             fillColor = "transparent",
-                             color = "#000000")  
+          leaflet::leaflet(data = dataMap(),
+                           options = leaflet::leafletOptions(zoomSnap = 0.25, 
+                                                             zoomDelta = 0.25,
+                                                             minZoom = 2,
+                                                             maxZoom = 14
+                           )) %>% 
+          leaflet::addProviderTiles("CartoDB.Voyager") %>% 
+          leaflet::addTopoJSON(topojson = mayorsCdmx, 
+                               weight = 1, opacity = 0.5, 
+                               fillColor = "transparent",
+                               color = "#000000")  
         
         
         if (r$desagregacionId == "ColoniaHechos") {
@@ -69,11 +69,12 @@ mod_load_viz_server <- function(id, r){
         }
         
         lm <- lm %>% 
-        leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>% 
+          leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>% 
           leaflet::addCircleMarkers(
             lng = ~lon,
             lat = ~lat,
             label = ~label,
+            radius = ~radio,
             color = r$colorsPlot[[r$colorsId]],
             options = leaflet::markerOptions(victimas = ~Víctimas),
             clusterOptions = leaflet::markerClusterOptions(
@@ -85,24 +86,26 @@ mod_load_viz_server <- function(id, r){
     }
     if(!sum)  return undefined;
     return new L.DivIcon({ html: '<div><span>' + sum + '</span></div>', className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40,40)});
-  }"),  maxClusterRadius = 100,
-              showCoverageOnHover = TRUE,
-              spiderfyDistanceMultiplier = 1.5,
+  }"),  
+              #maxClusterRadius = 100,
+              showCoverageOnHover = FALSE,
+              spiderfyDistanceMultiplier = 3,
               spiderLegPolylineOptions = list(weight = 0),
-              #zoomToBoundsOnClick = TRUE,
+              zoomToBoundsOnClick = TRUE,
               spiderfyOnMaxZoom = TRUE,
-              removeOutsideVisibleBounds = TRUE
+              removeOutsideVisibleBounds = TRUE,
+              animate = TRUE
             )
           )
-          lm
+        lm
       },
       error = function(cond) {
         return()
       })
     })
     
-  
-  
+    
+    
     optsViz <- reactive({
       tryCatch({
         if (is.null(r$active_viz)) return()
@@ -188,9 +191,9 @@ mod_load_viz_server <- function(id, r){
             opts_viz$suffix <- "%"
           }
           if (length(r$v_sel) >= 2) {
-          opts_viz$map_name <- "cdmx_colonies"
-          opts_viz$map_extra_layer <- TRUE
-          opts_viz$map_name_extra <- "mex_mayors"
+            opts_viz$map_name <- "cdmx_colonies"
+            opts_viz$map_extra_layer <- TRUE
+            opts_viz$map_name_extra <- "mex_mayors"
           }
           opts_viz$map_tiles <- "CartoDB.Voyager"
           opts_viz$fill_opacity <- 0.3
@@ -305,7 +308,7 @@ mod_load_viz_server <- function(id, r){
         } else if(r$active_viz %in% c("map")) {
           req(r$mapType )
           if (r$mapType == "bubbles") {
-            vv <-  leaflet::leafletOutput(ns("map1"), height = 630) 
+            vv <- leaflet::leafletOutput(ns("map1"), height = 630)
           } else {
             vv <- leaflet::leafletOutput(ns("viz_lflt"), height = 630) 
           }
