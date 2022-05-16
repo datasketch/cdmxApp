@@ -154,8 +154,8 @@ background: #637381 !important;
 }
 
 .buttons-group .button-container {
- height: 45px !important;
- width: 45px !important;
+ height: 40px !important;
+ width: 40px !important;
 }
 
 .buttons-group .button-style.active-btn {
@@ -186,6 +186,12 @@ background: #637381 !important;
 .button-checkmark {
  display: none;
 }
+
+/*
+.btn-default#fs {
+ background-image: url('inst/app/www/img/full.png') !important;
+ background-size: cover;
+}*/
 
 .irs-bar {
     border-top: 1px solid #637381 !important;
@@ -350,7 +356,8 @@ scroll STYLES
  text-align: center;
  font: normal normal normal 11px Roboto;
  letter-spacing: 0px;
- color: #691C32;
+ color: #637381;
+ font-weight: 300;
  opacity: 1;
 }
 

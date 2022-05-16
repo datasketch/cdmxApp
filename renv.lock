@@ -344,19 +344,23 @@
       "Version": "0.0.0.9000",
       "Source": "unknown",
       "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shi18ny, datasketch/shinypanels,\n        datasketch/dsmodules, datasketch/lfltmagic,\n        datasketch/hgchmagic",
-      "Hash": "0b7faa5ab73a08fa20ae66055a3dc53e",
+      "Hash": "cf46244238c90eb257082523711e3245",
       "Requirements": [
         "DT",
+        "dplyr",
         "dsmodules",
+        "golem",
         "hgchmagic",
         "lfltmagic",
         "parmesan",
+        "plyr",
         "shi18ny",
         "shinyWidgets",
         "shinybusy",
         "shinydisconnect",
         "shinyinvoer",
-        "shinypanels"
+        "shinypanels",
+        "tidyr"
       ]
     },
     "cellranger": {
@@ -1549,8 +1553,8 @@
       "RemoteRepo": "lfltmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "8d7230f548633d59ba2a4dea3cfb0e27d1041e57",
-      "Hash": "4f22778801b789477485e364bc098b31",
+      "RemoteSha": "7677b096a1440ba105c67c883d1144830204923e",
+      "Hash": "126a8931318db30d4b8b763e456395ce",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -1734,10 +1738,10 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.0.0",
+      "Version": "2.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "cf4329aac12c2c44089974559c18e446",
+      "Hash": "edde731e84cf3d42aa9b7f04b8de5941",
       "Requirements": [
         "askpass"
       ]

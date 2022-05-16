@@ -33,6 +33,13 @@ app_ui <- function(request) {
                          header_right = div(style = "display: flex;",
                                             div(class='first-container',
                                                 mod_viz_selection_ui("viz_selection_ui_1")),
+                                            div(class = 'inter-container', style = "margin-right: 8px;",
+                                                # actionButton(
+                                                #   "fs", "Full screen", 
+                                                #   onclick = "gopenFullscreen();"
+                                                # ) img(src= 'www/img/full.png')
+                                                actionButton(inputId ='fs', "Fullscreen", onclick = "gopenFullscreen();")
+                                                ),
                                             div(class='second-container',
                                                 mod_download_viz_ui("download_viz_ui_1"))),
                          can_collapse = FALSE,

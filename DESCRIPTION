@@ -9,17 +9,21 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
+    dplyr,
     dsmodules (>= 0.5.6),
     DT,
+    golem,
     hgchmagic (>= 1.0.0),
     lfltmagic (>= 0.1.0),
     parmesan (>= 0.6.1),
+    plyr,
     shi18ny (>= 1.1.1),
     shinybusy,
     shinydisconnect,
     shinyinvoer (>= 0.1.0),
     shinypanels (>= 0.5.1),
-    shinyWidgets
+    shinyWidgets,
+    tidyr
 Remotes: 
     datasketch/parmesan,
     datasketch/shinyinvoer,
