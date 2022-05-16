@@ -17,7 +17,7 @@
 ## Add one line by package you want to add as dependency
 
 list_pkg <- c("shinydisconnect", 
-              "shinybusy", "DT", "airtabler", "shinyWidgets")
+              "shinybusy", "DT",  "shinyWidgets")
 purrr::map(list_pkg, function(pkg){
   usethis::use_package(pkg)  
 })
@@ -29,7 +29,6 @@ purrr::map(list_pkg_gh, function(pkg){
 })
 ## Add modules ----
 ## Create a module infrastructure in R/
-golem::add_module( name = "internationalization") # traductor file
 golem::add_module( name = "questions_buttons" ) # buttons panel one
 golem::add_module( name = "load_parmesan" ) # load controls
 golem::add_module( name = "selected_data" ) # data selection accorging question selected
