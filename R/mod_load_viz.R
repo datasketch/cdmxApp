@@ -196,8 +196,8 @@ mod_load_viz_server <- function(id, r){
             opts_viz$map_name_extra <- "mex_mayors"
           }
           opts_viz$map_tiles <- "CartoDB.Voyager"
-          opts_viz$topo_fill_opacity <- 0.8
-          opts_viz$max_topo_fill_opacity <- 0.9
+          opts_viz$topo_fill_opacity <- 0.6
+          opts_viz$max_topo_fill_opacity <- 0.8
           opts_viz$map_opacity <- 0.5
           opts_viz$na_color <- "transparent"
           #opts_viz$map_cluster <- "markerClusterOptions(maxClusterRadius = 20)"
