@@ -189,7 +189,7 @@ background: #637381 !important;
 
 
 .btn-default#fs {
- background-image: url(/www/img/full.png) !important;
+ background-image: url('https://raw.githubusercontent.com/datasketch/cdmxApp/29e2c9fd90845af77c7de0c84ef8c35ba9f24550/inst/app/www/img/full.svg') !important;
  background-size: cover;
  color: transparent !important;
  background-repeat: no-repeat !important;
