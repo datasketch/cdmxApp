@@ -344,7 +344,7 @@
       "Version": "0.0.0.9000",
       "Source": "unknown",
       "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shi18ny, datasketch/shinypanels,\n        datasketch/dsmodules, datasketch/lfltmagic,\n        datasketch/hgchmagic",
-      "Hash": "cf46244238c90eb257082523711e3245",
+      "Hash": "ca9d1d4bac4b79a302f26954009fd3b6",
       "Requirements": [
         "DT",
         "dplyr",
@@ -354,6 +354,8 @@
         "lfltmagic",
         "parmesan",
         "plyr",
+        "remotes",
+        "renv",
         "shi18ny",
         "shinyWidgets",
         "shinybusy",
@@ -2245,10 +2247,10 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.15.2",
+      "Version": "0.15.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "206c4ef8b7ad6fb1060d69aa7b9dfe69",
+      "Hash": "c1078316e1d4f70275fc1ea60c0bc431",
       "Requirements": []
     },
     "reprex": {

@@ -17,6 +17,8 @@ Imports:
     lfltmagic (>= 0.1.0),
     parmesan (>= 0.6.1),
     plyr,
+    remotes,
+    renv,
     shi18ny (>= 1.1.1),
     shinybusy,
     shinydisconnect,

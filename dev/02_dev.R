@@ -17,7 +17,7 @@
 ## Add one line by package you want to add as dependency
 
 list_pkg <- c("shinydisconnect",  "golem", "plyr", "dplyr", "tidyr",
-              "shinybusy", "DT",  "shinyWidgets")
+              "shinybusy", "DT",  "shinyWidgets", "remotes", "renv")
 purrr::map(list_pkg, function(pkg){
   usethis::use_package(pkg)  
 })

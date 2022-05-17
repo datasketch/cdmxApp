@@ -20,7 +20,8 @@ RUN Rscript -e 'remotes::install_github("datasketch/dsmodules@a495c845e842e3dfe1
 RUN mkdir /build_zone
 ADD . /build_zone
 WORKDIR /build_zone
-RUN R -e 'remotes::install_local(upgrade="never")'
+RUN R -e 'install.packages("renv")'
+RUN R -e 'renv::restore();remotes::install_local(upgrade="never");renv::snapshot()'
 RUN rm -rf /build_zone
 EXPOSE 80
 CMD R -e "options('shiny.port'=80,shiny.host='0.0.0.0');cdmxApp::run_app()"
