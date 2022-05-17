@@ -15,6 +15,7 @@ Imports:
     golem,
     hgchmagic (>= 1.0.0),
     lfltmagic (>= 0.1.0),
+    lubridate,
     parmesan (>= 0.6.1),
     plyr,
     remotes,

@@ -7,7 +7,10 @@ RUN Rscript -e 'remotes::install_version("tidyr",upgrade="never", version = "1.2
 RUN Rscript -e 'remotes::install_version("shinyWidgets",upgrade="never", version = "0.7.0")'
 RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = "0.3.1")'
+RUN Rscript -e 'remotes::install_version("renv",upgrade="never", version = "0.15.4")'
+RUN Rscript -e 'remotes::install_version("remotes",upgrade="never", version = "2.4.2")'
 RUN Rscript -e 'remotes::install_version("plyr",upgrade="never", version = "1.8.7")'
+RUN Rscript -e 'remotes::install_version("lubridate",upgrade="never", version = "1.8.0")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.3.2")'
 RUN Rscript -e 'remotes::install_version("DT",upgrade="never", version = "0.23")'
 RUN Rscript -e 'remotes::install_github("datasketch/shinypanels@8be05c0ff074000f82f5903d597ce9e0eb0fc6b2")'
@@ -20,8 +23,9 @@ RUN Rscript -e 'remotes::install_github("datasketch/dsmodules@a495c845e842e3dfe1
 RUN mkdir /build_zone
 ADD . /build_zone
 WORKDIR /build_zone
-RUN R -e 'install.packages("renv")'
-RUN R -e 'renv::restore();remotes::install_local(upgrade="never");renv::snapshot()'
+RUN R -e 'remotes::install_local(upgrade="never")'
 RUN rm -rf /build_zone
+RUN R -e 'renv::restore();remotes::install_local(upgrade="never");renv::snapshot()'
 EXPOSE 80
+EXPOSE 8787
 CMD R -e "options('shiny.port'=80,shiny.host='0.0.0.0');cdmxApp::run_app()"

@@ -344,7 +344,7 @@
       "Version": "0.0.0.9000",
       "Source": "unknown",
       "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shi18ny, datasketch/shinypanels,\n        datasketch/dsmodules, datasketch/lfltmagic,\n        datasketch/hgchmagic",
-      "Hash": "ca9d1d4bac4b79a302f26954009fd3b6",
+      "Hash": "d630ee89bd0663b1aaa2fe7f1c940135",
       "Requirements": [
         "DT",
         "dplyr",
@@ -352,6 +352,7 @@
         "golem",
         "hgchmagic",
         "lfltmagic",
+        "lubridate",
         "parmesan",
         "plyr",
         "remotes",
