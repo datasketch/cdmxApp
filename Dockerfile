@@ -8,7 +8,6 @@ RUN Rscript -e 'remotes::install_version("shinyWidgets",upgrade="never", version
 RUN Rscript -e 'remotes::install_version("shinydisconnect",upgrade="never", version = "0.1.0")'
 RUN Rscript -e 'remotes::install_version("shinybusy",upgrade="never", version = "0.3.1")'
 RUN Rscript -e 'remotes::install_version("renv",upgrade="never", version = "0.15.4")'
-RUN Rscript -e 'remotes::install_version("remotes",upgrade="never", version = "2.4.2")'
 RUN Rscript -e 'remotes::install_version("plyr",upgrade="never", version = "1.8.7")'
 RUN Rscript -e 'remotes::install_version("lubridate",upgrade="never", version = "1.8.0")'
 RUN Rscript -e 'remotes::install_version("golem",upgrade="never", version = "0.3.2")'
