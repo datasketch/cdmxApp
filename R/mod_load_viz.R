@@ -280,6 +280,7 @@ mod_load_viz_server <- function(id, r){
       df <- df %>% dplyr::select(-FechaInicioR, -FechaHechoR)
       dtable <- DT::datatable(df,
                               rownames = F,
+                              selection = 'none',
                               options = list(
                                 #autoWidth = TRUE,
                                 language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),

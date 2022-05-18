@@ -518,6 +518,13 @@ input[type='radio']:checked:after {
   overflow: hidden !important; 
 }
 
+
+
+
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+ background-color: transparent !important;
+  }
+
 .marker-cluster span {
     color: #fff !important;
     font-weight: 700;
