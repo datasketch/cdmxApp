@@ -343,8 +343,8 @@
       "Package": "cdmxApp",
       "Version": "0.0.0.9000",
       "Source": "unknown",
-      "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shi18ny, datasketch/shinypanels,\n        datasketch/dsmodules, datasketch/lfltmagic,\n        datasketch/hgchmagic",
-      "Hash": "d630ee89bd0663b1aaa2fe7f1c940135",
+      "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shinypanels, datasketch/dsmodules,\n        datasketch/lfltmagic, datasketch/hgchmagic",
+      "Hash": "48dc8dea0362c21a2076e0d6a1dbe58e",
       "Requirements": [
         "DT",
         "dplyr",
@@ -355,9 +355,7 @@
         "lubridate",
         "parmesan",
         "plyr",
-        "remotes",
         "renv",
-        "shi18ny",
         "shinyWidgets",
         "shinybusy",
         "shinydisconnect",
@@ -2570,25 +2568,6 @@
       "Requirements": [
         "Rcpp",
         "geometries"
-      ]
-    },
-    "shi18ny": {
-      "Package": "shi18ny",
-      "Version": "1.1.1",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "shi18ny",
-      "RemoteUsername": "datasketch",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "37f276f1081f1f0a4c99f42f4f8038dbe999ba9a",
-      "Hash": "95507de4a96142105a1f99d284a0f54b",
-      "Requirements": [
-        "dplyr",
-        "purrr",
-        "shiny",
-        "shinyjs",
-        "yaml"
       ]
     },
     "shiny": {

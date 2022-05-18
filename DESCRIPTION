@@ -18,9 +18,7 @@ Imports:
     lubridate,
     parmesan (>= 0.6.1),
     plyr,
-    remotes,
     renv,
-    shi18ny (>= 1.1.1),
     shinybusy,
     shinydisconnect,
     shinyinvoer (>= 0.1.0),
@@ -30,7 +28,6 @@ Imports:
 Remotes: 
     datasketch/parmesan,
     datasketch/shinyinvoer,
-    datasketch/shi18ny,
     datasketch/shinypanels,
     datasketch/dsmodules,
     datasketch/lfltmagic,
