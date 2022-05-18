@@ -87,6 +87,7 @@ mod_filter_data_server <- function(id, r){
                if (varAdd == "cdmx") return()
                if (r$desagregacionId == "ninguna") varAdd <- NULL
                varSelection$id <- c(varAdd, r$varViewId)
+               if (r$active_viz == "treemap") varSelection$id <- c(r$varViewId, varAdd)
             } else if (r$active_viz %in% c( "line")) {
                if (is.null(r$varViewId)) return()
                varSelection$id <- r$varViewId
