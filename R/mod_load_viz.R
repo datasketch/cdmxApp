@@ -156,7 +156,9 @@ mod_load_viz_server <- function(id, r){
           legend_verticalAlign = "middle",
           map_canvas = TRUE,
           map_min_size = 3,
-          map_max_size = 10
+          map_max_size = 10,
+          treemap_borderWidth_levelOne = 3,
+          treemap_borderColor_levelOne = "#232323"
           # map_tiles_zoom_update = TRUE,
           # map_tiles_id_update = FALSE
         )
@@ -180,6 +182,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
         }
         
+       
         if (r$active_viz %in% c("map")) {
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"

@@ -721,8 +721,8 @@
       "RemoteRepo": "dsvizopts",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "c76fa5e04683d302cc4654c413b849a5de7c72c6",
-      "Hash": "ba157f159fc178a9e00b6d64e26bf0ed",
+      "RemoteSha": "a75f1bd5e56f3911ac5173219c8fa4f87f7e501d",
+      "Hash": "60ae262dd41e0180b5c8f7e222d2b903",
       "Requirements": [
         "dplyr",
         "purrr",
@@ -1179,8 +1179,8 @@
       "RemoteRepo": "hgchmagic",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "1b7105c88979e44b1c45be9dee74cc63e20cd6cb",
-      "Hash": "d9932c4542626647f4526c21486d6268",
+      "RemoteSha": "1c2126cb2722071855fa7133bffcd32a805399e1",
+      "Hash": "d606caf56679e28714169c456a2f46c5",
       "Requirements": [
         "d3.format",
         "dsvizopts",
@@ -2090,10 +2090,10 @@
     },
     "quantmod": {
       "Package": "quantmod",
-      "Version": "0.4.18",
+      "Version": "0.4.20",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d9dd45d86b5a23984ed50d5c35724702",
+      "Hash": "e8c1ef1a6bc7ea89c1801ab4994b87bb",
       "Requirements": [
         "TTR",
         "curl",
@@ -2367,10 +2367,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.13",
+      "Version": "2.14",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "ac78f4d2e0289d4cba73b88af567b8b1",
+      "Hash": "31b60a882fabfabf6785b8599ffeb8ba",
       "Requirements": [
         "bslib",
         "evaluate",
@@ -2937,10 +2937,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.38",
+      "Version": "0.39",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "759d047596ac173433985deddf313450",
+      "Hash": "29f67ab15405b390b90e56ff22198ead",
       "Requirements": [
         "xfun"
       ]
