@@ -23,17 +23,16 @@ mod_viz_selection_server <- function(id, r){
     
     possible_viz <- reactive({
       
-      # viz <- c("map", "bar", "treemap", "line", "table")
-      # viz
-      c("bar", "map",  "treemap", "line",  "table")
+      viz <- c("map", "bar", "treemap", "line", "table")
+      viz
       
     })
     
     
     viz_tool <- reactive({
       if (is.null(possible_viz())) return()
-      df_viz <- data.frame(id = c("bar", "map",  "treemap", "line",  "table"),
-                           label = c("Barras", "Mapa", "Treemap", "Líneas", "Tabla"))
+      df_viz <- data.frame(id = c( "map", "bar", "treemap", "line", "table"),
+                           label = c("Mapa", "Barras", "Treemap", "Líneas", "Tabla"))
       df_viz <- df_viz %>% dplyr::filter(id %in% possible_viz())
       df_viz$label
     })
