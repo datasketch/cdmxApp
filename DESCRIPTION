@@ -19,6 +19,7 @@ Imports:
     parmesan (>= 0.6.1),
     plyr,
     renv,
+    shiny,
     shinybusy,
     shinydisconnect,
     shinyinvoer (>= 0.1.0),

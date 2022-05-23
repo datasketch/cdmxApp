@@ -111,7 +111,7 @@ sortBar:
   input_type: toggleSwitchInput
   input_params:
     label: sortLabel()
-    value: false
+    value: true
     on_label: ''
     off_label: ''
   update_param: value
