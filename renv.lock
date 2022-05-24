@@ -339,32 +339,6 @@
         "processx"
       ]
     },
-    "cdmxApp": {
-      "Package": "cdmxApp",
-      "Version": "0.0.0.9000",
-      "Source": "unknown",
-      "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shinypanels, datasketch/dsmodules,\n        datasketch/lfltmagic, datasketch/hgchmagic",
-      "Hash": "dd5af0b0bcb5920f69d499fba7132fdf",
-      "Requirements": [
-        "DT",
-        "dplyr",
-        "dsmodules",
-        "golem",
-        "hgchmagic",
-        "lfltmagic",
-        "lubridate",
-        "parmesan",
-        "plyr",
-        "renv",
-        "shiny",
-        "shinyWidgets",
-        "shinybusy",
-        "shinydisconnect",
-        "shinyinvoer",
-        "shinypanels",
-        "tidyr"
-      ]
-    },
     "cellranger": {
       "Package": "cellranger",
       "Version": "1.1.0",
