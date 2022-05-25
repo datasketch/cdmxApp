@@ -542,3 +542,6 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
     background-blend-mode: saturation !important;
 }
 
+.map-caption{
+  background-color: #ffffff !important;
+}

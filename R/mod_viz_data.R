@@ -28,10 +28,10 @@ mod_viz_data_server <- function(id, r){
         req(r$v_sel)
         var_sel <- r$v_sel
         if ("cdmx" %in% var_sel) var_sel <- NULL
-        print(r$active_viz)
+        #print(r$active_viz)
         if (r$active_viz == "map") {
-          print("tipo de mapa")
-          print(r$mapType)
+         # print("tipo de mapa")
+         # print(r$mapType)
           if (r$mapType  %in% c("bubbles", "heatmap")) {
             var_sel <- c("longitud", "latitud", unique(c(var_sel, "AlcaldiaHechos", "ColoniaHechos")))
           }
@@ -41,8 +41,8 @@ mod_viz_data_server <- function(id, r){
         varAdd <- "AlcaldiaHechos"
         if (r$active_viz == "line") {
           req(r$fechasId)
-          print("fecha viz")
-          print(r$fechasId)
+          # print("fecha viz")
+          # print(r$fechasId)
           varAnio  <-  r$fechasId
           varAdd <- NULL
         }
@@ -69,17 +69,19 @@ mod_viz_data_server <- function(id, r){
           }
           if (r$mapType %in% c("bubbles","heatmap")) {
             #indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
-            df <- df %>% dplyr::group_by(ColoniaHechos) %>%
-              dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>%
-              dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = (Víctimas/(sum(Víctimas)))*100)
-            df$label <- paste0(df$ColoniaHechos, ": ", df$Víctimas, " víctimas")
-            df <- df %>% dplyr::select(lon, lat, Víctimas, dplyr::everything())
-            df$pctg <- round(df$pctg, 2)
-            df$radio <- scales::rescale(df$Víctimas, to = c(5, 35))
-            req(r$aggId)
-            if (r$aggId == "pctg") {
-              df$label <-  paste0(df$ColoniaHechos, " :", df$Víctimas, " (", df$pctg, "%)")
-            }
+            #df <- df #%>% dplyr::group_by(ColoniaHechos) %>%
+              # dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>%
+              # dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = (Víctimas/(sum(Víctimas)))*100)
+            #df$label <- shiny::HTML(paste0("Alcaldía: ", df$AlcaldiaHechos, "<br/>Colonia: ", df$ColoniaHechos))
+            #df$label <- paste0(df$ColoniaHechos, ": ", df$Víctimas, " víctimas")
+            df <- df[,c("longitud", "latitud")]
+            #df$id <- 1:nrow(df)
+            #df$pctg <- round(df$pctg, 2)
+            #df$radio <- scales::rescale(df$Víctimas, to = c(5, 35))
+            #req(r$aggId)
+            # if (r$aggId == "pctg") {
+            #   df$label <-  paste0(df$ColoniaHechos, " :", df$Víctimas, " (", df$pctg, "%)")
+            # }
           }
           
         }
@@ -100,8 +102,8 @@ mod_viz_data_server <- function(id, r){
           dicViz$label <- dplyr::coalesce(dicViz$label, dicViz$id)
           names(df) <- dicViz$label
         }
-        print("ultimo df")
-        print(df)
+        # print("ultimo df")
+        # print(df)
         df
       },
       error = function(cond) {

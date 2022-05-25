@@ -28,82 +28,130 @@ mod_load_viz_server <- function(id, r){
     ns <- session$ns
     
     
-    dataMap <- reactive({
-      if (is.null(r$d_viz)) return()
+    output$map1 <- leaflet::renderLeaflet({
+      #tryCatch({
       if (r$active_viz %in% c("map")) {
         req(r$mapType )
         if (r$mapType == "choropleth") return()
       }
-      df <- r$d_viz
-      df
+      
+      req(r$desagregacionId)
+      lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5, 
+                                              zoomDelta = 0.5
+      )) %>% 
+        # addProviderTiles("Stamen.TonerLite",
+        #                  group = "Toner") 
+        # leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.25, 
+        #                                                    zoomDelta = 0.25,
+        #                                                    minZoom = 1,
+        #                                                    maxZoom = 14
+        # )) %>% 
+        leaflet::addProviderTiles("CartoDB.Voyager") %>% 
+        leaflet::addTopoJSON(topojson = mayorsCdmx, 
+                             weight = 1, opacity = 0.5, 
+                             fillColor = "transparent",
+                             color = "#000000")  
+      
+      
+      if (r$desagregacionId == "ColoniaHechos") {
+        lm <- lm %>% 
+          leaflet::addTopoJSON(topojson = coloniaCdmx, 
+                               weight = 1, opacity = 0.5, 
+                               fillColor = "transparent",
+                               color = "#000000")  
+      }
+      
+      lm <- lm %>% 
+        leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>% 
+        leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia", 
+                            position = "bottomleft", className = "map-caption")
+      lm
     })
     
-    output$map1 <- leaflet::renderLeaflet({
+    
+    dataMap <- reactive({
       tryCatch({
+        if (is.null(r$d_viz)) return()
         if (r$active_viz %in% c("map")) {
           req(r$mapType )
           if (r$mapType == "choropleth") return()
         }
-        req(r$colorsPlot)
-        req(r$desagregacionId)
-        lm <-
-          leaflet::leaflet(data = dataMap(),
-                           options = leaflet::leafletOptions(zoomSnap = 0.25, 
-                                                             zoomDelta = 0.25,
-                                                             minZoom = 2,
-                                                             maxZoom = 14
-                           )) %>% 
-          leaflet::addProviderTiles("CartoDB.Voyager") %>% 
-          leaflet::addTopoJSON(topojson = mayorsCdmx, 
-                               weight = 1, opacity = 0.5, 
-                               fillColor = "transparent",
-                               color = "#000000")  
-        
-        
-        if (r$desagregacionId == "ColoniaHechos") {
-          lm <- lm %>% 
-            leaflet::addTopoJSON(topojson = coloniaCdmx, 
-                                 weight = 1, opacity = 0.5, 
-                                 fillColor = "transparent",
-                                 color = "#000000")  
+        df <- r$d_viz
+        if (input$map1_zoom <= 10) {
+          nsample <- 10000
+          if (nrow(df) < 10000) nsample <- nrow(df)
+          df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+        } else {
+          nsample <- (input$map1_zoom*3000) + 10000
+          if (nsample > nrow(df)) nsample <- nrow(df)
+          df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         }
-        
-        lm <- lm %>% 
-          leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>% 
+        # req(input$map1_bounds)
+        # 
+        # bounds_north <- input$map1_bounds$north
+        # bounds_south <- input$map1_bounds$south
+        # bounds_east <- input$map1_bounds$east
+        # bounds_west <- input$map1_bounds$west
+        # # if (nrow(df) > 50000) {-0.02-0.2
+        # df <- df %>% dplyr::filter(latitud < (bounds_north) & latitud > (bounds_south), longitud < (bounds_east) & longitud > bounds_west)
+        # #  }
+        # print("filter with bounds")
+        # print(nrow(df))
+        # nsample <- 15000
+        # if (nrow(df) < 15000) {
+        #   nsample <- nrow(df)
+        # } else {
+        #   nsample <- (input$map1_zoom*1000) + 15000
+        #   if (nrow(df) < nsample) nsample <- nrow(df)
+        # }
+        # 
+        # df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+        #}
+        # print("mapa")
+        # print(df)
+        df },
+        error = function(cond) {
+          return()
+        })
+    })
+    
+    
+    observe({
+      tryCatch({
+        req(dataMap())
+        lf <- leaflet::leafletProxy("map1", data = dataMap())
+        df <- dataMap()
+        req(r$colorsPlot)
+        #removeId <- setdiff(1:780000, df$id)
+        #print(removeId)
+        lf <- lf %>%
+          # leaflet::removeMarker(removeId) %>% 
+          # leaflet::removeMarkerCluster(layerId = removeId) %>% 
+          leaflet::clearMarkerClusters() %>% 
           leaflet::addCircleMarkers(
-            lng = ~lon,
-            lat = ~lat,
-            label = ~label,
-            radius = ~radio,
+            lng = ~longitud,
+            lat = ~latitud,
+            #label = ~label,
+            radius = 5,
             color = r$colorsPlot[[r$colorsId]],
-            options = leaflet::markerOptions(victimas = ~Víctimas),
             clusterOptions = leaflet::markerClusterOptions(
-              iconCreateFunction=JS("function (cluster) {    
-    var markers = cluster.getAllChildMarkers();
-    var sum = 0; 
-    for (i = 0; i < markers.length; i++) {
-      sum += Number(markers[i].options.victimas);
-    }
-    if(!sum)  return undefined;
-    return new L.DivIcon({ html: '<div><span>' + sum + '</span></div>', className: 'marker-cluster marker-cluster-medium', iconSize: new L.Point(40,40)});
-  }"),  
-              #maxClusterRadius = 100,
-              showCoverageOnHover = FALSE,
-              spiderfyDistanceMultiplier = 3,
+              maxClusterRadius = 50,
+              showCoverageOnHover = TRUE,
+              #spiderfyDistanceMultiplier = 1.5,
               spiderLegPolylineOptions = list(weight = 0),
               zoomToBoundsOnClick = TRUE,
               spiderfyOnMaxZoom = TRUE,
-              removeOutsideVisibleBounds = TRUE,
-              animate = TRUE
+              removeOutsideVisibleBounds = TRUE
             )
-          )
-        lm
+          ) #%>% 
       },
       error = function(cond) {
         return()
       })
+      # leaflet::clearMarkers() %>%
+      # leaflet::removeMarkerCluster(layerId = ~id) %>%
+      # leaflet::removeMarkerFromCluster(layerId = ~id, clusterId = ~id) 
     })
-    
     
     
     optsViz <- reactive({
@@ -182,7 +230,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
         }
         
-       
+        
         if (r$active_viz %in% c("map")) {
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"
