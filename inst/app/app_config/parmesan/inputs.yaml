@@ -3,7 +3,7 @@ varViewId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [map, bar, treemap, line, scatter, area]
+      is_any_of: [map, map_bubbles, bar, treemap, line, scatter, area]
   input_type: selectizeInput
   input_params:
     label: Selección de variable a visualizar
@@ -14,29 +14,12 @@ desagregacionId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [map, bar, treemap]
+      is_any_of: [map, map_bubbles, bar, treemap]
   input_type: radioButtons
   input_params:
     label: 'Desagregar por:'
     choices: desVarOpts()
     selected: ninguna
-  update_param: selected
-mapType:
-  show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [map]
-  input_type: radioButtons
-  input_params:
-    label: Tipo de mapa
-    choices:
-      Coropleta:
-      - choropleth
-      Puntos:
-      - bubbles
-     # Heatmap:
-     #- heatmap
-    selected: choropleth
   update_param: selected
 fechasId:
   show: true
@@ -152,7 +135,7 @@ colorsId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [bar, treemap, line, map, area, scatter]
+      is_any_of: [bar, treemap, line, map, map_bubbles, area, scatter]
   input_type: radioButtonsInput
   input_params:
     label: Colores

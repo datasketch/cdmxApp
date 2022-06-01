@@ -32,15 +32,10 @@ mod_viz_type_server <- function(id, r){
           tv <- "YeaNum"
           if (ncol(df) == 3) tv <- "CatYeaNum"
         }
-        if (r$active_viz == "map") {
-          req(r$mapType)
-          if ("bubbles" %in% r$mapType) return()
-          if ("choropleth" %in% r$mapType) {
-            #if (ncol(df) == 2) 
-            tv <- "GnmNum"
-            #if (ncol(df) == 3) tv <- "GnmCatNum"
-          }
-        }
+        if (r$active_viz %in% "map_bubbles") return()
+        if (r$active_viz %in% "map") tv <- "GnmNum"
+        
+        
         tv
       },
       error = function(cond) {
@@ -52,13 +47,13 @@ mod_viz_type_server <- function(id, r){
       tryCatch({
         req(viz_type())
         if (r$active_viz == "table") return()
+        if (r$active_viz %in% "map_bubbles") return()
         if (r$active_viz %in% "map") {
-          req(r$mapType)
-          if ("bubbles" %in% r$mapType) return()
-          vp <- paste0("lfltmagic::", paste0("lflt_", r$mapType, "_", viz_type())) 
+          vp <- paste0("lfltmagic::", paste0("lflt_", "choropleth", "_", viz_type())) 
         } else {
           vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
         }
+        print(vp)
         vp
       },
       error = function(cond) {

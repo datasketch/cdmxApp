@@ -80,7 +80,7 @@ mod_filter_data_server <- function(id, r){
       observe({
          tryCatch({
             if (is.null(r$active_viz)) return()
-            if (r$active_viz %in% c("bar", "treemap", "map")) {
+            if (r$active_viz %in% c("bar", "treemap", "map", "map_bubbles")) {
                if (is.null(r$varViewId)) return()
                if (is.null(r$desagregacionId)) return()
                varAdd <- r$desagregacionId

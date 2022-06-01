@@ -40,7 +40,7 @@ a#description_modal_ui_1-PdfReclasificacion,#description_modal_ui_1-PdfUpdate,#d
   font-size: 12px;
 }
 
-.control-label#load_parmesan_ui_1-desagregacionId-label,#load_parmesan_ui_1-mapType-label,
+.control-label#load_parmesan_ui_1-desagregacionId-label,
 #load_parmesan_ui_1-aggId-label{
   background: #637381;
   border-radius: 4px;
@@ -326,9 +326,6 @@ scroll STYLES
  margin-bottom: 10px !important;
 }
 
-#load_parmesan_ui_1-mapType {
- margin-top: 10px;
-}
 
 #load_parmesan_ui_1-output_colorsId {
   margin-top: 10px;

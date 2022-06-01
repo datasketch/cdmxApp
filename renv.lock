@@ -339,6 +339,32 @@
         "processx"
       ]
     },
+    "cdmxApp": {
+      "Package": "cdmxApp",
+      "Version": "0.0.0.9000",
+      "Source": "unknown",
+      "Remotes": "datasketch/parmesan, datasketch/shinyinvoer,\n        datasketch/shinypanels, datasketch/dsmodules,\n        datasketch/lfltmagic, datasketch/hgchmagic",
+      "Hash": "dd5af0b0bcb5920f69d499fba7132fdf",
+      "Requirements": [
+        "DT",
+        "dplyr",
+        "dsmodules",
+        "golem",
+        "hgchmagic",
+        "lfltmagic",
+        "lubridate",
+        "parmesan",
+        "plyr",
+        "renv",
+        "shiny",
+        "shinyWidgets",
+        "shinybusy",
+        "shinydisconnect",
+        "shinyinvoer",
+        "shinypanels",
+        "tidyr"
+      ]
+    },
     "cellranger": {
       "Package": "cellranger",
       "Version": "1.1.0",
@@ -715,8 +741,8 @@
       "RemoteRepo": "dsvizprep",
       "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "2f9d3e0aeb2b826a65e3899e2c1360c1aae3e11f",
-      "Hash": "9d0719bedcd9b06cd520b6a6907e556e",
+      "RemoteSha": "9d692aab0acd56f2d01b3e94b2a1c55aba5b3329",
+      "Hash": "fdd9e536cd0c7f5dcd0f34962cfa9157",
       "Requirements": [
         "dplyr",
         "geodata",
@@ -931,15 +957,15 @@
     },
     "geojsonsf": {
       "Package": "geojsonsf",
-      "Version": "2.0.1",
+      "Version": "2.0.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "geojsonsf",
       "RemoteUsername": "SymbolixAU",
       "RemoteRef": "HEAD",
-      "RemoteSha": "0550dbe1b0fb7b05e7d0312e209688882a57db16",
-      "Hash": "1f13193bd1699702e62a0ef91f1cf67e",
+      "RemoteSha": "b9b9efef83c7417661a56c27269edda37840d0f7",
+      "Hash": "626cefac460744e5cd7ae7714f81a813",
       "Requirements": [
         "Rcpp",
         "geometries",
@@ -1523,14 +1549,14 @@
       "Package": "lfltmagic",
       "Version": "0.1.0",
       "Source": "GitHub",
+      "Remotes": "datasketch/homodatum, datasketch/geodata, datasketch/makeup,\n        datasketch/paletero, datasketch/dsvizopts,\n        datasketch/dsvizprep, dreamRs/d3.format",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "datasketch",
       "RemoteRepo": "lfltmagic",
-      "RemoteRef": "main",
-      "RemoteSha": "7677b096a1440ba105c67c883d1144830204923e",
-      "Remotes": "datasketch/homodatum, datasketch/geodata, datasketch/makeup,\n    datasketch/paletero, datasketch/dsvizopts, datasketch/dsvizprep,\n    dreamRs/d3.format",
-      "Hash": "d6b5bd55109143f4aea0c1630b4a0b24",
+      "RemoteUsername": "datasketch",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "a2b1c1c7028443b65cab28828b4e5936deb16942",
+      "Hash": "ab871247bf054c1a1f5f9d21bb0d396d",
       "Requirements": [
         "d3.format",
         "dplyr",
@@ -2248,10 +2274,10 @@
     },
     "rgdal": {
       "Package": "rgdal",
-      "Version": "1.5-31",
+      "Version": "1.5-32",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "3ea75f292fceaa9ba09a88a70f8d1085",
+      "Hash": "7e8f18c3a55c90a44ea05e0620c05a7e",
       "Requirements": [
         "sp"
       ]

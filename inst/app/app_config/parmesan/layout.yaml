@@ -10,7 +10,6 @@ filtros:
     - sexoId
     - categoriaId
     - calidadId
-    - mapType
     - stackedId
     - axisId
     - sortBar

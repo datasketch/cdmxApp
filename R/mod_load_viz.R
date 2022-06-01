@@ -30,23 +30,14 @@ mod_load_viz_server <- function(id, r){
     
     output$map1 <- leaflet::renderLeaflet({
       #tryCatch({
-      if (r$active_viz %in% c("map")) {
-        req(r$mapType )
-        if (r$mapType == "choropleth") return()
-      }
+      if (r$active_viz != "map_bubbles") return()
       
       req(r$desagregacionId)
       lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5, 
-                                              zoomDelta = 0.5
+                                                                zoomDelta = 0.5
       )) %>% 
-        # addProviderTiles("Stamen.TonerLite",
-        #                  group = "Toner") 
-        # leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.25, 
-        #                                                    zoomDelta = 0.25,
-        #                                                    minZoom = 1,
-        #                                                    maxZoom = 14
-        # )) %>% 
-        leaflet::addProviderTiles("CartoDB.Voyager") %>% 
+        leaflet::addTiles(urlTemplate = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14",
+                          attribution = "positron") %>% 
         leaflet::addTopoJSON(topojson = mayorsCdmx, 
                              weight = 1, opacity = 0.5, 
                              fillColor = "transparent",
@@ -72,44 +63,19 @@ mod_load_viz_server <- function(id, r){
     dataMap <- reactive({
       tryCatch({
         if (is.null(r$d_viz)) return()
-        if (r$active_viz %in% c("map")) {
-          req(r$mapType )
-          if (r$mapType == "choropleth") return()
-        }
+        if (r$active_viz != "map_bubbles") return()
         df <- r$d_viz
         if (input$map1_zoom <= 10) {
           nsample <- 10000
           if (nrow(df) < 10000) nsample <- nrow(df)
           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         } else {
-          nsample <- (input$map1_zoom*3000) + 10000
+          nsample <- (input$map1_zoom*1000) + 15000
           if (nsample > nrow(df)) nsample <- nrow(df)
           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         }
-        # req(input$map1_bounds)
-        # 
-        # bounds_north <- input$map1_bounds$north
-        # bounds_south <- input$map1_bounds$south
-        # bounds_east <- input$map1_bounds$east
-        # bounds_west <- input$map1_bounds$west
-        # # if (nrow(df) > 50000) {-0.02-0.2
-        # df <- df %>% dplyr::filter(latitud < (bounds_north) & latitud > (bounds_south), longitud < (bounds_east) & longitud > bounds_west)
-        # #  }
-        # print("filter with bounds")
-        # print(nrow(df))
-        # nsample <- 15000
-        # if (nrow(df) < 15000) {
-        #   nsample <- nrow(df)
-        # } else {
-        #   nsample <- (input$map1_zoom*1000) + 15000
-        #   if (nrow(df) < nsample) nsample <- nrow(df)
-        # }
-        # 
-        # df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
-        #}
-        # print("mapa")
-        # print(df)
-        df },
+        df
+        },
         error = function(cond) {
           return()
         })
@@ -117,17 +83,16 @@ mod_load_viz_server <- function(id, r){
     
     
     observe({
+      req(r$active_viz)
+      if (r$active_viz != "map_bubbles") return()
       tryCatch({
         req(dataMap())
-        lf <- leaflet::leafletProxy("map1", data = dataMap())
         df <- dataMap()
+        lf <- leaflet::leafletProxy("map1", data = df)
         req(r$colorsPlot)
-        #removeId <- setdiff(1:780000, df$id)
-        #print(removeId)
+        req(r$colorsId)
         lf <- lf %>%
-          # leaflet::removeMarker(removeId) %>% 
-          # leaflet::removeMarkerCluster(layerId = removeId) %>% 
-          leaflet::clearMarkerClusters() %>% 
+         leaflet::clearMarkerClusters() %>% 
           leaflet::addCircleMarkers(
             lng = ~longitud,
             lat = ~latitud,
@@ -137,7 +102,6 @@ mod_load_viz_server <- function(id, r){
             clusterOptions = leaflet::markerClusterOptions(
               maxClusterRadius = 50,
               showCoverageOnHover = TRUE,
-              #spiderfyDistanceMultiplier = 1.5,
               spiderLegPolylineOptions = list(weight = 0),
               zoomToBoundsOnClick = TRUE,
               spiderfyOnMaxZoom = TRUE,
@@ -148,23 +112,18 @@ mod_load_viz_server <- function(id, r){
       error = function(cond) {
         return()
       })
-      # leaflet::clearMarkers() %>%
-      # leaflet::removeMarkerCluster(layerId = ~id) %>%
-      # leaflet::removeMarkerFromCluster(layerId = ~id, clusterId = ~id) 
     })
     
     
     optsViz <- reactive({
       tryCatch({
         if (is.null(r$active_viz)) return()
+        if (r$active_viz == "map_bubbles") return()
         if (is.null(r$colorsPlot)) return()
         if (is.null(r$colorsId)) return()
         if (is.null(r$d_viz)) return()
-        if (r$active_viz %in% c("map")) {
-          req(r$mapType )
-          if (r$mapType %in% c("bubbles", "heatmap")) return()
-        }
         df <- r$d_viz
+     
         if (any(c("lon", "longitud") %in% names(df))) return()
         opts_viz <- list(
           data = df,
@@ -246,7 +205,9 @@ mod_load_viz_server <- function(id, r){
             opts_viz$map_extra_layer <- TRUE
             opts_viz$map_name_extra <- "mex_mayors"
           }
-          opts_viz$map_tiles <- "CartoDB.Voyager"
+          opts_viz$map_provider_tile = "url"
+          opts_viz$map_extra_layout = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14"
+          opts_viz$map_name_layout = "positron"
           opts_viz$topo_fill_opacity <- 0.6
           opts_viz$max_topo_fill_opacity <- 0.8
           opts_viz$map_opacity <- 0.5
@@ -263,7 +224,7 @@ mod_load_viz_server <- function(id, r){
         
         
         
-        #print(opts_viz$agg)
+        #print(opts_viz)
         opts_viz
       },
       error = function(cond) {
@@ -275,6 +236,7 @@ mod_load_viz_server <- function(id, r){
       
       tryCatch({
         if (r$active_viz == "table") return()
+        if (r$active_viz == "map_bubbles") return()
         req(optsViz())
         req(r$v_type)
         req(r$d_viz)
@@ -296,14 +258,9 @@ mod_load_viz_server <- function(id, r){
     output$viz_lflt <- leaflet::renderLeaflet({
       tryCatch({      
         req(viz_s())
-        if (r$active_viz == "table") return()
-        if (!(r$active_viz %in% c("map"))) return()
-        req(r$mapType )
-        if (r$mapType == "bubbles") return()
-        
+        if (r$active_viz != "map") return()
         viz_s() %>% 
           leaflet::setView(lng = -99.2, lat = 19.33, 10.70)
-        
       },
       error = function(cond) {
         return()
@@ -316,6 +273,7 @@ mod_load_viz_server <- function(id, r){
         req(viz_s())
         if (r$active_viz == "table") return()
         if (r$active_viz == "map") return()
+        if (r$active_viz == "map_bubbles") return()
         viz_s()
       },
       error = function(cond) {
@@ -333,21 +291,11 @@ mod_load_viz_server <- function(id, r){
                               rownames = F,
                               selection = 'none',
                               options = list(
-                                #autoWidth = TRUE,
                                 language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
-                                #                        lengthChange = F,
-                                #                        pageLength = 4,
                                 scrollX = T,
                                 fixedColumns = TRUE,
                                 fixedHeader = TRUE,
-                                scrollY = "500px"#,
-                                #                        initComplete = htmlwidgets::JS(
-                                #                          "function(settings, json) {",
-                                #                          "$(this.api().table().header()).css({'background-color': '#a13e1f', 'color': '#fff'});",
-                                #                          "}")
-                                #                      )) %>%
-                                # DT::formatStyle( 0 , target= 'row',color = '#0A446B', fontSize ='13px', lineHeight='15px')
-                                
+                                scrollY = "500px"
                               ))
       dtable
     })
@@ -359,14 +307,11 @@ mod_load_viz_server <- function(id, r){
         if (r$quest_choose != "violencia") return()
         if (r$active_viz == "table") {
           vv <- DT::dataTableOutput(ns("table_view"), width = 950)
-        } else if(r$active_viz %in% c("map")) {
-          req(r$mapType )
-          if (r$mapType == "bubbles") {
-            vv <- leaflet::leafletOutput(ns("map1"), height = 630)
-          } else {
-            vv <- leaflet::leafletOutput(ns("viz_lflt"), height = 630) 
-          }
-        }else {
+        } else if (r$active_viz %in% c("map")) {
+          vv <- leaflet::leafletOutput(ns("viz_lflt"), height = 630) 
+        } else if (r$active_viz %in% "map_bubbles") {
+          vv <- leaflet::leafletOutput(ns("map1"), height = 630)
+        } else {
           vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 630)
         }
         vv
