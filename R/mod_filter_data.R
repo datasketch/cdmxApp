@@ -35,7 +35,7 @@ mod_filter_data_server <- function(id, r){
             vars_f <- r$vars_f
             
             for (i in 1:nrow(vars_f)) {
-               if (is.null(r[[vars_f$id[i]]])) {
+               if (is.null(r[[vars_f$id[i]]]) | r[[vars_f$id[i]]] == "NA") {
                   naInd <- is.na(df[[vars_f$vars[i]]])
                   if (any(naInd)) {
                      df <- df[naInd,]

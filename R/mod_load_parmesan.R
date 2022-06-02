@@ -299,13 +299,9 @@ mod_load_parmesan_server <- function(id, r){
     
     
     li <- reactive({
-      print( input)
       df <- parmesan:::index_inputs(session = session, input = input, parmesan = parmesan, 
                                     disincludeInputs = c("varViewId", "desagregacionId", "aggId", "anioId", "colorsId",
                                                          "fechasId", "stackedId", "sortBar", "axisId")) %>% plyr::compact()
-      #if (!identical(df, list())) df <- df %>% dplyr::filter(!id %in% c("desagregacionId"))
-      print("tablita")
-      print(df)
       df
     })
     

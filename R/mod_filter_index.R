@@ -34,8 +34,7 @@ mod_filter_index_server <- function(id, r){
     })
     
     
-    
-
+  
     
     # # observe({
     # #   if (is.null(aver())) return()

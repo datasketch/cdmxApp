@@ -34,12 +34,14 @@ mod_subsetting_data_server <- function(id, r){
         l_lb <- 
           purrr::map(1:nrow(varsF), function(i) {
             df_o <- data.frame(id = r$allCats[[varsF$vars[i]]])
+            df_o$id[is.na(df_o$id)] <- "NA"
             df_o$labelAdd <- paste0(df_o$id, " (0)")
             df_s <- df %>% 
               dplyr::group_by_(id = varsF$vars[i]) %>% 
               dplyr::summarise(total = dplyr::n()) %>%
-              tidyr::drop_na() %>%
+              #tidyr::drop_na() %>%
               dplyr::mutate(label = paste0(id, " (", total, ")"))
+            df_s$id[is.na(df_s$id)] <- "NA"
             df_s <- dplyr::bind_rows(
               data.frame(id = "Todas", label = paste0("Todas (", sum(df_s$total, na.rm = T), ")")),
               df_s)
@@ -48,7 +50,6 @@ mod_subsetting_data_server <- function(id, r){
               df_o$label <- dplyr::coalesce(df_o$label, df_o$labelAdd)
             }
           }) %>% plyr::compact()
-        
         if (identical(l_lb, list())) {
           labelVal$change <- NULL
         } else {

@@ -32,6 +32,7 @@ app_server <- function( input, output, session ) {
     req(r$info_ids)
     if (identical(list(), r$info_ids)) return()
 
+    
     parmesanInputs <- r$info_parmesan
     parmesan::indexButtonsServer(session = session, input = input,
                                  id = "INDEXTEST", parmesan_ids = r$info_ids,

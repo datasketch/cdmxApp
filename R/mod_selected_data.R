@@ -51,7 +51,9 @@ mod_selected_data_server <- function(id, r){
             df <- data_select()
             lCats <- 
                purrr::map(varsToFilter()$vars, function(var){
-                  c("Todas", setdiff(unique(df[[var]]), NA))
+                  x <- c("Todas", as.character(unique(df[[var]])))
+                  x[is.na(x)] <- "NA"
+                  x
                })
             names(lCats) <- varsToFilter()$vars
             lCats
