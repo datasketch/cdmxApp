@@ -36,6 +36,11 @@ alcaldiasId:
     label: Alcaldía
     choices: alcOpts()
     selected: Todas
+    multiple: true
+    options:
+      plugins:
+      - - remove_button
+      - - drag_drop
   update_param: selected
 sexoId:
   show: true
@@ -44,6 +49,11 @@ sexoId:
     label: Sexo
     choices: genOpts()
     selected: Todas
+    multiple: true
+    options:
+      plugins:
+      - - remove_button
+      - - drag_drop
   update_param: selected
 categoriaId:
   show: true
@@ -55,6 +65,11 @@ categoriaId:
     label: Delito
     choices: delOpts()
     selected: Todas
+    multiple: true
+    options:
+      plugins:
+      - - remove_button
+      - - drag_drop
   update_param: selected
 calidadId:
   show: true
@@ -66,6 +81,11 @@ calidadId:
     label: Calidad jurídica
     choices: jurOpts()
     selected: Todas
+    multiple: true
+    options:
+      plugins:
+      - - remove_button
+      - - drag_drop
   update_param: selected
 stackedId:
   show: true
