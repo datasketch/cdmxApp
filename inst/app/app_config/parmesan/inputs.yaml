@@ -9,7 +9,6 @@ varViewId:
     label: Selección de variable a visualizar
     choices: var_opts()
     selected: varDef()
-  update_param: selected
 desagregacionId:
   show: true
   show_if_all:
@@ -20,7 +19,6 @@ desagregacionId:
     label: 'Desagregar por:'
     choices: desVarOpts()
     selected: ninguna
-  update_param: selected
 fechasId:
   show: true
   show_if_all:
@@ -31,7 +29,6 @@ fechasId:
     label: Fecha de interés
     choices: fec_opts()
     selected: fec_select()
-  update_param: selected
 alcaldiasId:
   show: true
   input_type: selectizeInput
@@ -83,7 +80,6 @@ stackedId:
     value: false
     on_label: ''
     off_label: ''
-  update_param: value
 sortBar:
   show: true
   show_if_all:
@@ -97,7 +93,6 @@ sortBar:
     value: true
     on_label: ''
     off_label: ''
-  update_param: value
 axisId:
   show: true
   show_if_all:
@@ -111,7 +106,6 @@ axisId:
     value: false
     on_label: ''
     off_label: ''
-  update_param: value
 aggId: 
   show: true
   show_if_all:
@@ -130,7 +124,6 @@ aggId:
       Porcentaje:
       - pctg
     selected: sum
-  update_param: selected
 colorsId:
   show: true
   show_if_all:
