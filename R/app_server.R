@@ -9,6 +9,14 @@ app_server <- function( input, output, session ) {
   # Define reactive value to pass parameters between modules
   r <- reactiveValues()
   
+  # Get parameters from URL
+  par <- list(ckanConf = NULL)
+  
+  url_par <- reactive({
+    shinyinvoer::url_params(par, session)
+  })
+
+  
   # print buttons
   mod_questions_buttons_server("questions_buttons_ui_1", r)
   
@@ -21,6 +29,7 @@ app_server <- function( input, output, session ) {
   
   observe({
     r$quest_choose <- quest_choose()
+    r$url_par <- url_par()$inputs$ckanConf
   })
   
   mod_load_parmesan_server("load_parmesan_ui_1", r)
