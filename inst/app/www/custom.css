@@ -542,13 +542,15 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
     font-weight: 700;
 }
 
-.marker-cluster-medium div {
+.marker-cluster-medium div, .marker-cluster-small div, .marker-cluster-large div {
     background-color: #637381 !important;
 }
 
-.marker-cluster-medium {
+.marker-cluster-medium, .marker-cluster-small, .marker-cluster-large {
     background-color: rgba(99, 115, 129, 0.5) !important;
 }
+
+
 
 .leaflet-layer.blend .leaflet-tile {
     background-blend-mode: saturation !important;
