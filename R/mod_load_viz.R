@@ -89,8 +89,7 @@ mod_load_viz_server <- function(id, r){
         req(dataMap())
         df <- dataMap()
         lf <- leaflet::leafletProxy("map1", data = df)
-        req(r$colorsPlot)
-        req(r$colorsId)
+
         lf <- lf %>%
          leaflet::clearMarkerClusters() %>% 
           leaflet::addCircleMarkers(
@@ -98,7 +97,7 @@ mod_load_viz_server <- function(id, r){
             lat = ~latitud,
             #label = ~label,
             radius = 5,
-            color = r$colorsPlot[[r$colorsId]],
+            color = "#19719F",
             clusterOptions = leaflet::markerClusterOptions(
               maxClusterRadius = 50,
               showCoverageOnHover = TRUE,

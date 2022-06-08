@@ -157,12 +157,12 @@ mod_load_parmesan_server <- function(id, r){
           palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
         )
         
-      } else if (r$active_viz == "map_bubbles") {
-        list(
-          palette_a = c("#3E9FCC"),
-          palette_b = c("#93D0F1"),
-          palette_c = c("#19719F")
-        )
+      # } else if (r$active_viz == "map_bubbles") {
+      #   list(
+      #     palette_a = c("#3E9FCC"),
+      #     palette_b = c("#93D0F1"),
+      #     palette_c = c("#19719F")
+      #   )
       } else if (r$active_viz %in% c("treemap")) {
         list(
           palette_a = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
