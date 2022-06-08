@@ -299,7 +299,7 @@ mod_load_parmesan_server <- function(id, r){
     
     
     li <- reactive({
-      df <- parmesan:::index_inputs(session = session, input = input, parmesan = parmesan, 
+      df <- parmesan:::index_inputs(session = session, input = input, parmesan = parmesan, numberLabel = TRUE,
                                     disincludeInputs = c("varViewId", "desagregacionId", "aggId", "anioId", "colorsId",
                                                          "fechasId", "stackedId", "sortBar", "axisId")) %>% plyr::compact()
       df

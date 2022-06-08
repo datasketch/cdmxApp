@@ -27,18 +27,14 @@ mod_info_footer_server <- function(id, r){
     output$summaryInfo <- renderUI({
       tryCatch({
         req(r$d_sum)
-        #print(r$d_sum)
-        Fmv <- r$d_sum %>% dplyr::filter(Sexo == "Mujeres")
-        Mmv <- r$d_sum %>% dplyr::filter(Sexo == "Hombres")
-        Nmv <- r$d_sum %>% dplyr::filter(is.na(Sexo))
-        
+        print(r$d_sum)
         HTML(paste0(
           "<div class = 'dataSummary'>",
-          "<div class = 'infoAll'>",format(sum(r$d_sum$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Víctimas</span></div>",
-          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Fmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Mujeres</span></div>",
-          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Mmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>Hombres</span></div>",
-          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>
-        </div>"
+          "<div class = 'infoAll'>",format(nrow(r$d_sel), big.mark = ","), "<span class = 'infoAdd'>Total</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(nrow(r$d_sel) - r$d_sum$Total, big.mark = ","), "<span class = 'infoAdd'>Filtrado</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format((r$d_sum$Total/nrow(r$d_sel))*100, big.mark = ",", digits = 2, nsmall = 2), "<span class = 'infoAdd'>% del total</span></div>",
+         # "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>
+        "</div>"
         ))
       },
       error = function(cond) {

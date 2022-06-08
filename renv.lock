@@ -1762,10 +1762,10 @@
     },
     "packrat": {
       "Package": "packrat",
-      "Version": "0.6.0",
+      "Version": "0.8.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0d6cc4c357e7602bb3eee299f4cfc2a5",
+      "Hash": "15517f0f57129e93fba4cf40dcf88c2d",
       "Requirements": []
     },
     "paletero": {
@@ -1805,10 +1805,10 @@
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "parmesan",
-      "RemoteUsername": "camilaachuri",
+      "RemoteUsername": "datasketch",
       "RemoteRef": "HEAD",
-      "RemoteSha": "8a512d1a5bccfe533997c38893c3fd4ff94f5598",
-      "Hash": "36f3a12f9db25d27be740d8582305e55",
+      "RemoteSha": "d361f2047a6bb366a0adc271f0e264b62bd1e6e8",
+      "Hash": "23cd3f5d15ea51eb68c2bfbdfed01a82",
       "Requirements": [
         "dplyr",
         "shiny",

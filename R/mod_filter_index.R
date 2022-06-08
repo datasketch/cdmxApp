@@ -10,9 +10,7 @@
 mod_filter_index_ui <- function(id){
   ns <- NS(id)
   tagList(
-    div(style = "display: flex;margin-bottom: 10px;",
     uiOutput(ns("indexTest"))
-    )
   )
 }
 
@@ -29,7 +27,7 @@ mod_filter_index_server <- function(id, r){
       req(r$info_inputs)
       path_dic <- cdmxApp:::app_sys("app/app_config/")
       dic_yaml <- yaml::read_yaml(paste0(path_dic, "/", list.files(pattern = ".yaml", path = path_dic)))
-      parmesan::indexButtonsUI(id = "INDEXTEST", label = "Filtros aplicados",
+      parmesan::indexButtonsUI(id = "INDEXTEST", label = "Filtros aplicados", update_all = TRUE,update_label = "Eliminar todos los filtros",
                                list_inputs = r$info_inputs, dic_yaml = dic_yaml, img_icon =  'www/img/close.svg')
     })
     

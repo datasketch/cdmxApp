@@ -49,9 +49,12 @@ mod_filter_data_server <- function(id, r){
                   }
                }
             }   
+            
             df$FechaInicio <- lubridate::dmy(df$FechaInicio)
             if (!is.null(r$anioId)) {
-               cambioEdad <- !all(df$FechaInicio %in% r$anioId)
+               cambioEdad <- !(min(df$FechaInicio, na.rm = T) == r$anioId[1] & max(df$FechaInicio, na.rm = T) == r$anioId[2])
+               # print(r$anioId)
+               # print(cambioEdad)
                if (cambioEdad) {
                   if (length(r$anioId) == 1) {
                      df <- df %>% dplyr::filter(FechaInicioR %in% format(r$anioId, format="%Y-%m"))
@@ -62,6 +65,7 @@ mod_filter_data_server <- function(id, r){
                }
             }
             if (is.null(df) | nrow(df) == 0) return()
+            print(nrow(df))
             dataFilter$info <- df
          },
          error = function(cond) {
@@ -105,7 +109,7 @@ mod_filter_data_server <- function(id, r){
       data_summary <- reactive({
          tryCatch({
          req(dataFilter$info)
-         df <- dataFilter$info %>% dplyr::group_by(Sexo) %>% dplyr::summarise(Total = dplyr::n())
+         df <- dataFilter$info %>% dplyr::summarise(Total = dplyr::n())
          df},
          error = function(cond) {
             return()

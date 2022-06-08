@@ -434,16 +434,30 @@ p {
   font-family: 'Roboto' !important;
 }
 
-#labelIndex {
-  margin: 10px 0 3px 0;
-  font-size: 12px;
-  font-weight: 700;
+.content-all-index {
+ margin-bottom: 19% !important; 
 }
 
+#labelIndex {
+  margin: 12px 0 5px 0;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 10px;
+}
+
+#INDEXTEST-updateAllparmesan {
+  border: 0px !important;
+  padding: 0px !important;
+  font-size: 0.72rem !important;
+  margin: 0px !important;
+}
 
 .index-buttons {
   display: block !important;
-  padding-right: 10px !important;
+  margin-bottom: 7px !important;
 }
 
 .content-index {
@@ -471,6 +485,7 @@ p {
   background: #F0F0F0 !important;
   border-radius: 16px !important;
   border: 0px !important;
+  margin-right: 3px !important;
   padding: 5px 10px !important;
 }
 
@@ -542,3 +557,5 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 .map-caption{
   background-color: #ffffff !important;
 }
+
+
