@@ -52,7 +52,7 @@ app_server <- function( input, output, session ) {
   
 
   
-  
+  mod_read_ckan_server("read_ckan_ui_1", r)
   mod_viz_selection_server("viz_selection_ui_1", r)
   mod_selected_data_server("selected_data_ui_1", r)
   mod_subsetting_data_server("subsetting_data_ui_1", r)

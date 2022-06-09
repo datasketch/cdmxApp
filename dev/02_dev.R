@@ -29,6 +29,7 @@ purrr::map(list_pkg_gh, function(pkg){
 })
 ## Add modules ----
 ## Create a module infrastructure in R/
+golem::add_module( name = "read_ckan" )
 golem::add_module( name = "questions_buttons" ) # buttons panel one
 golem::add_module( name = "load_parmesan" ) # load controls
 golem::add_module( name = "selected_data" ) # data selection accorging question selected

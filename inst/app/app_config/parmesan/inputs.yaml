@@ -148,7 +148,7 @@ colorsId:
   show: true
   show_if_all:
     plotSel():
-      is_any_of: [bar, treemap, line, map, map_bubbles, area, scatter]
+      is_any_of: [bar, treemap, line, map, area, scatter]
   input_type: radioButtonsInput
   input_params:
     label: Colores

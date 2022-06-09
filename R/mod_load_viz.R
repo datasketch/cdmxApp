@@ -89,8 +89,7 @@ mod_load_viz_server <- function(id, r){
         req(dataMap())
         df <- dataMap()
         lf <- leaflet::leafletProxy("map1", data = df)
-        req(r$colorsPlot)
-        req(r$colorsId)
+
         lf <- lf %>%
          leaflet::clearMarkerClusters() %>% 
           leaflet::addCircleMarkers(
@@ -98,7 +97,7 @@ mod_load_viz_server <- function(id, r){
             lat = ~latitud,
             #label = ~label,
             radius = 5,
-            color = r$colorsPlot[[r$colorsId]],
+            color = "#19719F",
             clusterOptions = leaflet::markerClusterOptions(
               maxClusterRadius = 50,
               showCoverageOnHover = TRUE,
@@ -161,6 +160,9 @@ mod_load_viz_server <- function(id, r){
           legend_layout = "vertical",
           legend_align = "right",
           legend_verticalAlign = "middle",
+          legend_title = '<span style="font-size: 9px; color: #666; font-weight: normal">Haz clic en la leyenda para mostrar u </br>ocultar la categoría</span>',
+          legend_backgroundWidth = 1,
+          legend_backgroundBorderColor = "#cccccc",
           map_canvas = TRUE,
           map_min_size = 3,
           map_max_size = 10,
