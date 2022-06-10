@@ -30,13 +30,20 @@ mod_read_ckan_server <- function(id, r){
       listConf$result
     })
     
+    #con <- NULL
+    
     dataCkan <- reactive({
       req(infoUrl())
+      #file <- listConf$result$url
       file <- infoUrl()$url
       con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+      
+      # dataCkan <- readr::read_csv(file)
+      # usethis::use_data(dataCkan, overwrite = TRUE)
       DBI::dbWriteTable(con, "cdmxData", readr::read_csv(file))
-      d <- dplyr::tbl(con,  "cdmxData")
-      d
+      con
+      #d <- dplyr::tbl(con,  "cdmxData")
+      #d
     })
     
     dicCkan <- reactive({
