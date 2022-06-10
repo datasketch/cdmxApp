@@ -37,25 +37,42 @@ mod_selected_data_server <- function(id, r){
       
       
       varsToFilter <- reactive({
-         data.frame(
-            id = c("alcaldiasId", "calidadId", "categoriaId", "sexoId"),
-            vars = c("AlcaldiaHechos", "CalidadJuridica", "Categoria", "Sexo")
+        req(r$ckanConf)
+        #vars <- listConf$result$resource_disaggregate
+        vars <-  r$ckanConf$resource_disaggregate
+  
+        vars <- vars %>% 
+          stringr::str_split(pattern = ",") %>% 
+          .[[1]] %>% 
+          trimws() %>% 
+          stringi::stri_trans_general(id = "Latin-ASCII")
+        
+       df <-  data.frame(
+            id = paste0(tolower(vars), "Id"),
+            vars = vars
          )
+       print(df)
+       df
       })
       
       
       catsToFilter <- reactive({
          tryCatch({
-            req(data_select())
+            #req(r$ckanData)
             req(varsToFilter())
-            df <- data_select()
+            
+            #print("hola")
+           
+            #print(DBI::dbGetQuery(r$ckanData, "SELECT DISTINCT(Delito) FROM cdmxData" ))
             lCats <- 
                purrr::map(varsToFilter()$vars, function(var){
-                  x <- c("Todas", as.character(unique(df[[var]])))
-                  x[is.na(x)] <- "NA"
+                 uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
+                  x <- c("Todas", as.character(uCats[[var]]))
+                  #x[is.na(x)] <- "NA"
                   x
                })
             names(lCats) <- varsToFilter()$vars
+            #print(lCats)
             lCats
          },
          error = function(cond) {
