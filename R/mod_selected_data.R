@@ -51,19 +51,14 @@ mod_selected_data_server <- function(id, r){
             id = paste0(tolower(vars), "Id"),
             vars = vars
          )
-       print(df)
        df
       })
       
       
       catsToFilter <- reactive({
          tryCatch({
-            #req(r$ckanData)
+            req(r$ckanData)
             req(varsToFilter())
-            
-            #print("hola")
-           
-            #print(DBI::dbGetQuery(r$ckanData, "SELECT DISTINCT(Delito) FROM cdmxData" ))
             lCats <- 
                purrr::map(varsToFilter()$vars, function(var){
                  uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
@@ -72,7 +67,6 @@ mod_selected_data_server <- function(id, r){
                   x
                })
             names(lCats) <- varsToFilter()$vars
-            #print(lCats)
             lCats
          },
          error = function(cond) {
