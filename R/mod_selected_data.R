@@ -8,79 +8,77 @@
 #'
 #' @importFrom shiny NS tagList 
 mod_selected_data_ui <- function(id){
-   ns <- NS(id)
-   tagList(
-      
-   )
+  ns <- NS(id)
+  tagList(
+    
+  )
 }
 
 #' selected_data Server Functions
 #'
 #' @noRd 
 mod_selected_data_server <- function(id, r){
-   moduleServer( id, function(input, output, session){
-      ns <- session$ns
-      
-      data_select <- reactive({
-         tryCatch({
-            qs <- r$quest_choose
-            df <- NULL
-            if (qs == "violencia") {
-               df <- dataVictimas
-            } 
-            df
-         },
-         error = function(cond) {
-            return()
-         })
+  moduleServer( id, function(input, output, session){
+    ns <- session$ns
+    
+    data_select <- reactive({
+      tryCatch({
+        req(r$ckanData)
+        con <- r$ckanData
+        df <- dplyr::tbl(con,  "cdmxData")
+        df
+      },
+      error = function(cond) {
+        return()
       })
+    })
+    
+    
+    varsToFilter <- reactive({
+      req(r$ckanConf)
+      #vars <- listConf$result$resource_disaggregate
+      vars <-  r$ckanConf$resource_disaggregate
       
+      vars <- vars %>% 
+        stringr::str_split(pattern = ",") %>% 
+        .[[1]] %>% 
+        trimws() %>% 
+        stringi::stri_trans_general(id = "Latin-ASCII")
       
-      varsToFilter <- reactive({
-        req(r$ckanConf)
-        #vars <- listConf$result$resource_disaggregate
-        vars <-  r$ckanConf$resource_disaggregate
-  
-        vars <- vars %>% 
-          stringr::str_split(pattern = ",") %>% 
-          .[[1]] %>% 
-          trimws() %>% 
-          stringi::stri_trans_general(id = "Latin-ASCII")
-        
-       df <-  data.frame(
-            id = paste0(tolower(vars), "Id"),
-            vars = vars
-         )
-       df
+      df <-  data.frame(
+        id = paste0(tolower(vars), "Id"),
+        vars = vars
+      )
+      df
+    })
+    
+    
+    catsToFilter <- reactive({
+      tryCatch({
+        req(r$ckanData)
+        req(varsToFilter())
+        lCats <- 
+          purrr::map(varsToFilter()$vars, function(var){
+            uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
+            x <- c("Todas", as.character(uCats[[var]]))
+            #x[is.na(x)] <- "NA"
+            x
+          })
+        names(lCats) <- varsToFilter()$vars
+        lCats
+      },
+      error = function(cond) {
+        return()
       })
-      
-      
-      catsToFilter <- reactive({
-         tryCatch({
-            req(r$ckanData)
-            req(varsToFilter())
-            lCats <- 
-               purrr::map(varsToFilter()$vars, function(var){
-                 uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
-                  x <- c("Todas", as.character(uCats[[var]]))
-                  #x[is.na(x)] <- "NA"
-                  x
-               })
-            names(lCats) <- varsToFilter()$vars
-            lCats
-         },
-         error = function(cond) {
-            return()
-         })
-      })
-      
-      observe({
-         r$d_sel <- data_select()
-         r$vars_f <- varsToFilter()
-         r$allCats <- catsToFilter()
-      })
-      
-   })
+    })
+    
+    observe({
+      r$d_sel <- data_select()
+      r$vars_f <- varsToFilter()
+      r$allCats <- catsToFilter()
+    })
+    
+  })
 }
 
 ## To be copied in the UI

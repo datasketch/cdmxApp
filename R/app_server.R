@@ -17,18 +17,7 @@ app_server <- function( input, output, session ) {
   })
 
   
-  # print buttons
-  mod_questions_buttons_server("questions_buttons_ui_1", r)
-  
-  
-  quest_choose <- reactive({
-    last_btn <- input$last_click
-    if (is.null(last_btn)) last_btn <- "violencia"
-    last_btn
-  })
-  
   observe({
-    r$quest_choose <- quest_choose()
     r$url_par <- url_par()$inputs$ckanConf
   })
   
