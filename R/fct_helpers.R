@@ -29,9 +29,11 @@ summaryTbl <-
     } else {
       df <- df %>% dplyr::summarise(total = do.call(aggregation, list(varToSumm, na.rm = TRUE)))
     }
+   df <-   df %>% dplyr::collect()
+   df$id[is.na(df$id)] <- "NA"
     df %>% 
-      dplyr::mutate(label = paste0(id, " (", total, ")")) %>% 
-      dplyr::collect()
+      dplyr::mutate(label = paste0(as.character(id), " (", total, ")")) 
+
   }
 
 

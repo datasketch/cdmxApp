@@ -12,7 +12,9 @@ mod_load_parmesan_ui <- function(id){
   ns <- NS(id)
   tagList(
     # uiOutput(ns("controls"))
-    uiOutput(ns("filterOptions"))
+    uiOutput(ns("filterOptions")),
+    uiOutput(ns("NumericFilters")),
+    uiOutput(ns("NumericRange"))
   )
 }
 
@@ -39,11 +41,57 @@ mod_load_parmesan_server <- function(id, r){
                                   "drag_drop"))
           )
         })
+      } else {
+        return()
       }
       
     })
     
+    output$NumericFilters <- renderUI({
+      req(r$allNums)
+      shiny::selectizeInput(inputId = ns("numericSelected"), 
+                            label = "Variable numerica", 
+                            choices = r$allNums,
+                            selected = r$allNums[1], multiple = TRUE, 
+                            options = list(
+                              maxItems = 2,
+                              plugins = list(
+                                "remove_button",
+                                "drag_drop"))
+      )
+    })
     
+    output$NumericRange <- renderUI({
+      req(r$allNums)
+      req(r$numRange)
+      if (length(r$allNums) > 0) {
+        purrr::map(r$allNums, function(i) {
+          print(i)
+          rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
+          print(rangeDef)
+          shiny::sliderInput(inputId = ns(paste0(rangeDef$id, "range")),
+                             label = rangeDef$id,
+                             min = rangeDef$min, 
+                             max = rangeDef$max,
+                             value = c(rangeDef$min, rangeDef$max)
+          )
+        })
+      } else {
+        return()
+      }
+    })
+    
+    
+    
+    observe({
+      req(r$allNums)
+      extra_nums <- paste0(r$allNums, "range")
+      for(nums_input in extra_nums){
+        get_nums_input <- input[[nums_input]]
+        r[[nums_input]] <- get_nums_input
+      }
+      r$varNum <- input$numericSelected
+    })
     
     observe({
       req(r$vars_f)
@@ -139,7 +187,6 @@ mod_load_parmesan_server <- function(id, r){
         varS <- r$vars_f
         
         purrr::map(1:nrow(varS), function(i) {
-          print("aaaa veeer")
           varToSel <- isolate({input[[varS$id[i]]]})
           if (length(varToSel) > 1) {
             if ("Todas" %in% varToSel) {

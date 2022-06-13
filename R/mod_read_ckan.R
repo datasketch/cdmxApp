@@ -24,7 +24,7 @@ mod_read_ckan_server <- function(id, r){
     infoUrl <- reactive({
       generalUrl <- "https://datos-prueba.cdmx.gob.mx/api/3/action/resource_show?id="
       linkInfo <- r$url_par
-      if (is.null(linkInfo)) linkInfo <- "d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"  
+      if (is.null(linkInfo)) linkInfo <- "d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"#"ff1d4cbf-5985-45db-b40f-d820ce2b01a2" #"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
       linkInfo <- paste0(generalUrl, linkInfo)
       listConf <- jsonlite::fromJSON(linkInfo)
       listConf$result
@@ -43,6 +43,7 @@ mod_read_ckan_server <- function(id, r){
     
     dicCkan <- reactive({
       req(infoUrl())
+      #idDic <- listConf$result$package_id
       idDic <- infoUrl()$package_id
       if (is.null(idDic)) return()
       #idDic <- "7593b324-6010-44f7-8132-cb8b2276c842"
@@ -55,20 +56,27 @@ mod_read_ckan_server <- function(id, r){
         }) %>% 
         purrr::discard(is.null) %>% 
         .[[1]] 
-      
+   
       listUrl <- 
         listDic %>% 
-        .$resources %>% 
-        dplyr::filter(is.na(resource_disaggregate)) %>% 
-        dplyr::select(name, format, url)
+        .$resources #%>%
+      
+      if ("datastore_active" %in% names(listUrl)) {
+        listUrl <-  listUrl %>% dplyr::filter(!datastore_active) 
+      }
+      listUrl <- listUrl %>%   dplyr::select(name, format, url)
       listUrl$format <- gsub("\\.", "",tolower(listUrl$format))
       
       dataDic <- listUrl %>% dplyr::filter(format != "pdf")
-      if (nrow(dataDic) == 0) stop("Debe ingresar el diccionario en formato xlsx o csv")
-      if (dataDic$format == "csv") {
-        dataDic <- readr::read_csv(dataDic$url)
+      
+      if (nrow(dataDic) == 0 ) {
+        dataDic <- NULL  #stop("Debe ingresar el diccionario en formato xlsx o csv")
       } else {
-        dataDic <- rio::import(dataDic$url)
+        if (dataDic$format == "csv") {
+          dataDic <- readr::read_csv(dataDic$url)
+        } else {
+          dataDic <- rio::import(dataDic$url)
+        }
       }
       
       
@@ -79,9 +87,10 @@ mod_read_ckan_server <- function(id, r){
       
       listDic <- list(
         listResources = listUrl,
-        dataDic <- dataDic,
+        dataDic = dataDic,
         infoDic = infoDic
       )
+      
       listDic
       
     })

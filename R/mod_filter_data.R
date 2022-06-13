@@ -23,7 +23,7 @@ mod_filter_data_server <- function(id, r){
     
     
     dataFilter <- reactiveValues(info = NULL)
-
+    
     observe({
       tryCatch({
         req(r$d_sel)
@@ -32,14 +32,16 @@ mod_filter_data_server <- function(id, r){
         for (i in 1:nrow(vars_f)) {
           if (is.null(r[[vars_f$id[i]]])) df <- df
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
-
             filterNA <- FALSE
-            if (is.null(r[[vars_f$id[i]]]) | is.na(r[[vars_f$id[i]]])) filterNA <- TRUE
-
+            print("input")
+            print(r[[vars_f$id[i]]])
+            if (is.null(r[[vars_f$id[i]]]) | is.na(r[[vars_f$id[i]]]) ) filterNA <- TRUE
+            if (any(r[[vars_f$id[i]]] == "NA")) filterNA <- TRUE
+            r[[vars_f$id[i]]][r[[vars_f$id[i]]] == "NA"] <- NULL
             if (!all(r$allCats[[vars_f$vars[i]]] %in% r[[vars_f$id[i]]])) {
               df <- df %>% filterTbl(varToFilter = vars_f$vars[i], catsToView = r[[vars_f$id[i]]], filterNA = filterNA)
             }
-
+            
           }
         }
         # 
@@ -64,15 +66,15 @@ mod_filter_data_server <- function(id, r){
       error = function(cond) {
         return()
       })
-
-
+      
+      
     })
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     # varSelection <- reactiveValues(id = NULL)
     # observe({
     #   tryCatch({
@@ -98,7 +100,7 @@ mod_filter_data_server <- function(id, r){
     #     return()
     #   })
     # })
-
+    
     data_summary <- reactive({
       tryCatch({
         req(dataFilter$info)
@@ -108,7 +110,7 @@ mod_filter_data_server <- function(id, r){
           return()
         })
     })
-
+    
     observe({
       r$d_fil <- dataFilter$info
       #r$v_sel <- varSelection$id
