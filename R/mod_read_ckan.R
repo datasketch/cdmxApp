@@ -24,7 +24,7 @@ mod_read_ckan_server <- function(id, r){
     infoUrl <- reactive({
       generalUrl <- "https://datos-prueba.cdmx.gob.mx/api/3/action/resource_show?id="
       linkInfo <- r$url_par
-      if (is.null(linkInfo)) linkInfo <- "d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"    #"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
+      if (is.null(linkInfo)) linkInfo <- "ff1d4cbf-5985-45db-b40f-d820ce2b01a2"   #"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5" #"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
       linkInfo <- paste0(generalUrl, linkInfo)
       listConf <- jsonlite::fromJSON(linkInfo)
       listConf$result

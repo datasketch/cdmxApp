@@ -27,12 +27,16 @@ mod_info_footer_server <- function(id, r){
     output$summaryInfo <- renderUI({
       tryCatch({
         req(r$d_sum)
-        pctgView <- (r$d_sum$Total/nrow(r$d_sel))*100
+        
+        nrowIni <- DBI::dbGetQuery(r$ckanData, "SELECT COUNT(*) FROM cdmxData")
+        print(nrowIni)
+        
+        pctgView <- (r$d_sum$Total/nrowIni)*100
         nDig <- 2
         if (pctgView == 100) nDig <- 0
         HTML(paste0(
           "<div class = 'dataSummary'>",
-          "<div class = 'infoAll'>",format(nrow(r$d_sel), big.mark = ","), "<span class = 'infoAdd'>Total</span></div>",
+          "<div class = 'infoAll'>",format(nrowIni, big.mark = ","), "<span class = 'infoAdd'>Total</span></div>",
           "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format( r$d_sum$Total, big.mark = ","), "<span class = 'infoAdd'>Visualizados</span></div>",
           "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(pctgView, big.mark = ",", digits = nDig, nsmall = nDig), "%<span class = 'infoAdd'> del total</span></div>",
          # "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>

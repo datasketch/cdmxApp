@@ -243,7 +243,6 @@ mod_load_viz_server <- function(id, r){
         req(optsViz())
         req(r$v_type)
         req(r$d_viz)
-       print(r$d_viz)
         library(hgchmagic)
 
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
