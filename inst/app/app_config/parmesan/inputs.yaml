@@ -1,92 +1,92 @@
 ---
-varViewId:
-  show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [map, map_bubbles, bar, treemap, line, scatter, area]
-  input_type: selectizeInput
-  input_params:
-    label: Selección de variable a visualizar
-    choices: var_opts()
-    selected: varDef()
-desagregacionId:
-  show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [map, map_bubbles, bar, treemap]
-  input_type: radioButtons
-  input_params:
-    label: 'Desagregar por:'
-    choices: desVarOpts()
-    selected: ninguna
-fechasId:
-  show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [line]
-  input_type: selectizeInput
-  input_params:
-    label: Fecha de interés
-    choices: fec_opts()
-    selected: fec_select()
-alcaldiasId:
-  show: true
-  input_type: selectizeInput
-  input_params:
-    label: Alcaldía
-    choices: alcOpts()
-    selected: Todas
-    multiple: true
-    options:
-      plugins:
-      - - remove_button
-      - - drag_drop
-  update_param: selected
-sexoId:
-  show: true
-  input_type: selectizeInput
-  input_params:
-    label: Sexo
-    choices: genOpts()
-    selected: Todas
-    multiple: true
-    options:
-      plugins:
-      - - remove_button
-      - - drag_drop
-  update_param: selected
-categoriaId:
-  show: true
-  show_if_all:
-    dataId():
-      equals: violencia
-  input_type: selectizeInput
-  input_params:
-    label: Delito
-    choices: delOpts()
-    selected: Todas
-    multiple: true
-    options:
-      plugins:
-      - - remove_button
-      - - drag_drop
-  update_param: selected
-calidadId:
-  show: true
-  show_if_all:
-    dataId():
-      equals: violencia
-  input_type: selectizeInput
-  input_params:
-    label: Calidad jurídica
-    choices: jurOpts()
-    selected: Todas
-    multiple: true
-    options:
-      plugins:
-      - - remove_button
-      - - drag_drop
-  update_param: selected
+# varViewId:
+#   show: true
+#   show_if_all:
+#     plotSel():
+#       is_any_of: [map, map_bubbles, bar, treemap, line, scatter, area]
+#   input_type: selectizeInput
+#   input_params:
+#     label: Selección de variable a visualizar
+#     choices: var_opts()
+#     selected: varDef()
+# desagregacionId:
+#   show: true
+#   show_if_all:
+#     plotSel():
+#       is_any_of: [map, map_bubbles, bar, treemap]
+#   input_type: radioButtons
+#   input_params:
+#     label: 'Desagregar por:'
+#     choices: desVarOpts()
+#     selected: ninguna
+# fechasId:
+#   show: true
+#   show_if_all:
+#     plotSel():
+#       is_any_of: [line]
+#   input_type: selectizeInput
+#   input_params:
+#     label: Fecha de interés
+#     choices: fec_opts()
+#     selected: fec_select()
+# alcaldiasId:
+#   show: true
+#   input_type: selectizeInput
+#   input_params:
+#     label: Alcaldía
+#     choices: alcOpts()
+#     selected: Todas
+#     multiple: true
+#     options:
+#       plugins:
+#       - - remove_button
+#       - - drag_drop
+#   update_param: selected
+# sexoId:
+#   show: true
+#   input_type: selectizeInput
+#   input_params:
+#     label: Sexo
+#     choices: genOpts()
+#     selected: Todas
+#     multiple: true
+#     options:
+#       plugins:
+#       - - remove_button
+#       - - drag_drop
+#   update_param: selected
+# categoriaId:
+#   show: true
+#   show_if_all:
+#     dataId():
+#       equals: violencia
+#   input_type: selectizeInput
+#   input_params:
+#     label: Delito
+#     choices: delOpts()
+#     selected: Todas
+#     multiple: true
+#     options:
+#       plugins:
+#       - - remove_button
+#       - - drag_drop
+#   update_param: selected
+# calidadId:
+#   show: true
+#   show_if_all:
+#     dataId():
+#       equals: violencia
+#   input_type: selectizeInput
+#   input_params:
+#     label: Calidad jurídica
+#     choices: jurOpts()
+#     selected: Todas
+#     multiple: true
+#     options:
+#       plugins:
+#       - - remove_button
+#       - - drag_drop
+#   update_param: selected
 stackedId:
   show: true
   show_if_all:
@@ -126,24 +126,24 @@ axisId:
     value: false
     on_label: ''
     off_label: ''
-aggId: 
-  show: true
-  show_if_all:
-    plotSel():
-      is_any_of: [bar, treemap, line, map, area, scatter]
-    dataId():
-      equals: violencia
-  input_type: radioButtons
-  input_params:
-    label: Tipo de unidad
-    choices:
-      Total:
-      - sum
-      #Promedio:
-      #- mean
-      Porcentaje:
-      - pctg
-    selected: sum
+# aggId: 
+#   show: true
+#   show_if_all:
+#     plotSel():
+#       is_any_of: [bar, treemap, line, map, area, scatter]
+#     dataId():
+#       equals: violencia
+#   input_type: radioButtons
+#   input_params:
+#     label: Tipo de unidad
+#     choices:
+#       Total:
+#       - sum
+#       #Promedio:
+#       #- mean
+#       Porcentaje:
+#       - pctg
+#     selected: sum
 colorsId:
   show: true
   show_if_all:
@@ -153,19 +153,19 @@ colorsId:
   input_params:
     label: Colores
     choices: agg_palette()
-anioId:
-  show: true
-  show_if_all:
-    dataId():
-      equals: violencia
-  input_type: dateRangeInput
-  input_params:
-    label: Fecha denuncia
-    start: minIn()
-    end: maxIn()
-    max: maxIn()
-    min: minIn()
-    startLabel: Inicio del rango
-    endLabel: Final del rango
+# anioId:
+#   show: true
+#   show_if_all:
+#     dataId():
+#       equals: violencia
+#   input_type: dateRangeInput
+#   input_params:
+#     label: Fecha denuncia
+#     start: minIn()
+#     end: maxIn()
+#     max: maxIn()
+#     min: minIn()
+#     startLabel: Inicio del rango
+#     endLabel: Final del rango
 
 

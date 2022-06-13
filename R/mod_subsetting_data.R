@@ -37,7 +37,7 @@ mod_subsetting_data_server <- function(id, r){
             df_o$id[is.na(df_o$id)] <- "NA"
             df_o$labelAdd <- paste0(df_o$id, " (0)")
             df_s <- df %>% summaryTbl(agg = "conteo", varToAgg = varsF$vars[i])
-            print(df_s)
+            #print(df_s)
             df_s <- dplyr::bind_rows(
               data.frame(id = "Todas", label = paste0("Todas (", sum(df_s$total, na.rm = T), ")")),
               df_s)

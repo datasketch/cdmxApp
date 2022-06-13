@@ -24,80 +24,13 @@ mod_viz_data_server <- function(id, r){
     data_viz <- reactive({
       tryCatch({
         req(r$d_fil)
+        req(r$aggId)
+        varNum <- r$varNum
+        varCats <- r$v_sel
+        varSel <- c(varCats, varNum)
         df <- r$d_fil
-        req(r$v_sel)
-        var_sel <- r$v_sel
-        if ("cdmx" %in% var_sel) var_sel <- NULL
-        
-        if (r$active_viz %in% "map_bubbles") {
-          var_sel <- c("longitud", "latitud", unique(c(var_sel, "AlcaldiaHechos", "ColoniaHechos")))
-        }
-        
-        
-        varAnio <- NULL
-        varAdd <- "AlcaldiaHechos"
-        if (r$active_viz == "line") {
-          req(r$fechasId)
-          # print("fecha viz")
-          # print(r$fechasId)
-          varAnio  <-  r$fechasId
-          varAdd <- NULL
-        }
-        
-        df <- df[,unique(c(var_sel, varAnio, varAdd))] %>%
-          dplyr::group_by_all() %>%
-          dplyr::summarise(Víctimas = dplyr::n())
-        #print(head(df))
-        
-        
-        
-        if (!(r$active_viz %in% c("map", "line"))) {
-          if (!("AlcaldiaHechos" %in% var_sel)) {
-            df <- df %>% dplyr::select(-AlcaldiaHechos)
-          }
-        }
-        
-        if (r$active_viz == "map") {
-          df <- df %>% dplyr::select(AlcaldiaHechos, dplyr::everything())
-          if ("ColoniaHechos" %in% names(df)) {
-            df <- df %>% dplyr::select(ColoniaHechos, dplyr::everything())
-          }
-        }
-        if (r$active_viz %in% c("map_bubbles","heatmap")) {
-          #indAlc <- grep("AlcaldiaHechos|ColoniaHechos", names(df))
-          #df <- df #%>% dplyr::group_by(ColoniaHechos) %>%
-          # dplyr::summarise(lon = median(longitud, na.rm = TRUE), lat = median(latitud, na.rm = TRUE), Víctimas = dplyr::n()) %>%
-          # dplyr::filter(lon != 0) %>% dplyr::ungroup() %>% dplyr::mutate(pctg = (Víctimas/(sum(Víctimas)))*100)
-          #df$label <- shiny::HTML(paste0("Alcaldía: ", df$AlcaldiaHechos, "<br/>Colonia: ", df$ColoniaHechos))
-          #df$label <- paste0(df$ColoniaHechos, ": ", df$Víctimas, " víctimas")
-          df <- df[,c("longitud", "latitud")]
-          #df$id <- 1:nrow(df)
-          #df$pctg <- round(df$pctg, 2)
-          #df$radio <- scales::rescale(df$Víctimas, to = c(5, 35))
-          #req(r$aggId)
-          # if (r$aggId == "pctg") {
-          #   df$label <-  paste0(df$ColoniaHechos, " :", df$Víctimas, " (", df$pctg, "%)")
-          # }
-        }
-        
-        
-        
-        
-        if (length(var_sel) == 2 & !(r$active_viz %in% c("line", "map"))) {
-          if (is.null(r$axisId)) return()
-          #print(r$axisId)
-          if (r$axisId) {
-            var_sel <- rev(var_sel)
-            df <- df[,c(var_sel, "Víctimas")]
-          }
-        }
-        
-        if (any(dicVictimas$id %in% names(df))) {
-          dicViz <- data.frame(id = names(df))
-          dicViz <- dicViz %>% dplyr::left_join(dicVictimas)
-          dicViz$label <- dplyr::coalesce(dicViz$label, dicViz$id)
-          names(df) <- dicViz$label
-        }
+        df <- selectTbl(df, agg = r$aggId, varToSel = varSel, varToGroup = varCats, varToAgg = varNum)
+        #print(df)
         df
       },
       error = function(cond) {

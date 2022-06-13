@@ -48,8 +48,13 @@ mod_selected_data_server <- function(id, r){
       lsFringe$dic$hdType[grepl("edad", lsFringe$dic$id)] <- "Cat"
       lsFringe$dic$hdType[grepl("hora|postal|id", lsFringe$dic$id)] <- "Txt"
       lsFringe$dic$hdType[grepl("fecha|date", lsFringe$dic$id)] <- "Dat"
-      print(lsFringe$dic)
+      #print(lsFringe$dic)
       lsFringe
+    })
+    
+    dic_fringe <- reactive({
+      req(data_fringe())
+      data_fringe()$dic
     })
     
     
@@ -133,6 +138,7 @@ mod_selected_data_server <- function(id, r){
     
     observe({
       r$d_sel <- data_select()
+      r$dic_f <- dic_fringe()
       r$vars_f <- varsToFilter()
       r$allCats <- catsToFilter()
       r$allNums <- numToFilter()

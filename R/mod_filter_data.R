@@ -33,8 +33,6 @@ mod_filter_data_server <- function(id, r){
           if (is.null(r[[vars_f$id[i]]])) df <- df
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
             filterNA <- FALSE
-            print("input")
-            print(r[[vars_f$id[i]]])
             if (is.null(r[[vars_f$id[i]]]) | is.na(r[[vars_f$id[i]]]) ) filterNA <- TRUE
             if (any(r[[vars_f$id[i]]] == "NA")) filterNA <- TRUE
             r[[vars_f$id[i]]][r[[vars_f$id[i]]] == "NA"] <- NULL
@@ -75,31 +73,29 @@ mod_filter_data_server <- function(id, r){
     
     
     
-    # varSelection <- reactiveValues(id = NULL)
-    # observe({
-    #   tryCatch({
-    #     if (is.null(r$active_viz)) return()
-    #     if (r$active_viz %in% c("bar", "treemap", "map", "map_bubbles")) {
-    #       if (is.null(r$varViewId)) return()
-    #       if (is.null(r$desagregacionId)) return()
-    #       varAdd <- r$desagregacionId
-    #       if (varAdd == "cdmx") return()
-    #       if (r$desagregacionId == "ninguna") varAdd <- NULL
-    #       varSelection$id <- c(varAdd, r$varViewId)
-    #       if (r$active_viz == "treemap") varSelection$id <- c(r$varViewId, varAdd)
-    #     } else if (r$active_viz %in% c( "line")) {
-    #       if (is.null(r$varViewId)) return()
-    #       varSelection$id <- r$varViewId
-    #     } else {
-    #       return()
-    #       #if (is.null(r$varOtherId)) return()
-    #       #varSelection$id <- "AlcaldiaHechos"
-    #     }
-    #   },
-    #   error = function(cond) {
-    #     return()
-    #   })
-    # })
+    varSelection <- reactiveValues(id = NULL)
+    observe({
+      tryCatch({
+        if (is.null(r$active_viz)) return()
+        if (r$active_viz %in% c("bar", "treemap", "map", "map_bubbles")) {
+          if (is.null(r$varViewId)) return()
+          if (is.null(r$desagregacionId)) return()
+          varAdd <- r$desagregacionId
+          #if (varAdd == "Histórico CDMX") return()
+          if (r$desagregacionId == "ninguna") varAdd <- NULL
+          varSelection$id <- c(varAdd, r$varViewId)
+          if (r$active_viz == "treemap") varSelection$id <- c(r$varViewId, varAdd)
+        } else if (r$active_viz %in% c( "line", "scatter")) {
+          if (is.null(r$varViewId)) return()
+          varSelection$id <- r$varViewId
+        } else {
+          return()
+        }
+      },
+      error = function(cond) {
+        return()
+      })
+    })
     
     data_summary <- reactive({
       tryCatch({
@@ -113,7 +109,7 @@ mod_filter_data_server <- function(id, r){
     
     observe({
       r$d_fil <- dataFilter$info
-      #r$v_sel <- varSelection$id
+      r$v_sel <- varSelection$id
       r$d_sum <- data_summary()
     })
     

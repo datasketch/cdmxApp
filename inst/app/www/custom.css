@@ -332,6 +332,10 @@ scroll STYLES
   margin-bottom: 10px;
 }
 
+#load_parmesan_ui_1-varViewOut {
+  margin-top: 15px !important;
+}
+
 
 .form-group,.radio {
   margin-bottom: 3px !important;

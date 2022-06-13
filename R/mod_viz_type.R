@@ -20,50 +20,50 @@ mod_viz_type_ui <- function(id){
 mod_viz_type_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-    # 
-    # viz_type <- reactive({
-    #   tryCatch({
-    #     req(r$d_viz)
-    #     req(r$active_viz)
-    #     df <- r$d_viz
-    #     tv <- "CatNum"
-    #     if (ncol(df) == 3) tv <- "CatCatNum"
-    #     if (sum(grepl("Mes|Año",names(df)))>0) {
-    #       tv <- "YeaNum"
-    #       if (ncol(df) == 3) tv <- "CatYeaNum"
-    #     }
-    #     if (r$active_viz %in% "map_bubbles") return()
-    #     if (r$active_viz %in% "map") tv <- "GnmNum"
-    #     
-    #     
-    #     tv
-    #   },
-    #   error = function(cond) {
-    #     return()
-    #   })
-    # })
-    # 
-    # viz_name <- reactive({
-    #   tryCatch({
-    #     req(viz_type())
-    #     if (r$active_viz == "table") return()
-    #     if (r$active_viz %in% "map_bubbles") return()
-    #     if (r$active_viz %in% "map") {
-    #       vp <- paste0("lfltmagic::", paste0("lflt_", "choropleth", "_", viz_type())) 
-    #     } else {
-    #       vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
-    #     }
-    #     print(vp)
-    #     vp
-    #   },
-    #   error = function(cond) {
-    #     return()
-    #   })
-    # })
-    # 
-    # observe({
-    #   r$v_type <- viz_name()
-    # })
+
+    viz_type <- reactive({
+      tryCatch({
+        req(r$d_viz)
+        req(r$active_viz)
+        df <- r$d_viz
+        tv <- "CatNum"
+        if (ncol(df) == 3) tv <- "CatCatNum"
+        if (sum(grepl("Mes|Año",names(df)))>0) {
+          tv <- "YeaNum"
+          if (ncol(df) == 3) tv <- "CatYeaNum"
+        }
+        if (r$active_viz %in% "map_bubbles") return()
+        if (r$active_viz %in% "map") tv <- "GnmNum"
+
+
+        tv
+      },
+      error = function(cond) {
+        return()
+      })
+    })
+
+    viz_name <- reactive({
+      tryCatch({
+        req(viz_type())
+        if (r$active_viz == "table") return()
+        if (r$active_viz %in% "map_bubbles") return()
+        if (r$active_viz %in% "map") {
+          vp <- paste0("lfltmagic::", paste0("lflt_", "choropleth", "_", viz_type()))
+        } else {
+          vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
+        }
+        print(vp)
+        vp
+      },
+      error = function(cond) {
+        return()
+      })
+    })
+
+    observe({
+      r$v_type <- viz_name()
+    })
     
     
   })
