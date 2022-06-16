@@ -34,6 +34,7 @@ mod_selected_data_server <- function(id, r){
     })
     
     data_fringe <- reactive({
+      tryCatch({
       req(data_select())
       df <- data_select()
       #dic <- r$ckanExtra
@@ -50,6 +51,10 @@ mod_selected_data_server <- function(id, r){
       lsFringe$dic$hdType[grepl("fecha|date", lsFringe$dic$id)] <- "Dat"
       #print(lsFringe$dic)
       lsFringe
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     dic_fringe <- reactive({
@@ -59,6 +64,7 @@ mod_selected_data_server <- function(id, r){
     
     
     varsToFilter <- reactive({
+      tryCatch({
       req(r$ckanConf)
       #vars <- listConf$result$resource_disaggregate
       vars <-  r$ckanConf$resource_disaggregate
@@ -88,6 +94,10 @@ mod_selected_data_server <- function(id, r){
         vars = vars
       )
       df
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     
@@ -124,6 +134,7 @@ mod_selected_data_server <- function(id, r){
     })
     
     numRange <- reactive({
+      tryCatch({
       req(numToFilter())
         lNum <- 
           purrr::map(numToFilter(), function(var){
@@ -133,6 +144,10 @@ mod_selected_data_server <- function(id, r){
             df
           }) %>% dplyr::bind_rows()
         lNum
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     

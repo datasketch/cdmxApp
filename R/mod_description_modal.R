@@ -70,8 +70,8 @@ mod_description_modal_server <- function(id, r){
     })
 
     output$tableDic <- DT::renderDataTable({
-      req(dicViolencia)
-      df <- dicViolencia[,-3]
+      req(r$ckanExtra)
+      df <- r$ckanExtra$dataDic
       dtable <- DT::datatable(df,
                               rownames = F,
                               escape = FALSE,

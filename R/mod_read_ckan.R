@@ -22,26 +22,37 @@ mod_read_ckan_server <- function(id, r){
     ns <- session$ns
     
     infoUrl <- reactive({
+      tryCatch({
       generalUrl <- "https://datos-prueba.cdmx.gob.mx/api/3/action/resource_show?id="
       linkInfo <- r$url_par
-      if (is.null(linkInfo)) linkInfo <- "ff1d4cbf-5985-45db-b40f-d820ce2b01a2"   #"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5" #"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
+      if (is.null(linkInfo)) linkInfo <- "d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"    #"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
       linkInfo <- paste0(generalUrl, linkInfo)
       listConf <- jsonlite::fromJSON(linkInfo)
       listConf$result
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     #con <- NULL
     
     dataCkan <- reactive({
+     # tryCatch({
       req(infoUrl())
       #file <- listConf$result$url
       file <- infoUrl()$url
       con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
       DBI::dbWriteTable(con, "cdmxData", readr::read_csv(file, na = "NA"))
       con
+      # },
+      # error = function(cond) {
+      #   return()
+      # })
     })
     
     dicCkan <- reactive({
+     # tryCatch({
       req(infoUrl())
       #idDic <- listConf$result$package_id
       idDic <- infoUrl()$package_id
@@ -92,7 +103,10 @@ mod_read_ckan_server <- function(id, r){
       )
       
       listDic
-      
+      # },
+      # error = function(cond) {
+      #   return()
+      # })
     })
     
     

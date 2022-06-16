@@ -28,7 +28,7 @@ mod_info_footer_server <- function(id, r){
       tryCatch({
         req(r$d_sum)
         
-        nrowIni <- DBI::dbGetQuery(r$ckanData, "SELECT COUNT(*) FROM cdmxData")
+        nrowIni <- as.vector(DBI::dbGetQuery(r$ckanData, "SELECT COUNT(*) FROM cdmxData"))
         print(nrowIni)
         
         pctgView <- (r$d_sum$Total/nrowIni)*100
@@ -60,7 +60,7 @@ mod_info_footer_server <- function(id, r){
       r$modal_desc <- input$descripcion_modal
       r$modal_dicc <- input$dicc_modal
       r$modal_recs <- input$recursos_modal
-      r$dic_violencia <- dicViolencia
+      #r$dic_violencia <- dicViolencia
     })
     
     

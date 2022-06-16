@@ -9,16 +9,19 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports: 
+    DBI,
     dplyr,
     dsmodules (>= 0.5.6),
     DT,
     golem,
     hgchmagic (>= 1.0.0),
+    jsonlite,
     lfltmagic (>= 0.1.0),
     lubridate,
     parmesan (>= 0.6.1),
     plyr,
     renv,
+    RSQLite,
     shiny,
     shinybusy,
     shinydisconnect,
