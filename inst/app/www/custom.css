@@ -564,4 +564,8 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: #ffffff !important;
 }
 
+#naranja {
+  flex-shrink: 0;
+}
+
 
