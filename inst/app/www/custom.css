@@ -565,7 +565,7 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
 }
 
 #naranja {
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 
