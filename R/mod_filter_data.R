@@ -30,15 +30,21 @@ mod_filter_data_server <- function(id, r){
         df <- r$d_sel
         vars_f <- r$vars_f
         for (i in 1:nrow(vars_f)) {
+          print("inicial")
+          print(r[[vars_f$id[i]]])
+          print("----")
           if (is.null(r[[vars_f$id[i]]])) df <- df
+          if (is.na(r[[vars_f$id[i]]])) df <- df
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
+            if (is.null(r[[vars_f$id[i]]])) df <- df
             filterNA <- FALSE
-            if (is.null(r[[vars_f$id[i]]]) | is.na(r[[vars_f$id[i]]]) ) filterNA <- TRUE
+            if (is.na(r[[vars_f$id[i]]])) filterNA <- TRUE
+            
             if (any(r[[vars_f$id[i]]] == "NA")) filterNA <- TRUE
-            r[[vars_f$id[i]]][r[[vars_f$id[i]]] == "NA"] <- NULL
-            if (!all(r$allCats[[vars_f$vars[i]]] %in% r[[vars_f$id[i]]])) {
-              df <- df %>% filterTbl(varToFilter = vars_f$vars[i], catsToView = r[[vars_f$id[i]]], filterNA = filterNA)
-            }
+            varF <- setdiff(r[[vars_f$id[i]]], "NA")
+            if (identical(varF, character())) varF <- NULL
+            df <- df %>% filterTbl(varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
+            #  }
             
           }
         }
@@ -101,10 +107,11 @@ mod_filter_data_server <- function(id, r){
       tryCatch({
         req(dataFilter$info)
         df <- dataFilter$info %>% dplyr::summarise(Total = dplyr::n()) %>% dplyr::collect()
-        df},
-        error = function(cond) {
-          return()
-        })
+        df
+      },
+      error = function(cond) {
+        return()
+      })
     })
     
     observe({

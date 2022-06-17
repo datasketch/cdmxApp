@@ -10,9 +10,13 @@ filterTbl <-
   function(dataTbl, varToFilter, catsToView = NULL, filterNA = FALSE) {
     var <- dplyr::sym(varToFilter)
     df <- dataTbl
-    if (filterNA)  df <- df %>% dplyr::filter(is.na(!!var))
+    dfNA <- NULL
+    if (filterNA) dfNA <- df %>% dplyr::filter(is.na(!!var))
     if (!is.null(catsToView)) {
       df <- df %>% dplyr::filter(!!var %in% catsToView)
+      if (filterNA)  df <- df %>% dplyr::union_all(dfNA)
+    } else {
+      if (filterNA) df <- dfNA
     }
     df
   }
@@ -29,11 +33,11 @@ summaryTbl <-
     } else {
       df <- df %>% dplyr::summarise(total = do.call(aggregation, list(varToSumm, na.rm = TRUE)))
     }
-   df <-   df %>% dplyr::collect()
-   df$id[is.na(df$id)] <- "NA"
+    df <-   df %>% dplyr::collect()
+    df$id[is.na(df$id)] <- "NA"
     df %>% 
       dplyr::mutate(label = paste0(as.character(id), " (", total, ")")) 
-
+    
   }
 
 selectTbl <-
@@ -47,7 +51,7 @@ selectTbl <-
       }
     }
     print(varToSel)
-  
+    
     df <- dataTbl
     df <- df %>% 
       dplyr::select(!!varToSel) 
@@ -59,9 +63,9 @@ selectTbl <-
       varGadd <- dplyr::sym(varToGroup[2])
       df <- df %>% dplyr::group_by(!!varG, !!varGadd)
     }
-
-   
-
+    
+    
+    
     if (agg == "count") {
       df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
     } else if (agg == "mean") {
