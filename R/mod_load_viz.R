@@ -178,6 +178,9 @@ mod_load_viz_server <- function(id, r){
         if (r$aggId == "pctg") {
           opts_viz$percentage <- TRUE
         } 
+        if (!is.null(r$pctgNum)) {
+          if (r$pctgNum)opts_viz$percentage <- TRUE
+        }
 
         if (!is.null(r$stackedId)) {
           if (r$stackedId) {

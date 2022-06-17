@@ -42,10 +42,14 @@ summaryTbl <-
 
 selectTbl <-
   function(dataTbl, agg = "count", varToSel, varToGroup, varToAgg) {
-    
+    if (is.null(dataTbl)) return()
+    if (is.null(varToSel)) return()
+    if (is.null(varToGroup)) return()
     if (!is.null(varToAgg)) {
       varToAgg <- dplyr::sym(varToAgg)
     } 
+    
+    if (agg == "pctg") agg <- "count"
     
     df <- dataTbl
     df <- df %>% 

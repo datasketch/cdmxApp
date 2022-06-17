@@ -14,6 +14,7 @@ mod_load_parmesan_ui <- function(id){
     uiOutput(ns("varViewOut")),
     uiOutput(ns("desagregacionOut")),
     uiOutput(ns("aggOut")),
+    uiOutput(ns("percOut")),
     uiOutput(ns("NumericFilters")),
     uiOutput(ns("filterOptions")),
     uiOutput(ns("NumericRange")),
@@ -100,7 +101,7 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(numVars)) {
         ch <- setNames(c("count", "pctg"), c("Conteo", "Porcentaje"))
       } else {
-        ch <- setNames(c("count", "sum", "mean", "pctg"), c("Conteo", "Suma", "Promedio", "Porcentaje"))
+        ch <- setNames(c("count", "sum", "mean"), c("Conteo", "Suma", "Promedio"))
       }
       
       shiny::radioButtons(ns("aggId"), 
@@ -110,10 +111,17 @@ mod_load_parmesan_server <- function(id, r){
                           )
     })
     
+    
+    output$percOut <- renderUI({
+      if(is.null(r$allNums)) return()
+      shinyinvoer::toggleSwitchInput(ns("pctgNumVar"), " Porcentaje", on_label = " ", off_label = " ")
+    })
+    
     observe({
       r$varViewId <- input[["varViewId"]]
       r$desagregacionId <- input[["desagregacionId"]]
       r$aggId <- input[["aggId"]]
+      r$pctgNum <- input[["pctgNumVar"]]
     })
 
     # # Filtros q afectan la base -----------------------------------------------
