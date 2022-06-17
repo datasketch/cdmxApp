@@ -42,15 +42,10 @@ summaryTbl <-
 
 selectTbl <-
   function(dataTbl, agg = "count", varToSel, varToGroup, varToAgg) {
-    if (agg == "pctg") {
-      if (!is.null(varToAgg)) {
-        agg <- "sum"
-        varToAgg <- dplyr::sym(varToAgg)
-      } else {
-        agg <- "count"
-      }
-    }
-    print(varToSel)
+    
+    if (!is.null(varToAgg)) {
+      varToAgg <- dplyr::sym(varToAgg)
+    } 
     
     df <- dataTbl
     df <- df %>% 
@@ -63,15 +58,14 @@ selectTbl <-
       varGadd <- dplyr::sym(varToGroup[2])
       df <- df %>% dplyr::group_by(!!varG, !!varGadd)
     }
-    
-    
+
     
     if (agg == "count") {
       df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
     } else if (agg == "mean") {
-      df <- df %>% dplyr::summarise(Promedio = mean(varToAgg, na.rm = TRUE))
+      df <- df %>% dplyr::summarise(Promedio = mean(!!varToAgg, na.rm = TRUE))
     } else if (agg == "sum") {
-      df <- df %>% dplyr::summarise(Total = sum(varToAgg, na.rm = TRUE))
+      df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
     }
     df <-   df %>% dplyr::collect()
     df

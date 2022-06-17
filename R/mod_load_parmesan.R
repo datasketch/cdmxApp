@@ -14,8 +14,8 @@ mod_load_parmesan_ui <- function(id){
     uiOutput(ns("varViewOut")),
     uiOutput(ns("desagregacionOut")),
     uiOutput(ns("aggOut")),
-    uiOutput(ns("filterOptions")),
     uiOutput(ns("NumericFilters")),
+    uiOutput(ns("filterOptions")),
     uiOutput(ns("NumericRange")),
     uiOutput(ns("controls"))
   )
@@ -100,7 +100,7 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(numVars)) {
         ch <- setNames(c("count", "pctg"), c("Conteo", "Porcentaje"))
       } else {
-        ch <- setNames(c("count", "sum", "mean", "pctg"), c("Conteo", "Total", "Promedio", "Porcentaje"))
+        ch <- setNames(c("count", "sum", "mean", "pctg"), c("Conteo", "Suma", "Promedio", "Porcentaje"))
       }
       
       shiny::radioButtons(ns("aggId"), 
@@ -141,6 +141,8 @@ mod_load_parmesan_server <- function(id, r){
     
     output$NumericFilters <- renderUI({
       req(r$allNums)
+      req(r$aggId)
+      if (r$aggId == "count") return()
       shiny::selectizeInput(inputId = ns("numericSelected"), 
                             label = "Variable numerica", 
                             choices = r$allNums,
