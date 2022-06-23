@@ -139,9 +139,9 @@ mod_selected_data_server <- function(id, r){
       req(numToFilter())
         lNum <- 
           purrr::map(numToFilter(), function(var){
-            minNum <- as.vector(DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData")))
-            maxNum <- as.vector(DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData")))
-            df <- data.frame(min = as.numeric(minNum), max = as.numeric(maxNum), id = var)
+            minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
+            maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData"))
+            df <- data.frame(min = as.numeric(minNum[[1]]), max = as.numeric(maxNum[[1]]), id = var)
             df
           }) %>% dplyr::bind_rows()
         lNum
@@ -152,6 +152,37 @@ mod_selected_data_server <- function(id, r){
     })
     
     
+    
+    dateToFilter <- reactive({
+      req(data_fringe())
+      dic <- data_fringe()$dic
+      numDic <- dic %>% dplyr::filter(hdType == "Dat")
+      if (nrow(numDic) > 0) {
+        numDic$id
+      } else {
+        return()
+      }
+    })
+    
+    dateRange <- reactive({
+      tryCatch({
+        req(DateToFilter())
+        lNum <- 
+          purrr::map(DateToFilter(), function(var){
+            minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
+            maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData"))
+            df <- data.frame(min = lubridate::dmy(minNum[[1]]), max = lubridate::as_date(maxNum[[1]]), id = var)
+            df
+          }) %>% dplyr::bind_rows()
+        lNum
+      },
+      error = function(cond) {
+        return()
+      })      
+    })
+    
+    
+    
     observe({
       r$d_sel <- data_select()
       r$dic_f <- dic_fringe()
@@ -159,6 +190,8 @@ mod_selected_data_server <- function(id, r){
       r$allCats <- catsToFilter()
       r$allNums <- numToFilter()
       r$numRange <- numRange()
+      r$allDates <- dateToFilter()
+      r$datesRange <- dateRange()
     })
     
   })

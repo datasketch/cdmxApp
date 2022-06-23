@@ -16,6 +16,8 @@ mod_load_parmesan_ui <- function(id){
     uiOutput(ns("aggOut")),
     uiOutput(ns("percOut")),
     uiOutput(ns("NumericFilters")),
+    uiOutput(ns("DateFilters")),
+    uiOutput(ns("dateRange")),
     uiOutput(ns("filterOptions")),
     uiOutput(ns("NumericRange")),
     uiOutput(ns("controls"))
@@ -30,7 +32,45 @@ mod_load_parmesan_server <- function(id, r){
     ns <- session$ns
     
     
-
+    output$DateFilters <- renderUI({
+      req(r$allDates)
+      req(r$active_viz)
+      if (!r$active_viz %in% c("line", "area")) return()
+      shiny::selectizeInput(inputId = ns("datesSelected"), 
+                            label = "Fecha de interés", 
+                            choices = r$allDates,
+                            selected = r$allNums[1]
+      )
+    })
+    
+    
+    output$dateRange <- renderUI({
+      print("dateRanes")
+      print(r$datesRange)
+      "hola"
+      # req(r$allDates)
+      # req(r$datesRange)
+      # print(r$allDates)
+      # if (length(r$allDates) > 0) {
+      #   purrr::map(r$allDates, function(i) {
+      #     rangeDef <- r$datesRange %>% dplyr::filter(id %in% i)
+      #     print(rangeDef)
+      #     shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
+      #                                 label = "Fecha denuncia",
+      #                                 start= rangeDef$min,
+      #                                 end= rangeDef$max,
+      #                                 max= rangeDef$max,
+      #                                 min= rangeDef$min,
+      #                                 startLabel = "Inicio del rango",
+      #                                 endLabel = "Final del rango"
+      #     )
+      #   })
+      # } else {
+      #   return()
+      # }
+    })
+    
+    
     var_opts <- reactive({
       req(r$active_viz)
       if (is.null(r$vars_f)) return()
@@ -45,7 +85,7 @@ mod_load_parmesan_server <- function(id, r){
       }
       ch
     })
-
+    
     varDef <- reactive({
       req(var_opts())
       var_opts()[1]
@@ -59,7 +99,7 @@ mod_load_parmesan_server <- function(id, r){
                             choices = var_opts(),
                             selected = varDef())
     })
-
+    
     desVarOpts <- reactive({
       req(r$dic_f)
       req(r$varViewId)
@@ -70,10 +110,10 @@ mod_load_parmesan_server <- function(id, r){
       varPsel <- data.frame(id = c("ninguna", catVars),
                             label = c("Ninguna", catVars))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)
-
+      
       if (req(r$active_viz) %in% c("map", "map_bubbles"))  {
-         setNames(c("ninguna", r$dic_f$label[grepl("colonia", tolower(r$dic_f$label))]),
-                  c("Ninguna", r$dic_f$label[grepl("colonia", tolower(r$dic_f$label))]))
+        setNames(c("ninguna", r$dic_f$label[grepl("colonia", tolower(r$dic_f$label))]),
+                 c("Ninguna", r$dic_f$label[grepl("colonia", tolower(r$dic_f$label))]))
       } else {
         setNames(varPsel$id, varPsel$label)
       }
@@ -84,13 +124,13 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       if (r$active_viz %in% "line") return()
       req(desVarOpts())
-     shiny::radioButtons(ns("desagregacionId"),
+      shiny::radioButtons(ns("desagregacionId"),
                           "Desagregar por:",
                           choices = desVarOpts(),
                           selected = "ninguna")
     })
-
-
+    
+    
     
     output$aggOut <- renderUI({
       req(r$active_viz)
@@ -108,7 +148,7 @@ mod_load_parmesan_server <- function(id, r){
                           "Tipo de unidad",
                           choices = ch,
                           selected = "count"
-                          )
+      )
     })
     
     
@@ -123,7 +163,7 @@ mod_load_parmesan_server <- function(id, r){
       r$aggId <- input[["aggId"]]
       r$pctgNum <- input[["pctgNumVar"]]
     })
-
+    
     # # Filtros q afectan la base -----------------------------------------------
     
     output$filterOptions <- renderUI({
@@ -238,36 +278,36 @@ mod_load_parmesan_server <- function(id, r){
         return()
       })
     })
-
-
-
-
-
+    
+    
+    
+    
+    
     plotSel <- reactive({
       req(r$active_viz)
       r$active_viz
     })
-
-
-
+    
+    
+    
     varTwoSel <- reactive({
       req(r$desagregacionId)
       r$desagregacionId != "ninguna"
     })
-
+    
     stackLabel <- reactive({
       HTML("<span style='margin-left:5px; margin-top: -6px;'>Apilar barras </span>")
     })
-
+    
     axisLabel <- reactive({
       HTML("<span style='margin-left:5px; margin-top: -6px;'> Invertir selección de Variables </span>")
     })
-
+    
     sortLabel <- reactive({
       HTML("<span style='margin-left:5px; margin-top: -6px;'> Ordenar </span>")
     })
-
-
+    
+    
     colors_default <- reactive({
       req(r$active_viz)
       if (r$active_viz %in% c("map")) {
@@ -279,13 +319,13 @@ mod_load_parmesan_server <- function(id, r){
           palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
           palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
         )
-
-      # } else if (r$active_viz == "map_bubbles") {
-      #   list(
-      #     palette_a = c("#3E9FCC"),
-      #     palette_b = c("#93D0F1"),
-      #     palette_c = c("#19719F")
-      #   )
+        
+        # } else if (r$active_viz == "map_bubbles") {
+        #   list(
+        #     palette_a = c("#3E9FCC"),
+        #     palette_b = c("#93D0F1"),
+        #     palette_c = c("#19719F")
+        #   )
       } else if (r$active_viz %in% c("treemap")) {
         list(
           palette_a = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
@@ -294,7 +334,7 @@ mod_load_parmesan_server <- function(id, r){
           palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
           palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
           palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
-
+          
         )
       } else if (r$active_viz == "bar"){
         req(r$desagregacionId)
@@ -335,9 +375,9 @@ mod_load_parmesan_server <- function(id, r){
       } else {
         return()
       }
-
+      
     })
-
+    
     colors_show <- reactive({
       if (is.null(colors_default())) return()
       cd <- colors_default()
@@ -353,14 +393,14 @@ mod_load_parmesan_server <- function(id, r){
       names(lc) <- names(cd)
       lc
     })
-
+    
     agg_palette <- reactive({
       if (is.null(r$active_viz)) return()
       if (is.null(colors_show())) return()
       colors_show()
     })
-
-
+    
+    
     # fec_opts <- reactive({
     #   setNames(c("FechaInicioR", "Año_hecho"),
     #            c("Fecha en que se hizo la denuncia",
@@ -372,7 +412,7 @@ mod_load_parmesan_server <- function(id, r){
     #   #fec_opts()[1]
     #   "FechaInicioR"
     # })
-
+    
     # maxIn <- reactive({
     #   req(r$d_sel)
     #   df <- r$d_sel
@@ -384,21 +424,21 @@ mod_load_parmesan_server <- function(id, r){
     #   df <- r$d_sel
     #   min(lubridate::dmy(df$FechaInicio), na.rm = TRUE)
     # })
-
-
+    
+    
     # anioHolder <- reactive({
     #   req(maxIn())
     #   req(minIn())
     #   #c(minIn(), maxIn())
     #   paste0(format(minIn(), format="%Y-%m"), " al ", format(maxIn(), format="%Y-%m"))
     # })
-
-
+    
+    
     # Initialize parmesan
     path <- app_sys("app/app_config/parmesan")
     parmesan <- parmesan::parmesan_load(path)
     parmesan_input <- parmesan::parmesan_watch(input, parmesan)
-
+    
     parmesan::output_parmesan("controls",
                               parmesan = parmesan,
                               #r = r,
@@ -409,31 +449,31 @@ mod_load_parmesan_server <- function(id, r){
     # # ======================================================================================================================
     # Pass all inputs from parmesan to other parts of the app as reactiveValues
     parmesan_inputs <- purrr::map(parmesan, function(.x) { purrr::map_chr(.x$inputs, "id")}) %>% unlist(use.names = FALSE)
-
+    
     observe({
       for(parmesan_input in parmesan_inputs){
-
+        
         get_input <- input[[parmesan_input]]
         #if(!is.null(get_input)){
         r[[parmesan_input]] <- isolate(get_input)
         #}
       }
     })
-
-# 
-#     li <- reactive({
-#       df <- parmesan:::index_inputs(session = session, input = input, parmesan = parmesan, numberLabel = TRUE,
-#                                     disincludeInputs = c("varViewId", "desagregacionId", "aggId", "anioId", "colorsId",
-#                                                          "fechasId", "stackedId", "sortBar", "axisId")) %>% plyr::compact()
-#       df
-#     })
-# 
-#     id_parmesan <- reactive({
-#       req(parmesan)
-#       parmesan::parmesan_input_ids(parmesan = parmesan)
-#     })
-
-
+    
+    # 
+    #     li <- reactive({
+    #       df <- parmesan:::index_inputs(session = session, input = input, parmesan = parmesan, numberLabel = TRUE,
+    #                                     disincludeInputs = c("varViewId", "desagregacionId", "aggId", "anioId", "colorsId",
+    #                                                          "fechasId", "stackedId", "sortBar", "axisId")) %>% plyr::compact()
+    #       df
+    #     })
+    # 
+    #     id_parmesan <- reactive({
+    #       req(parmesan)
+    #       parmesan::parmesan_input_ids(parmesan = parmesan)
+    #     })
+    
+    
     observe({
       #r$parmesan_input <- parmesan_input()
       #r$info_inputs <- li()
