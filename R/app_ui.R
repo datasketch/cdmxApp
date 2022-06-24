@@ -33,7 +33,7 @@ app_ui <- function(request) {
                          header_right = div(style = "display: flex;",
                                             div(class='first-container',
                                                 mod_viz_selection_ui("viz_selection_ui_1")),
-                                            div(class = 'inter-container', style = "margin-right: 3%;",
+                                            div(class = 'inter-container', style = "margin-right: 3%; margin-left: 3%;",
                                                 # actionButton(
                                                 #   "fs", "Full screen", 
                                                 #   onclick = "gopenFullscreen();"

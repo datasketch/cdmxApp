@@ -146,6 +146,8 @@ background: #637381 !important;
 
 .buttons-group {
   padding: 0px 0px 10px !important;
+  display: flex !important;
+  gap: 20px !important;
 }
 
 

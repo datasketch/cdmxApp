@@ -47,7 +47,7 @@ mod_load_parmesan_server <- function(id, r){
     output$dateRange <- renderUI({
       print("dateRanes")
       print(r$datesRange)
-      "hola"
+      #"hola"
       # req(r$allDates)
       # req(r$datesRange)
       # print(r$allDates)
