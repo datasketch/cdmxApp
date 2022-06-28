@@ -45,31 +45,32 @@ mod_load_parmesan_server <- function(id, r){
     
     
     output$dateRange <- renderUI({
-      print("dateRanes")
-      print(r$datesRange)
-      #"hola"
-      # req(r$allDates)
-      # req(r$datesRange)
-      # print(r$allDates)
-      # if (length(r$allDates) > 0) {
-      #   purrr::map(r$allDates, function(i) {
-      #     rangeDef <- r$datesRange %>% dplyr::filter(id %in% i)
-      #     print(rangeDef)
-      #     shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
-      #                                 label = "Fecha denuncia",
-      #                                 start= rangeDef$min,
-      #                                 end= rangeDef$max,
-      #                                 max= rangeDef$max,
-      #                                 min= rangeDef$min,
-      #                                 startLabel = "Inicio del rango",
-      #                                 endLabel = "Final del rango"
-      #     )
-      #   })
-      # } else {
-      #   return()
-      # }
+      if (!r$active_viz %in% c("line", "area")) return()
+      req(r$allDates)
+      req(r$datesRange)
+      if (length(r$allDates) > 0) {
+        purrr::map(r$allDates, function(i) {
+          rangeDef <- r$datesRange %>% dplyr::filter(id %in% i)
+          print(rangeDef)
+          shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
+                                      label = rangeDef$id,
+                                      start = rangeDef$min,
+                                      end = rangeDef$max,
+                                      max = rangeDef$max,
+                                      min = rangeDef$min,
+                                      startLabel = "Inicio del rango",
+                                      endLabel = "Final del rango"
+          )
+        })
+      } else {
+        return()
+      }
     })
     
+    
+    observe({
+      r$datesSelected <- input[["datesSelected"]]
+    })
     
     var_opts <- reactive({
       req(r$active_viz)
@@ -162,6 +163,7 @@ mod_load_parmesan_server <- function(id, r){
       r$desagregacionId <- input[["desagregacionId"]]
       r$aggId <- input[["aggId"]]
       r$pctgNum <- input[["pctgNumVar"]]
+      #r$datesRanges <- input[]
     })
     
     # # Filtros q afectan la base -----------------------------------------------

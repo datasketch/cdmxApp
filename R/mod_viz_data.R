@@ -22,14 +22,31 @@ mod_viz_data_server <- function(id, r){
     ns <- session$ns
     
     data_viz <- reactive({
+      print("info")
+      print(r$datesSelected)
       tryCatch({
         req(r$d_fil)
         req(r$aggId)
         varNum <- r$varNum
         varCats <- r$v_sel
+        varDate <- NULL
+        haveDate <- FALSE
+        if (r$active_viz %in% c("line", "area"))  {
+          req(r$datesSelected)
+          varDate <- r$datesSelected
+          if (varCats == "Histórico CDMX") varCats <- NULL
+          varCats <- c(varCats, varDate)
+          haveDate <- TRUE
+        }
         varSel <- c(varCats, varNum)
         df <- r$d_fil
-        df <- selectTbl(df, agg = r$aggId, varToSel = varSel, varToGroup = varCats, varToAgg = varNum)
+        df <- selectTbl(df, 
+                        agg = r$aggId, 
+                        varToSel = varSel,
+                        varToGroup = varCats, 
+                        varToAgg = varNum, 
+                        haveDate = haveDate,
+                        varDate = varDate)
         #print(df)
         df
       },

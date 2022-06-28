@@ -49,6 +49,7 @@ mod_selected_data_server <- function(id, r){
       lsFringe$dic$hdType[grepl("hora|postal|id", lsFringe$dic$id)] <- "Txt"
       lsFringe$dic$hdType[grepl("fecha|date", lsFringe$dic$id)] <- "Dat"
       lsFringe$dic$hdType[grepl("_1", lsFringe$dic$id)] <- "Uid"
+      lsFringe$dic$id <- lsFringe$dic$label
       #dic <- r$ckanExtra
       #print(lsFringe$dic)
       lsFringe
@@ -156,9 +157,10 @@ mod_selected_data_server <- function(id, r){
     dateToFilter <- reactive({
       req(data_fringe())
       dic <- data_fringe()$dic
-      numDic <- dic %>% dplyr::filter(hdType == "Dat")
-      if (nrow(numDic) > 0) {
-        numDic$id
+      print(dic)
+      dateDic <- dic %>% dplyr::filter(hdType == "Dat")
+      if (nrow(dateDic) > 0) {
+        dateDic$id
       } else {
         return()
       }
@@ -166,12 +168,12 @@ mod_selected_data_server <- function(id, r){
     
     dateRange <- reactive({
       tryCatch({
-        req(DateToFilter())
+        req(dateToFilter())
         lNum <- 
-          purrr::map(DateToFilter(), function(var){
+          purrr::map(dateToFilter(), function(var){
             minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
             maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData"))
-            df <- data.frame(min = lubridate::dmy(minNum[[1]]), max = lubridate::as_date(maxNum[[1]]), id = var)
+            df <- data.frame(min = lubridate::dmy(minNum[[1]]), max = lubridate::dmy(maxNum[[1]]), id = var)
             df
           }) %>% dplyr::bind_rows()
         lNum

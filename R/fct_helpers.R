@@ -41,7 +41,7 @@ summaryTbl <-
   }
 
 selectTbl <-
-  function(dataTbl, agg = "count", varToSel, varToGroup, varToAgg) {
+  function(dataTbl, agg = "count", varToSel, varToGroup, varToAgg, haveDate = FALSE, varDate) {
     if (is.null(dataTbl)) return()
     if (is.null(varToSel)) return()
     if (is.null(varToGroup)) return()
@@ -55,14 +55,25 @@ selectTbl <-
     df <- df %>% 
       dplyr::select(!!varToSel) 
     
-    varG <- dplyr::sym(varToGroup[1])
+    if (haveDate) {
+      if (is.null(varDate)) return()
+      df <- df %>% dplyr::collect() %>%tidyr::drop_na(!!varDate)
+      df[[varDate]] <- lubridate::dmy(df[[varDate]])  
+      df <- df %>% 
+        dplyr::arrange(arrange(across(starts_with("Fecha"), desc))) %>%
+        tidyr::separate(!!varDate, into = c("anio", "mes", "dia"), sep = "-", extra = "drop") 
+      df[[varDate]] <- paste0(df$anio, "-", df$mes)
+      df <- df %>% dplyr::select(-dia, -mes, -anio)
+    }
     
+    varG <- dplyr::sym(varToGroup[1])
     df <- df %>% dplyr::group_by(!!varG)
+    
+    
     if (length(varToGroup) == 2) {
       varGadd <- dplyr::sym(varToGroup[2])
       df <- df %>% dplyr::group_by(!!varG, !!varGadd)
     }
-
     
     if (agg == "count") {
       df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
@@ -72,6 +83,7 @@ selectTbl <-
       df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
     }
     df <-   df %>% dplyr::collect()
+    
     df
     
   }

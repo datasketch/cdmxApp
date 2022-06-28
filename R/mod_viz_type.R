@@ -28,7 +28,7 @@ mod_viz_type_server <- function(id, r){
         df <- r$d_viz
         tv <- "CatNum"
         if (ncol(df) == 3) tv <- "CatCatNum"
-        if (sum(grepl("Mes|Año",names(df)))>0) {
+        if (sum(grepl("Mes|Año|Fecha",names(df)))>0) {
           tv <- "YeaNum"
           if (ncol(df) == 3) tv <- "CatYeaNum"
         }
