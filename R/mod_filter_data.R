@@ -25,14 +25,12 @@ mod_filter_data_server <- function(id, r){
     dataFilter <- reactiveValues(info = NULL)
     
     observe({
+      
+      req(r$d_sel)
+      df <- r$d_sel
       tryCatch({
-        req(r$d_sel)
-        df <- r$d_sel
         vars_f <- r$vars_f
         for (i in 1:nrow(vars_f)) {
-          print("inicial")
-          print(r[[vars_f$id[i]]])
-          print("----")
           if (is.null(r[[vars_f$id[i]]])) df <- df
           if (is.na(r[[vars_f$id[i]]])) df <- df
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
@@ -46,6 +44,16 @@ mod_filter_data_server <- function(id, r){
             df <- df %>% filterTbl(varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
             #  }
             
+          }
+        }
+        
+        if (!is.null(r$allNums)) {
+          for (i in r$allNums) {
+            rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
+            df <- filterNumTbl(dataTbl = df,
+                               varToFilter = i,
+                               rangeToView = r[[paste0(i, "range")]],
+                               originalRange = c(rangeDef$min, rangeDef$max))
           }
         }
         # 
@@ -73,6 +81,9 @@ mod_filter_data_server <- function(id, r){
       
       
     })
+    
+
+
     
     
     

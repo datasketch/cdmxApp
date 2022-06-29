@@ -48,6 +48,7 @@ mod_selected_data_server <- function(id, r){
       lsFringe$dic$hdType[grepl("edad", lsFringe$dic$id)] <- "Cat"
       lsFringe$dic$hdType[grepl("hora|postal|id", lsFringe$dic$id)] <- "Txt"
       lsFringe$dic$hdType[grepl("fecha|date", lsFringe$dic$id)] <- "Dat"
+      lsFringe$dic$hdType[grepl("mes|Mes", lsFringe$dic$id)] <- "Mon"
       lsFringe$dic$hdType[grepl("_1", lsFringe$dic$id)] <- "Uid"
       lsFringe$dic$id <- lsFringe$dic$label
       #dic <- r$ckanExtra

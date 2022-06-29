@@ -43,34 +43,66 @@ mod_load_parmesan_server <- function(id, r){
       )
     })
     
-    
-    output$dateRange <- renderUI({
-      if (!r$active_viz %in% c("line", "area")) return()
-      req(r$allDates)
-      req(r$datesRange)
-      if (length(r$allDates) > 0) {
-        purrr::map(r$allDates, function(i) {
-          rangeDef <- r$datesRange %>% dplyr::filter(id %in% i)
-          print(rangeDef)
-          shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
-                                      label = rangeDef$id,
-                                      start = rangeDef$min,
-                                      end = rangeDef$max,
-                                      max = rangeDef$max,
-                                      min = rangeDef$min,
-                                      startLabel = "Inicio del rango",
-                                      endLabel = "Final del rango"
-          )
-        })
-      } else {
-        return()
-      }
-    })
-    
-    
     observe({
+      if (is.null(r$allDates)) return()
       r$datesSelected <- input[["datesSelected"]]
     })
+    
+    
+    
+    output$dateRange <- renderUI({
+      if (is.null(r$allDates)) return()
+      rangeDef <- r$datesRange[1,]
+      shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
+                                  label = rangeDef$id,
+                                  start = rangeDef$min,
+                                  end = rangeDef$max,
+                                  max = rangeDef$max,
+                                  min = rangeDef$min,
+                                  startLabel = "Inicio del rango",
+                                  endLabel = "Final del rango"
+      )
+    })
+    # output$dateRange <- renderUI({
+    #   req(r$allDates)
+    #   req(r$datesRange)
+    #   if (length(r$allDates) > 0) {
+    #     x <- list()
+    #     for ( i in 1:nrow(r$datesRange)) {
+    #       print("tavlaaa")
+    #       print(i)
+    #       rangeDef <- r$datesRange[i,]
+    #       print(rangeDef)
+    #       x[[i]] <-  shinyinvoer::dateRangeInput(inputId = ns(paste0(rangeDef$id, "range")),
+    #                                              label = rangeDef$id,
+    #                                              start = rangeDef$min,
+    #                                              end = rangeDef$max,
+    #                                              max = rangeDef$max,
+    #                                              min = rangeDef$min,
+    #                                              startLabel = "Inicio del rango",
+    #                                              endLabel = "Final del rango"
+    #       )
+    #     }#)
+    #     x
+    #   } 
+    # })
+    
+    # output$the_output <- renderPrint({
+    #   list(
+    #     input$FechaHechorange,
+    #     input$FechaIniciorange
+    #   )
+    # })
+    
+    # observe({
+    #   if (is.null(r$allDates)) return()
+    #   extra_dates <- paste0(r$allDates, "range")
+    #   for(dates_input in extra_dates){
+    #     print("in observe")
+    #     print(dates_input)
+    #     r[[dates_input]] <- input[[dates_input]]
+    #   }
+    # })
     
     var_opts <- reactive({
       req(r$active_viz)
@@ -95,6 +127,7 @@ mod_load_parmesan_server <- function(id, r){
     
     output$varViewOut <- renderUI({
       req(var_opts())
+      req(varDef())
       shiny::selectizeInput(ns("varViewId"),
                             "Selección de variable a visualizar",
                             choices = var_opts(),
@@ -232,6 +265,8 @@ mod_load_parmesan_server <- function(id, r){
       r$varNum <- input$numericSelected
       extra_nums <- paste0(r$allNums, "range")
       for(nums_input in extra_nums){
+        # "num impu"
+        # print(input[[nums_input]])
         get_nums_input <- input[[nums_input]]
         r[[nums_input]] <- get_nums_input
       }

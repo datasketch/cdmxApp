@@ -22,8 +22,7 @@ mod_viz_data_server <- function(id, r){
     ns <- session$ns
     
     data_viz <- reactive({
-      print("info")
-      print(r$datesSelected)
+ 
       tryCatch({
         req(r$d_fil)
         req(r$aggId)

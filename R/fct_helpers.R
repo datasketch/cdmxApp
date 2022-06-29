@@ -21,6 +21,22 @@ filterTbl <-
     df
   }
 
+filterNumTbl <- 
+  function(dataTbl, varToFilter, rangeToView, originalRange) {
+    df <- dataTbl
+    if (!identical(setdiff(originalRange, rangeToView), numeric())) {
+      var <- dplyr::sym(varToFilter)
+      if ( length(rangeToView) == 1) {
+        df <- df %>% dplyr::filter(!!var >= !!rangeToView[1])
+      }
+      if ( length(rangeToView) == 2) {
+      df <- df %>%  dplyr::filter(!!var >= !!rangeToView[1] & !!var <= !!rangeToView[2])
+      }
+    }
+    df
+  }
+
+
 summaryTbl <- 
   function(dataTbl, agg = "conteo", aggregation = "sum", varToAgg, varToSumm = NULL) {
     var <- dplyr::sym(varToAgg)
