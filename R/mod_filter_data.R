@@ -56,23 +56,16 @@ mod_filter_data_server <- function(id, r){
                                originalRange = c(rangeDef$min, rangeDef$max))
           }
         }
-        # 
-        # df$FechaInicio <- lubridate::dmy(df$FechaInicio)
-        # if (!is.null(r$anioId)) {
-        #   cambioEdad <- !(min(df$FechaInicio, na.rm = T) == r$anioId[1] & max(df$FechaInicio, na.rm = T) == r$anioId[2])
-        #   # print(r$anioId)
-        #   # print(cambioEdad)
-        #   if (cambioEdad) {
-        #     if (length(r$anioId) == 1) {
-        #       df <- df %>% dplyr::filter(FechaInicioR %in% format(r$anioId, format="%Y-%m"))
-        #     } else {
-        #       print(format(r$anioId[1], format="%Y-%m"))
-        #       df <- df %>% dplyr::filter(FechaInicioR >= format(r$anioId[1], format="%Y-%m") & FechaInicioR <= format(r$anioId[2], format="%Y-%m"))
-        #     }
-        #   }
-        # }
-        # if (is.null(df) | nrow(df) == 0) return()
-        # print(nrow(df))
+        
+        if (!is.null(r$allDates)) {
+          rangeDef <- r$datesRange[1,]
+          df <- filterDatTbl(df, 
+                             rangeDef$id, 
+                             c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
+                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max), format="%Y-%m"))
+          )
+        }
+        
         dataFilter$info <- df
       },
       error = function(cond) {
@@ -82,8 +75,8 @@ mod_filter_data_server <- function(id, r){
       
     })
     
-
-
+    
+    
     
     
     

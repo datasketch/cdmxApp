@@ -24,7 +24,7 @@ filterTbl <-
 filterNumTbl <- 
   function(dataTbl, varToFilter, rangeToView, originalRange) {
     df <- dataTbl
-    if (!identical(setdiff(originalRange, rangeToView), numeric())) {
+    if (!(rangeToView[1] == originalRange[1] & rangeToView[2] == originalRange[2])) {
       var <- dplyr::sym(varToFilter)
       if ( length(rangeToView) == 1) {
         df <- df %>% dplyr::filter(!!var >= !!rangeToView[1])
@@ -34,6 +34,20 @@ filterNumTbl <-
       }
     }
     df
+  }
+
+filterDatTbl <-
+  function (dataTbl, varToFilter, rangeDate, originaDate) {
+    df <- dataTbl
+    var <- dplyr::sym(varToFilter)
+
+    df <- df %>% dplyr::collect() 
+    df <- df %>% dplyr::mutate(Fechax = lubridate::dmy(!!var))  
+    df <- df %>% 
+      tidyr::separate(Fechax, into = c("anio", "mes", "dia"), sep = "-", extra = "drop") 
+    df$Fechax <- paste0(df$anio, "-", df$mes)
+    df <- df %>% dplyr::select(-dia, -mes, -anio)
+    filterNumTbl(df, "Fechax", rangeDate, originaDate)
   }
 
 
@@ -73,7 +87,7 @@ selectTbl <-
     
     if (haveDate) {
       if (is.null(varDate)) return()
-      df <- df %>% dplyr::collect() %>%tidyr::drop_na(!!varDate)
+      df <- df %>% dplyr::collect() %>% tidyr::drop_na(!!varDate)
       df[[varDate]] <- lubridate::dmy(df[[varDate]])  
       df <- df %>% 
         dplyr::arrange(arrange(across(starts_with("Fecha"), desc))) %>%
