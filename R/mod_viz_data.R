@@ -21,33 +21,50 @@ mod_viz_data_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    data_viz <- reactive({
- 
+    
+    viz <- reactiveValues(data = NULL)
+    
+    observe({
+      req(r$active_viz)
+      req(r$d_fil)
+      req(r$aggId)
       tryCatch({
-        req(r$d_fil)
-        req(r$aggId)
-        varNum <- r$varNum
-        varCats <- r$v_sel
-        varDate <- NULL
-        haveDate <- FALSE
-        if (r$active_viz %in% c("line", "area"))  {
-          req(r$datesSelected)
-          varDate <- r$datesSelected
-          if (varCats == "Histórico CDMX") varCats <- NULL
-          varCats <- c(varCats, varDate)
-          haveDate <- TRUE
-        }
-        varSel <- c(varCats, varNum)
-        df <- r$d_fil
-        df <- selectTbl(df, 
-                        agg = r$aggId, 
-                        varToSel = varSel,
-                        varToGroup = varCats, 
-                        varToAgg = varNum, 
-                        haveDate = haveDate,
-                        varDate = varDate)
-        #print(df)
-        df
+      vizSel <- r$active_viz
+      varNum <- r$varNum
+      if (vizSel %in% c("scatter")) {
+        if (is.null(varNum)) varNum <-  r$allNums[1:2]
+      }
+
+      varCats <- r$v_sel
+      varDate <- NULL
+      haveDate <- FALSE
+      
+      if (vizSel %in% c("line", "area"))  {
+        req(r$datesSelected)
+        varDate <- r$datesSelected
+        if (varCats == "Histórico CDMX") varCats <- NULL
+        varCats <- c(varCats, varDate)
+        haveDate <- TRUE
+      }
+      
+      varSel <- c(varCats, varNum)
+      df <- r$d_fil
+      df <- selectTbl(df, 
+                      agg = r$aggId, 
+                      varToSel = varSel,
+                      varToGroup = varCats, 
+                      varToAgg = varNum, 
+                      haveDate = haveDate,
+                      varDate = varDate,
+                      viz = vizSel)
+      
+      if (vizSel == "scatter") {
+        if (ncol(df) == 2) return()
+      } else {
+        if (length(varNum) > 2) return()
+      }
+      print(df)
+      viz$data <- df
       },
       error = function(cond) {
         return()
@@ -56,7 +73,7 @@ mod_viz_data_server <- function(id, r){
     
     
     observe({
-      r$d_viz <- data_viz()
+      r$d_viz <- viz$data
     })
     
   })

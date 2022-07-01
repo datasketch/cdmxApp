@@ -30,7 +30,7 @@ filterNumTbl <-
         df <- df %>% dplyr::filter(!!var >= !!rangeToView[1])
       }
       if ( length(rangeToView) == 2) {
-      df <- df %>%  dplyr::filter(!!var >= !!rangeToView[1] & !!var <= !!rangeToView[2])
+        df <- df %>%  dplyr::filter(!!var >= !!rangeToView[1] & !!var <= !!rangeToView[2])
       }
     }
     df
@@ -40,7 +40,7 @@ filterDatTbl <-
   function (dataTbl, varToFilter, rangeDate, originaDate) {
     df <- dataTbl
     var <- dplyr::sym(varToFilter)
-
+    
     df <- df %>% dplyr::collect() 
     df <- df %>% dplyr::mutate(Fechax = lubridate::dmy(!!var))  
     df <- df %>% 
@@ -71,16 +71,18 @@ summaryTbl <-
   }
 
 selectTbl <-
-  function(dataTbl, agg = "count", varToSel, varToGroup, varToAgg, haveDate = FALSE, varDate) {
+  function(dataTbl, agg = "count", varToSel, varToGroup, 
+           varToAgg, haveDate = FALSE, varDate, viz) {
     if (is.null(dataTbl)) return()
     if (is.null(varToSel)) return()
     if (is.null(varToGroup)) return()
+    if (is.null(viz)) return()
+    if (viz != "scatter") {
     if (!is.null(varToAgg)) {
-      varToAgg <- dplyr::sym(varToAgg)
-    } 
+      if (length(varToAgg == 1)) varToAgg <- dplyr::sym(varToAgg[1])
+    } }
     
     if (agg == "pctg") agg <- "count"
-    
     df <- dataTbl
     df <- df %>% 
       dplyr::select(!!varToSel) 
@@ -105,15 +107,25 @@ selectTbl <-
       df <- df %>% dplyr::group_by(!!varG, !!varGadd)
     }
     
-    if (agg == "count") {
-      df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
-    } else if (agg == "mean") {
-      df <- df %>% dplyr::summarise(Promedio = mean(!!varToAgg, na.rm = TRUE))
-    } else if (agg == "sum") {
-      df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
-    }
+    if (viz != "scatter") {
+      if (agg == "count") {
+        df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
+      } else if (agg == "mean") {
+        df <- df %>% dplyr::summarise(Promedio = mean(!!varToAgg, na.rm = TRUE))
+      } else if (agg == "sum") {
+        df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
+      }
+    } 
+    print("por aca estuvo")
+    # else {
+    #   print("in scatter")
+    #   print(varToAgg)
+    #   df <- df %>% dplyr::summarise(Promedio = mean(!!dplyr::sym(varToAgg[1]), na.rm = TRUE),
+    #                                 Promedio2 = mean(!!dplyr::sym(varToAgg[2]), na.rm = TRUE))
+    # }
     df <-   df %>% dplyr::collect()
-    
+    print("data sel")
+    print(df)
     df
     
   }

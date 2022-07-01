@@ -43,8 +43,8 @@ mod_read_ckan_server <- function(id, r){
       #file <- listConf$result$url
       file <- infoUrl()$url
       con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-      csv <- readr::read_csv(file, na = c("NA", ""))
-      #csv <- readr::read_csv("sampleData.csv")
+      #csv <- readr::read_csv(file, na = c("NA", ""))
+      csv <- readr::read_csv("sampleData.csv")
       DBI::dbWriteTable(con, "cdmxData", csv)
       
       con

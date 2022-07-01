@@ -20,7 +20,7 @@ mod_viz_type_ui <- function(id){
 mod_viz_type_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
-
+    
     viz_type <- reactive({
       tryCatch({
         req(r$d_viz)
@@ -34,15 +34,17 @@ mod_viz_type_server <- function(id, r){
         }
         if (r$active_viz %in% "map_bubbles") return()
         if (r$active_viz %in% "map") tv <- "GnmNum"
-
-
+        if (r$active_viz %in% "scatter") {
+          tv <- "CatNumNum"
+          if (ncol(df) == 4) tv <- "CatNumNumNum"
+        }
         tv
       },
       error = function(cond) {
         return()
       })
     })
-
+    
     viz_name <- reactive({
       tryCatch({
         req(viz_type())
@@ -53,14 +55,14 @@ mod_viz_type_server <- function(id, r){
         } else {
           vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
         }
-        print(vp)
+        #print(vp)
         vp
       },
       error = function(cond) {
         return()
       })
     })
-
+    
     observe({
       r$v_type <- viz_name()
     })

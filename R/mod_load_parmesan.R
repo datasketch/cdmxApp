@@ -16,6 +16,7 @@ mod_load_parmesan_ui <- function(id){
     uiOutput(ns("aggOut")),
     uiOutput(ns("percOut")),
     uiOutput(ns("NumericFilters")),
+    #verbatimTextOutput(ns("numprint")),
     uiOutput(ns("DateFilters")),
     uiOutput(ns("dateRange")),
     uiOutput(ns("filterOptions")),
@@ -142,12 +143,13 @@ mod_load_parmesan_server <- function(id, r){
         ch <- setNames(c("count", "pctg"), c("Conteo", "Porcentaje"))
       } else {
         ch <- setNames(c("count", "sum", "mean"), c("Conteo", "Suma", "Promedio"))
+        if (r$active_viz == "scatter") ch <- setNames(c( "sum", "mean"), c("Suma", "Promedio"))
       }
       
       shiny::radioButtons(ns("aggId"), 
                           "Tipo de unidad",
                           choices = ch,
-                          selected = "count"
+                          selected = ch[[1]]
       )
     })
     
@@ -189,20 +191,36 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     output$NumericFilters <- renderUI({
+      req(r$active_viz)
       req(r$allNums)
       req(r$aggId)
       if (r$aggId == "count") return()
+      selOps <- r$allNums[1]
+      maxI <- 1
+      
+      if (r$active_viz == "scatter") {
+      if (length(r$allNums) >= 2) {
+          selOps <- c(selOps, r$allNums[2])
+          maxI <- 2
+        }
+      }
+      
       shiny::selectizeInput(inputId = ns("numericSelected"), 
                             label = "Variable numerica", 
                             choices = r$allNums,
-                            selected = r$allNums[1], multiple = TRUE, 
+                            selected = selOps, 
+                            multiple = TRUE, 
                             options = list(
-                              maxItems = 2,
+                              maxItems = maxI,
                               plugins = list(
                                 "remove_button",
                                 "drag_drop"))
       )
     })
+    
+    # output$numprint <- renderPrint({
+    #   input[["numericSelected"]]
+    # })
     
     output$NumericRange <- renderUI({
       req(r$allNums)
@@ -329,7 +347,7 @@ mod_load_parmesan_server <- function(id, r){
         #     palette_b = c("#93D0F1"),
         #     palette_c = c("#19719F")
         #   )
-      } else if (r$active_viz %in% c("treemap")) {
+      } else if (r$active_viz %in% c("treemap", "scatter")) {
         list(
           palette_a = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
           palette_b = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),

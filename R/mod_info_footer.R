@@ -29,7 +29,7 @@ mod_info_footer_server <- function(id, r){
         req(r$d_sum)
         
         nrowIni <- as.vector(DBI::dbGetQuery(r$ckanData, "SELECT COUNT(*) FROM cdmxData"))
-        print(nrowIni)
+        #print(nrowIni)
         
         pctgView <- (r$d_sum$Total/nrowIni)*100
         nDig <- 2

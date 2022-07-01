@@ -28,95 +28,96 @@ mod_load_viz_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-# 
-#     
-#     output$map1 <- leaflet::renderLeaflet({
-#       #tryCatch({
-#       if (r$active_viz != "map_bubbles") return()
-# 
-#       req(r$desagregacionId)
-#       lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5,
-#                                                                 zoomDelta = 0.5
-#       )) %>%
-#         leaflet::addTiles(urlTemplate = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14",
-#                           attribution = "positron") %>%
-#         leaflet::addTopoJSON(topojson = mayorsCdmx,
-#                              weight = 1, opacity = 0.5,
-#                              fillColor = "transparent",
-#                              color = "#000000")
-# 
-# 
-#       if (r$desagregacionId == "ColoniaHechos") {
-#         lm <- lm %>%
-#           leaflet::addTopoJSON(topojson = coloniaCdmx,
-#                                weight = 1, opacity = 0.5,
-#                                fillColor = "transparent",
-#                                color = "#000000")
-#       }
-# 
-#       lm <- lm %>%
-#         leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>%
-#         leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia",
-#                             position = "bottomleft", className = "map-caption")
-#       lm
-#     })
-# 
-# 
-#     dataMap <- reactive({
-#       tryCatch({
-#         if (is.null(r$d_viz)) return()
-#         if (r$active_viz != "map_bubbles") return()
-#         df <- r$d_viz
-#         if (input$map1_zoom <= 10) {
-#           nsample <- 10000
-#           if (nrow(df) < 10000) nsample <- nrow(df)
-#           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
-#         } else {
-#           nsample <- (input$map1_zoom*1000) + 15000
-#           if (nsample > nrow(df)) nsample <- nrow(df)
-#           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
-#         }
-#         df
-#         },
-#         error = function(cond) {
-#           return()
-#         })
-#     })
-# 
-# 
-#     observe({
-#       req(r$active_viz)
-#       if (r$active_viz != "map_bubbles") return()
-#       tryCatch({
-#         req(dataMap())
-#         df <- dataMap()
-#         lf <- leaflet::leafletProxy("map1", data = df)
-# 
-#         lf <- lf %>%
-#          leaflet::clearMarkerClusters() %>%
-#           leaflet::addCircleMarkers(
-#             lng = ~longitud,
-#             lat = ~latitud,
-#             #label = ~label,
-#             radius = 5,
-#             color = "#19719F",
-#             clusterOptions = leaflet::markerClusterOptions(
-#               maxClusterRadius = 50,
-#               showCoverageOnHover = TRUE,
-#               spiderLegPolylineOptions = list(weight = 0),
-#               zoomToBoundsOnClick = TRUE,
-#               spiderfyOnMaxZoom = TRUE,
-#               removeOutsideVisibleBounds = TRUE
-#             )
-#           ) #%>%
-#       },
-#       error = function(cond) {
-#         return()
-#       })
-#     })
-
-
+    # 
+    #     
+    #     output$map1 <- leaflet::renderLeaflet({
+    #       #tryCatch({
+    #       if (r$active_viz != "map_bubbles") return()
+    # 
+    #       req(r$desagregacionId)
+    #       lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5,
+    #                                                                 zoomDelta = 0.5
+    #       )) %>%
+    #         leaflet::addTiles(urlTemplate = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14",
+    #                           attribution = "positron") %>%
+    #         leaflet::addTopoJSON(topojson = mayorsCdmx,
+    #                              weight = 1, opacity = 0.5,
+    #                              fillColor = "transparent",
+    #                              color = "#000000")
+    # 
+    # 
+    #       if (r$desagregacionId == "ColoniaHechos") {
+    #         lm <- lm %>%
+    #           leaflet::addTopoJSON(topojson = coloniaCdmx,
+    #                                weight = 1, opacity = 0.5,
+    #                                fillColor = "transparent",
+    #                                color = "#000000")
+    #       }
+    # 
+    #       lm <- lm %>%
+    #         leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>%
+    #         leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia",
+    #                             position = "bottomleft", className = "map-caption")
+    #       lm
+    #     })
+    # 
+    # 
+    #     dataMap <- reactive({
+    #       tryCatch({
+    #         if (is.null(r$d_viz)) return()
+    #         if (r$active_viz != "map_bubbles") return()
+    #         df <- r$d_viz
+    #         if (input$map1_zoom <= 10) {
+    #           nsample <- 10000
+    #           if (nrow(df) < 10000) nsample <- nrow(df)
+    #           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+    #         } else {
+    #           nsample <- (input$map1_zoom*1000) + 15000
+    #           if (nsample > nrow(df)) nsample <- nrow(df)
+    #           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+    #         }
+    #         df
+    #         },
+    #         error = function(cond) {
+    #           return()
+    #         })
+    #     })
+    # 
+    # 
+    #     observe({
+    #       req(r$active_viz)
+    #       if (r$active_viz != "map_bubbles") return()
+    #       tryCatch({
+    #         req(dataMap())
+    #         df <- dataMap()
+    #         lf <- leaflet::leafletProxy("map1", data = df)
+    # 
+    #         lf <- lf %>%
+    #          leaflet::clearMarkerClusters() %>%
+    #           leaflet::addCircleMarkers(
+    #             lng = ~longitud,
+    #             lat = ~latitud,
+    #             #label = ~label,
+    #             radius = 5,
+    #             color = "#19719F",
+    #             clusterOptions = leaflet::markerClusterOptions(
+    #               maxClusterRadius = 50,
+    #               showCoverageOnHover = TRUE,
+    #               spiderLegPolylineOptions = list(weight = 0),
+    #               zoomToBoundsOnClick = TRUE,
+    #               spiderfyOnMaxZoom = TRUE,
+    #               removeOutsideVisibleBounds = TRUE
+    #             )
+    #           ) #%>%
+    #       },
+    #       error = function(cond) {
+    #         return()
+    #       })
+    #     })
+    
+    
     optsViz <- reactive({
+      
       tryCatch({
         if (is.null(r$active_viz)) return()
         if (r$active_viz == "map_bubbles") return()
@@ -124,8 +125,7 @@ mod_load_viz_server <- function(id, r){
         if (is.null(r$colorsId)) return()
         if (is.null(r$d_viz)) return()
         df <- r$d_viz
-
-        if (any(c("lon", "longitud") %in% names(df))) return()
+        # if (any(c("lon", "longitud") %in% names(df))) return()
         opts_viz <- list(
           data = df,
           palette_colors = r$colorsPlot[[r$colorsId]],
@@ -162,7 +162,6 @@ mod_load_viz_server <- function(id, r){
           legend_layout = "vertical",
           legend_align = "right",
           legend_verticalAlign = "middle",
-          legend_title = '<span style="font-size: 9px; color: #666; font-weight: normal">Haz clic en la leyenda para mostrar u </br>ocultar la categoría</span>',
           legend_backgroundWidth = 1,
           legend_backgroundBorderColor = "#cccccc",
           map_canvas = TRUE,
@@ -173,28 +172,32 @@ mod_load_viz_server <- function(id, r){
           # map_tiles_zoom_update = TRUE,
           # map_tiles_id_update = FALSE
         )
-
-
+        
+        
         if (r$aggId == "pctg") {
           opts_viz$percentage <- TRUE
-        } 
+        }
         if (!is.null(r$pctgNum)) {
           if (r$pctgNum)opts_viz$percentage <- TRUE
         }
-
+        
         if (!is.null(r$stackedId)) {
           if (r$stackedId) {
             opts_viz$graph_type <-  "stacked"
           }
         }
-
-        if (r$active_viz %in% c("treemap", "pie")) {
+        
+        if (r$active_viz %in% c("treemap", "pie", "scatter")) {
           opts_viz$color_by <- names(r$d_viz)[1]
           opts_viz$legend_show <- FALSE
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
         }
-
-
+        
+        if (r$active_viz %in% c("bar", "line", "scatter")) {
+          opts_viz$legend_title <- '<span style="font-size: 9px; color: #666; font-weight: normal">Haz clic en la leyenda para mostrar u </br>ocultar la categoría</span>'
+        }
+        
+        
         if (r$active_viz %in% c("map")) {
           req(r$v_sel)
           opts_viz$map_name <- "mex_mayors"
@@ -221,15 +224,15 @@ mod_load_viz_server <- function(id, r){
           #opts_viz$map_cluster <- "markerClusterOptions(maxClusterRadius = 20)"
           #opts_viz$palette_colors <- c("#7CDFEA", "#066C63")
         }
-
+        
         if (r$active_viz %in% "bar") {
           if (r$sortBar) {
             opts_viz$sort <- "desc"
           }
         }
-
-
-
+        
+        
+        
         #print(opts_viz)
         opts_viz
       },
@@ -237,29 +240,30 @@ mod_load_viz_server <- function(id, r){
         return()
       })
     })
-
+    
     viz_s <- reactive({
-
+      
       tryCatch({
+        if (is.null(r$active_viz)) return()
         if (r$active_viz == "table") return()
-        if (r$active_viz == "map_bubbles") return()
+        #  if (r$active_viz %in% c("map", "map_heat", "map_bubbles")) return()
         req(optsViz())
         req(r$v_type)
         req(r$d_viz)
         library(hgchmagic)
-
+        
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
-
-        #print(lv)
+        
+        print(lv)
         lv
       },
       error = function(cond) {
         return()
       })
     })
-
-
-
+    
+    
+    
     output$viz_lflt <- leaflet::renderLeaflet({
       tryCatch({
         req(viz_s())
@@ -271,8 +275,8 @@ mod_load_viz_server <- function(id, r){
         return()
       })
     })
-
-
+    
+    
     output$viz_hgch <- highcharter::renderHighchart({
       tryCatch({
         req(viz_s())
@@ -285,8 +289,8 @@ mod_load_viz_server <- function(id, r){
         return()
       })
     })
-
-
+    
+    
     output$table_view <- DT::renderDataTable({
       req(r$d_fil)
       if (r$active_viz != "table") return()
@@ -304,8 +308,8 @@ mod_load_viz_server <- function(id, r){
                               ))
       dtable
     })
-
-
+    
+    
     output$viz_plot <- renderUI({
       tryCatch({
         #print(r$parmesan_input)
@@ -324,8 +328,8 @@ mod_load_viz_server <- function(id, r){
         return()
       })
     })
-
-
+    
+    
     output$logos_add <- renderUI({
       HTML(
         paste0(
@@ -335,8 +339,8 @@ mod_load_viz_server <- function(id, r){
         <img src="www/img/open.svg"></div>')
       )
     })
-
-
+    
+    
     observe({
       r$downViz <- viz_s()
     })

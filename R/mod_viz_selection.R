@@ -22,12 +22,13 @@ mod_viz_selection_server <- function(id, r){
     ns <- session$ns
     
     possible_viz <- reactive({
-      
-      # viz <- c("map", "bar", "treemap", "line", "table")
-      # viz
-      #"map_heat",
-      c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter", "table")
-      
+     viz <- c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter")
+ 
+     if (is.null(r$allNums)) {
+       if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
+     }
+     if (is.null(r$allDates)) viz <- setdiff(viz, "line")
+     c(viz, "table")
     })
     
     
@@ -35,7 +36,8 @@ mod_viz_selection_server <- function(id, r){
       if (is.null(possible_viz())) return()
       df_viz <- data.frame(id = c( "map", "map_heat" ,"map_bubbles", "bar", "treemap", "line", "scatter"  ,"table"),
                            label = c( "Coropleta", "Mapa de calor", "Puntos" ,"Barras","Treemap", "Líneas", "Dispersión", "Tabla"))
-      df_viz <- df_viz %>% dplyr::filter(id %in% possible_viz())
+      viz_a <- data.frame(id = possible_viz())
+      df_viz <- viz_a %>% dplyr::left_join(df_viz) %>% dplyr::filter(id %in% possible_viz())
       df_viz$label
     })
     

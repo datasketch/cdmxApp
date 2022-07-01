@@ -128,17 +128,15 @@ mod_selected_data_server <- function(id, r){
       req(data_fringe())
       dic <- data_fringe()$dic
       numDic <- dic %>% dplyr::filter(hdType == "Num")
-      if (nrow(numDic) > 0) {
-        numDic$id
-      } else {
-        return()
-      }
-      
+      varNum <- NULL
+      if (nrow(numDic) == 0) return()
+      if (nrow(numDic) > 0) varNum <-  numDic$id
+      varNum 
     })
     
     numRange <- reactive({
+      if (is.null(numToFilter())) return()
       tryCatch({
-      req(numToFilter())
         lNum <- 
           purrr::map(numToFilter(), function(var){
             minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
