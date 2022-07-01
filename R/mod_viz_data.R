@@ -46,7 +46,10 @@ mod_viz_data_server <- function(id, r){
         varCats <- c(varCats, varDate)
         haveDate <- TRUE
       }
-      
+      if (vizSel %in% c("map_bubbles")){
+        if (is.null(r$coorToPlot)) return()
+        varCats <- r$coorToPlot
+      }
       varSel <- c(varCats, varNum)
       df <- r$d_fil
       df <- selectTbl(df, 

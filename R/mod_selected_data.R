@@ -42,14 +42,15 @@ mod_selected_data_server <- function(id, r){
       lsFringe <- 
         df %>% 
         homodatum::fringe()
-      lsFringe$dic$hdType[grepl("geo|colonia", lsFringe$dic$id)] <- "Gnm"
-      lsFringe$dic$hdType[grepl("longitud", lsFringe$dic$id)] <- "Gln"
-      lsFringe$dic$hdType[grepl("latitud", lsFringe$dic$id)] <- "Glt"
-      lsFringe$dic$hdType[grepl("edad", lsFringe$dic$id)] <- "Cat"
-      lsFringe$dic$hdType[grepl("hora|postal|id", lsFringe$dic$id)] <- "Txt"
-      lsFringe$dic$hdType[grepl("fecha|date", lsFringe$dic$id)] <- "Dat"
-      lsFringe$dic$hdType[grepl("mes|Mes", lsFringe$dic$id)] <- "Mon"
-      lsFringe$dic$hdType[grepl("_1", lsFringe$dic$id)] <- "Uid"
+      
+      lsFringe$dic$hdType[grepl("longitud|lon|long", tolower(lsFringe$dic$id))] <- "Gln"
+      lsFringe$dic$hdType[grepl("latitud|lat", tolower(lsFringe$dic$id))] <- "Glt"
+      lsFringe$dic$hdType[grepl("edad", tolower(lsFringe$dic$id))] <- "Cat"
+      lsFringe$dic$hdType[grepl("hora|postal|id", tolower(lsFringe$dic$id))] <- "Txt"
+      lsFringe$dic$hdType[grepl("fecha|date", tolower(lsFringe$dic$id))] <- "Dat"
+      lsFringe$dic$hdType[grepl("mes|Mes", tolower(lsFringe$dic$id))] <- "Mon"
+      lsFringe$dic$hdType[grepl("_1", tolower(lsFringe$dic$id))] <- "Uid"
+      lsFringe$dic$hdType[grepl("geo|colonia", tolower(lsFringe$dic$id))] <- "Gnm"
       lsFringe$dic$id <- lsFringe$dic$label
       #dic <- r$ckanExtra
       #print(lsFringe$dic)
@@ -91,6 +92,7 @@ mod_selected_data_server <- function(id, r){
         .[[1]] %>% 
         trimws() %>% 
         stringi::stri_trans_general(id = "Latin-ASCII")
+      vars <- gsub("Competencia", "competencia", vars)
       }
       df <-  data.frame(
         id = paste0(tolower(vars), "Id"),
@@ -156,7 +158,6 @@ mod_selected_data_server <- function(id, r){
     dateToFilter <- reactive({
       req(data_fringe())
       dic <- data_fringe()$dic
-      print(dic)
       dateDic <- dic %>% dplyr::filter(hdType == "Dat")
       if (nrow(dateDic) > 0) {
         dateDic$id
@@ -184,6 +185,23 @@ mod_selected_data_server <- function(id, r){
     
     
     
+    coordinatesToPlot <- reactive({
+      req(data_fringe())
+      dic <- data_fringe()$dic
+      print(tail(dic))
+      GlnDic <- dic %>% dplyr::filter(hdType %in% "Gln")
+      print(GlnDic)
+      GltDic <- dic %>% dplyr::filter(hdType %in% "Glt")
+      print(GltDic)
+      varCoor <- NULL
+      if (nrow(GlnDic) == 0) return()
+      if (nrow(GlnDic) > 0 & nrow(GltDic) > 0) varCoor <- c(GlnDic$id[1],GltDic$id[1])
+      varCoor
+    })
+    
+   
+    
+    
     observe({
       r$d_sel <- data_select()
       r$dic_f <- dic_fringe()
@@ -193,6 +211,7 @@ mod_selected_data_server <- function(id, r){
       r$numRange <- numRange()
       r$allDates <- dateToFilter()
       r$datesRange <- dateRange()
+      r$coorToPlot <- coordinatesToPlot()
     })
     
   })

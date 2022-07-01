@@ -107,7 +107,7 @@ selectTbl <-
       df <- df %>% dplyr::group_by(!!varG, !!varGadd)
     }
     
-    if (viz != "scatter") {
+    if (!(viz %in% c("scatter", "map_bubbles"))) {
       if (agg == "count") {
         df <- df %>%  dplyr::summarise(Conteo = dplyr::n())
       } else if (agg == "mean") {
@@ -116,7 +116,7 @@ selectTbl <-
         df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
       }
     } 
-    print("por aca estuvo")
+   
     # else {
     #   print("in scatter")
     #   print(varToAgg)
@@ -124,8 +124,6 @@ selectTbl <-
     #                                 Promedio2 = mean(!!dplyr::sym(varToAgg[2]), na.rm = TRUE))
     # }
     df <-   df %>% dplyr::collect()
-    print("data sel")
-    print(df)
     df
     
   }

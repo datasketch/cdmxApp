@@ -28,92 +28,92 @@ mod_load_viz_server <- function(id, r){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
     
-    # 
-    #     
-    #     output$map1 <- leaflet::renderLeaflet({
-    #       #tryCatch({
-    #       if (r$active_viz != "map_bubbles") return()
-    # 
-    #       req(r$desagregacionId)
-    #       lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5,
-    #                                                                 zoomDelta = 0.5
-    #       )) %>%
-    #         leaflet::addTiles(urlTemplate = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14",
-    #                           attribution = "positron") %>%
-    #         leaflet::addTopoJSON(topojson = mayorsCdmx,
-    #                              weight = 1, opacity = 0.5,
-    #                              fillColor = "transparent",
-    #                              color = "#000000")
-    # 
-    # 
-    #       if (r$desagregacionId == "ColoniaHechos") {
-    #         lm <- lm %>%
-    #           leaflet::addTopoJSON(topojson = coloniaCdmx,
-    #                                weight = 1, opacity = 0.5,
-    #                                fillColor = "transparent",
-    #                                color = "#000000")
-    #       }
-    # 
-    #       lm <- lm %>%
-    #         leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>%
-    #         leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia",
-    #                             position = "bottomleft", className = "map-caption")
-    #       lm
-    #     })
-    # 
-    # 
-    #     dataMap <- reactive({
-    #       tryCatch({
-    #         if (is.null(r$d_viz)) return()
-    #         if (r$active_viz != "map_bubbles") return()
-    #         df <- r$d_viz
-    #         if (input$map1_zoom <= 10) {
-    #           nsample <- 10000
-    #           if (nrow(df) < 10000) nsample <- nrow(df)
-    #           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
-    #         } else {
-    #           nsample <- (input$map1_zoom*1000) + 15000
-    #           if (nsample > nrow(df)) nsample <- nrow(df)
-    #           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
-    #         }
-    #         df
-    #         },
-    #         error = function(cond) {
-    #           return()
-    #         })
-    #     })
-    # 
-    # 
-    #     observe({
-    #       req(r$active_viz)
-    #       if (r$active_viz != "map_bubbles") return()
-    #       tryCatch({
-    #         req(dataMap())
-    #         df <- dataMap()
-    #         lf <- leaflet::leafletProxy("map1", data = df)
-    # 
-    #         lf <- lf %>%
-    #          leaflet::clearMarkerClusters() %>%
-    #           leaflet::addCircleMarkers(
-    #             lng = ~longitud,
-    #             lat = ~latitud,
-    #             #label = ~label,
-    #             radius = 5,
-    #             color = "#19719F",
-    #             clusterOptions = leaflet::markerClusterOptions(
-    #               maxClusterRadius = 50,
-    #               showCoverageOnHover = TRUE,
-    #               spiderLegPolylineOptions = list(weight = 0),
-    #               zoomToBoundsOnClick = TRUE,
-    #               spiderfyOnMaxZoom = TRUE,
-    #               removeOutsideVisibleBounds = TRUE
-    #             )
-    #           ) #%>%
-    #       },
-    #       error = function(cond) {
-    #         return()
-    #       })
-    #     })
+
+
+        output$map1 <- leaflet::renderLeaflet({
+          #tryCatch({
+          if (r$active_viz != "map_bubbles") return()
+
+          req(r$desagregacionId)
+          lm <-  leaflet::leaflet(options = leaflet::leafletOptions(zoomSnap = 0.5,
+                                                                    zoomDelta = 0.5
+          )) %>%
+            leaflet::addTiles(urlTemplate = "https://maps.geoapify.com/v1/tile/positron/{z}/{x}/{y}.png?&apiKey=f39345000acd4188aae1f2f4eed3ff14",
+                              attribution = "positron") %>%
+            leaflet::addTopoJSON(topojson = mayorsCdmx,
+                                 weight = 1, opacity = 0.5,
+                                 fillColor = "transparent",
+                                 color = "#000000")
+
+
+          if (r$desagregacionId == "ColoniaHechos") {
+            lm <- lm %>%
+              leaflet::addTopoJSON(topojson = coloniaCdmx,
+                                   weight = 1, opacity = 0.5,
+                                   fillColor = "transparent",
+                                   color = "#000000")
+          }
+
+          lm <- lm %>%
+            leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>%
+            leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia",
+                                position = "bottomleft", className = "map-caption")
+          lm
+        })
+
+
+        dataMap <- reactive({
+          tryCatch({
+            if (is.null(r$d_viz)) return()
+            if (r$active_viz != "map_bubbles") return()
+            df <- r$d_viz %>% tidyr::drop_na()
+            if (input$map1_zoom <= 10) {
+              nsample <- 10000
+              if (nrow(df) < 10000) nsample <- nrow(df)
+              df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+            } else {
+              nsample <- (input$map1_zoom*1000) + 15000
+              if (nsample > nrow(df)) nsample <- nrow(df)
+              df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
+            }
+            df
+            },
+            error = function(cond) {
+              return()
+            })
+        })
+
+
+        observe({
+          req(r$active_viz)
+          if (r$active_viz != "map_bubbles") return()
+          tryCatch({
+            req(dataMap())
+            df <- dataMap()
+            lf <- leaflet::leafletProxy("map1", data = df)
+
+            lf <- lf %>%
+             leaflet::clearMarkerClusters() %>%
+              leaflet::addCircleMarkers(
+                lng = ~longitud,
+                lat = ~latitud,
+                #label = ~label,
+                radius = 5,
+                color = "#19719F",
+                clusterOptions = leaflet::markerClusterOptions(
+                  maxClusterRadius = 50,
+                  showCoverageOnHover = TRUE,
+                  spiderLegPolylineOptions = list(weight = 0),
+                  zoomToBoundsOnClick = TRUE,
+                  spiderfyOnMaxZoom = TRUE,
+                  removeOutsideVisibleBounds = TRUE
+                )
+              ) #%>%
+          },
+          error = function(cond) {
+            return()
+          })
+        })
     
     
     optsViz <- reactive({
