@@ -314,13 +314,13 @@ mod_load_viz_server <- function(id, r){
       tryCatch({
         #print(r$parmesan_input)
         if (r$active_viz == "table") {
-          vv <- DT::dataTableOutput(ns("table_view"), width = 950)
+          vv <- shinycustomloader::withLoader(ui_element = DT::dataTableOutput(ns("table_view"), width = 950), type = "html", loader = "loader4")
         } else if (r$active_viz %in% c("map")) {
-          vv <- leaflet::leafletOutput(ns("viz_lflt"), height = 630)
+          vv <- shinycustomloader::withLoader(ui_element = leaflet::leafletOutput(ns("viz_lflt"), height = 630), type = "html", loader = "loader4")
         } else if (r$active_viz %in% "map_bubbles") {
-          vv <- leaflet::leafletOutput(ns("map1"), height = 630)
+          vv <- shinycustomloader::withLoader(ui_element = leaflet::leafletOutput(ns("map1"), height = 630), type = "html", loader = "loader4")
         } else {
-          vv <-highcharter::highchartOutput(ns("viz_hgch"), height = 630)
+          vv <- shinycustomloader::withLoader(ui_element = highcharter::highchartOutput(ns("viz_hgch"), height = 630), type = "html", loader = "loader4")
         }
         vv
       },
