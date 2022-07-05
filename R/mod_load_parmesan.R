@@ -106,7 +106,6 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
-      print(catVars)
       varPsel <- data.frame(id = c("ninguna", catVars),
                             label = c("Ninguna", catVars))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)
@@ -284,8 +283,10 @@ mod_load_parmesan_server <- function(id, r){
               } 
             }
           }
+          print("parmesan")
           print(varToSel)
           print(input[[varS$id[i]]])
+          print("parmesan")
           updateSelectizeInput(session,
                                inputId = varS$id[i],
                                choices = isolate({setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),

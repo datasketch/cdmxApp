@@ -38,7 +38,7 @@ mod_info_footer_server <- function(id, r){
           "<div class = 'dataSummary'>",
           "<div class = 'infoAll'>",format(nrowIni, big.mark = ","), "<span class = 'infoAdd'>Total</span></div>",
           "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format( r$d_sum$Total, big.mark = ","), "<span class = 'infoAdd'>Visualizados</span></div>",
-          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(pctgView, big.mark = ",", nsmall = nDig), "%<span class = 'infoAdd'> del total</span></div>",
+          "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(pctgView, big.mark = ",", digits = 2, nsmall = nDig), "%<span class = 'infoAdd'> del total</span></div>",
          # "<div class = 'infoAll' style = 'border-left: 1px solid;margin-left:3%;padding: 0% 3%;'>",format(sum(Nmv$Total, na.rm = TRUE), big.mark = ","), "<span class = 'infoAdd'>No identificados</span></div>
         "</div>"
         ))

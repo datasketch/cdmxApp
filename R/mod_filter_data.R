@@ -26,16 +26,16 @@ mod_filter_data_server <- function(id, r){
     
     observe({
       
-      req(r$d_sel)
-      df <- r$d_sel
       tryCatch({
+        req(r$d_sel)
+        df <- r$d_sel
         vars_f <- r$vars_f
         for (i in 1:nrow(vars_f)) {
+          print("inicial")
+          print(r[[vars_f$id[i]]])
+          print("----")
           if (is.null(r[[vars_f$id[i]]])) df <- df
           if (is.na(r[[vars_f$id[i]]])) df <- df
-          print("thiiiiis")
-          print(r[[vars_f$id[i]]] )
-          print("thiiiiis")
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
             if (is.null(r[[vars_f$id[i]]])) df <- df
             filterNA <- FALSE

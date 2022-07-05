@@ -254,7 +254,7 @@ mod_load_viz_server <- function(id, r){
         
         lv <- do.call(eval(parse(text=r$v_type)), optsViz())
         
-        print(lv)
+        #print(lv)
         lv
       },
       error = function(cond) {
