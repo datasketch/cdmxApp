@@ -33,6 +33,9 @@ mod_filter_data_server <- function(id, r){
         for (i in 1:nrow(vars_f)) {
           if (is.null(r[[vars_f$id[i]]])) df <- df
           if (is.na(r[[vars_f$id[i]]])) df <- df
+          print("thiiiiis")
+          print(r[[vars_f$id[i]]] )
+          print("thiiiiis")
           if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
             if (is.null(r[[vars_f$id[i]]])) df <- df
             filterNA <- FALSE
