@@ -28,6 +28,8 @@ mod_viz_selection_server <- function(id, r){
        if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
      }
      if (is.null(r$allDates)) viz <- setdiff(viz, "line")
+     if (is.null(r$coorToPlot)) viz <- setdiff(viz, c( "map_heat", "map_bubbles"))
+     if (is.null(r$geoToPlot)) viz <- setdiff(viz, "map")
      c(viz, "table")
     })
     

@@ -32,19 +32,7 @@ mod_filter_index_server <- function(id, r){
     })
     
     
-  
-    
-    # # observe({
-    # #   if (is.null(aver())) return()
-    # #   
-    # #   purrr::map(aver(), function(btn) {
-    # #     print(btn)
-    #     observeEvent(input[["INDEXTEST-index-alcaldiasId"]], {
-    #       print("hola")
-    #     })
-    # #   })
-    # # })
-   
+
    
   })
 }

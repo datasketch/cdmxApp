@@ -29,46 +29,44 @@ mod_filter_data_server <- function(id, r){
       tryCatch({
         req(r$d_sel)
         df <- r$d_sel
-        vars_f <- r$vars_f
-        for (i in 1:nrow(vars_f)) {
-          print("inicial")
-          print(r[[vars_f$id[i]]])
-          print("----")
-          if (is.null(r[[vars_f$id[i]]])) df <- df
-          if (is.na(r[[vars_f$id[i]]])) df <- df
-          if (!any(r[[vars_f$id[i]]] %in% "Todas")) {
-            if (is.null(r[[vars_f$id[i]]])) df <- df
-            filterNA <- FALSE
-            if (is.na(r[[vars_f$id[i]]])) filterNA <- TRUE
-            
-            if (any(r[[vars_f$id[i]]] == "NA")) filterNA <- TRUE
+        if (!is.null(r$vars_f)) {
+          vars_f <- r$vars_f
+          for (i in 1:nrow(vars_f)) {
+            if (is.null(r[[vars_f$id[i]]])) return()
+            print("holaaa acaa entraa todo bien")
+            filterNA <- "NA" %in% r[[vars_f$id[i]]]
             varF <- setdiff(r[[vars_f$id[i]]], "NA")
-            if (identical(varF, character())) varF <- NULL
-            df <- df %>% filterTbl(varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
-            #  }
-            
+            print("hasta aacaa llega")
+            df <- filterTbl(df, varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
           }
-        }
-        
+        } 
+        print(df)
+        print(r$allNums)
+        print(r$numRange)
         if (!is.null(r$allNums)) {
-          for (i in r$allNums) {
-            rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
-            df <- filterNumTbl(dataTbl = df,
-                               varToFilter = i,
-                               rangeToView = r[[paste0(i, "range")]],
-                               originalRange = c(rangeDef$min, rangeDef$max))
+          if (!is.null(r$numRange)) {
+            for (i in r$allNums) {
+              rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
+              df <- filterNumTbl(dataTbl = df,
+                                 varToFilter = i,
+                                 rangeToView = r[[paste0(i, "range")]],
+                                 originalRange = c(rangeDef$min, rangeDef$max))
+            }
           }
         }
         
         if (!is.null(r$allDates)) {
+          print(r$allDates)
           rangeDef <- r$datesRange[1,]
-          df <- filterDatTbl(df, 
-                             rangeDef$id, 
+          df <- filterDatTbl(df,
+                             rangeDef$id,
                              c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
-                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max), format="%Y-%m"))
+                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max)))
           )
         }
         
+        #print("into filter data")
+        print(df)
         dataFilter$info <- df
       },
       error = function(cond) {
@@ -77,7 +75,6 @@ mod_filter_data_server <- function(id, r){
       
       
     })
-    
     
     
     

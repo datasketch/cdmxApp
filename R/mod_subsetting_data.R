@@ -23,9 +23,9 @@ mod_subsetting_data_server <- function(id, r){
     
     
     labelVal <- reactiveValues(change = NULL)
-
+    
     tryCatch({
-    observe({
+      observe({
         req(r$d_fil)
         req(r$allCats)
         req(r$vars_f)
@@ -35,8 +35,9 @@ mod_subsetting_data_server <- function(id, r){
           purrr::map(1:nrow(varsF), function(i) {
             df_o <- data.frame(id = r$allCats[[varsF$vars[i]]])
             df_o$id[is.na(df_o$id)] <- "NA"
-            df_o$labelAdd <- paste0(df_o$id, " (0)")
-            df_s <- df %>% summaryTbl(agg = "conteo", varToAgg = varsF$vars[i])
+            df_o$labelAdd <- df_o$id
+            df_s <- df %>% summaryTbl(agg = "conteo", varToAgg = varsF$vars[i]) %>% dplyr::collect()
+            #print("acaa")
             #print(df_s)
             df_s <- dplyr::bind_rows(
               data.frame(id = "Todas", label = paste0("Todas (", sum(df_s$total, na.rm = T), ")")),
@@ -55,11 +56,11 @@ mod_subsetting_data_server <- function(id, r){
         labelVal$change <- l_lb
         r$labelChange <- isolate(labelVal$change)
       })
-      },
-      error = function(cond) {
-        return()
-      })
-
+    },
+    error = function(cond) {
+      return()
+    })
+    
     
     
     

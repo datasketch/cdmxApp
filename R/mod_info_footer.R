@@ -27,10 +27,10 @@ mod_info_footer_server <- function(id, r){
     output$summaryInfo <- renderUI({
       tryCatch({
         req(r$d_sum)
+        req(r$ckanData)
         
         nrowIni <- as.vector(DBI::dbGetQuery(r$ckanData, "SELECT COUNT(*) FROM cdmxData"))$`COUNT(*)`
-        print(nrowIni)
-        
+
         pctgView <- (r$d_sum$Total/nrowIni)*100
         nDig <- 2
         if (pctgView == 100) nDig <- 0

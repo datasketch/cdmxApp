@@ -37,20 +37,20 @@ mod_load_parmesan_server <- function(id, r){
       req(r$allDates)
       req(r$active_viz)
       if (!r$active_viz %in% c("line", "area")) return()
-      shiny::selectizeInput(inputId = ns("datesSelected"), 
-                            label = "Fecha de interés", 
+      shiny::selectizeInput(inputId = ns("datesSelected"),
+                            label = "Fecha de interés",
                             choices = r$allDates,
                             selected = r$allNums[1]
       )
     })
-    
+
     observe({
       if (is.null(r$allDates)) return()
       r$datesSelected <- input[["datesSelected"]]
     })
-    
-    
-    
+
+
+
     output$dateRange <- renderUI({
       if (is.null(r$allDates)) return()
       rangeDef <- r$datesRange[1,]
@@ -64,7 +64,7 @@ mod_load_parmesan_server <- function(id, r){
                                   endLabel = "Final del rango"
       )
     })
-  
+
     observe({
       if (is.null(r$allDates)) return()
       rangeDef <- r$datesRange[1,]
@@ -168,6 +168,7 @@ mod_load_parmesan_server <- function(id, r){
     # # Filtros q afectan la base -----------------------------------------------
     
     output$filterOptions <- renderUI({
+      req(r$varViewId)
       req(r$vars_f)
       req(r$allCats)
       df <- r$vars_f
@@ -197,7 +198,7 @@ mod_load_parmesan_server <- function(id, r){
       maxI <- 1
       
       if (r$active_viz == "scatter") {
-      if (length(r$allNums) >= 2) {
+        if (length(r$allNums) >= 2) {
           selOps <- c(selOps, r$allNums[2])
           maxI <- 2
         }
@@ -225,9 +226,7 @@ mod_load_parmesan_server <- function(id, r){
       req(r$numRange)
       if (length(r$allNums) > 0) {
         purrr::map(r$allNums, function(i) {
-          #print(i)
           rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
-          #print(rangeDef)
           shiny::sliderInput(inputId = ns(paste0(rangeDef$id, "range")),
                              label = rangeDef$id,
                              min = rangeDef$min, 
@@ -265,40 +264,44 @@ mod_load_parmesan_server <- function(id, r){
     })
     
     # ###########################################################################    
-    # 
+    #
+    # tryCatch({
+    
     observe({
-      tryCatch({
-        if (is.null(r$labelChange)) return()
-        req(r$vars_f)
-        varS <- r$vars_f
+
+      if (is.null(r$vars_f)) return()
+      
+      varS <- r$vars_f
+      
+      purrr::map(1:nrow(varS), function(i) {
         
-        purrr::map(1:nrow(varS), function(i) {
-          varToSel <- isolate({input[[varS$id[i]]]})
-          if (length(varToSel) > 1) {
-            if ("Todas" %in% varToSel) {
-              if (varToSel[[1]] == "Todas") {
-                varToSel <- setdiff(varToSel, "Todas")
-              } else {
-                varToSel <- "Todas"
-              } 
-            }
+        varToSel <- isolate({input[[varS$id[i]]]})
+        if (length(varToSel) > 1) {
+          if ("Todas" %in% varToSel) {
+            if (varToSel[[1]] == "Todas") {
+              varToSel <- setdiff(varToSel, "Todas")
+            } else {
+              varToSel <- "Todas"
+            } 
           }
-          print("parmesan")
-          print(varToSel)
-          print(input[[varS$id[i]]])
-          print("parmesan")
-          updateSelectizeInput(session,
-                               inputId = varS$id[i],
-                               choices = isolate({setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", r$labelChange[[varS$vars[i]]])),
-                                                           r$labelChange[[varS$vars[i]]])}),
-                               selected = varToSel
-          )
-        })
-      },
-      error = function(cond) {
-        return()
+        }
+        print(varToSel)
+        print(input[[varS$id[i]]])
+        labelInput <- r$labelChange[[varS$vars[i]]]
+        if (is.null(labelInput)) labelInput <- "Todas"
+        updateSelectizeInput(session,
+                             inputId = varS$id[i],
+                             choices = isolate({setNames(paste0(gsub("\\s*\\([^\\)]+\\)","", labelInput)),
+                                                         labelInput)}),
+                             selected = varToSel
+        )
       })
+      
     })
+    # },
+    # error = function(cond) {
+    #   return()
+    # })
     
     
     
@@ -420,40 +423,7 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(colors_show())) return()
       colors_show()
     })
-    
-    
-    # fec_opts <- reactive({
-    #   setNames(c("FechaInicioR", "Año_hecho"),
-    #            c("Fecha en que se hizo la denuncia",
-    #              "Fecha en que se cometió el delito"))
-    # })
-    # 
-    # fec_select <- reactive({
-    #   #req(fec_opts())
-    #   #fec_opts()[1]
-    #   "FechaInicioR"
-    # })
-    
-    # maxIn <- reactive({
-    #   req(r$d_sel)
-    #   df <- r$d_sel
-    #   max(lubridate::dmy(df$FechaInicio), na.rm = TRUE)
-    # })
-    # 
-    # minIn <- reactive({
-    #   req(r$d_sel)
-    #   df <- r$d_sel
-    #   min(lubridate::dmy(df$FechaInicio), na.rm = TRUE)
-    # })
-    
-    
-    # anioHolder <- reactive({
-    #   req(maxIn())
-    #   req(minIn())
-    #   #c(minIn(), maxIn())
-    #   paste0(format(minIn(), format="%Y-%m"), " al ", format(maxIn(), format="%Y-%m"))
-    # })
-    
+
     
     # Initialize parmesan
     path <- app_sys("app/app_config/parmesan")

@@ -24,6 +24,7 @@ mod_selected_data_server <- function(id, r){
     data_select <- reactive({
       tryCatch({
         req(r$ckanData)
+        #print(r$ckanExtra)
         con <- r$ckanData
         df <- dplyr::tbl(con,  "cdmxData")
         df
@@ -35,26 +36,34 @@ mod_selected_data_server <- function(id, r){
     
     data_fringe <- reactive({
       tryCatch({
-      req(data_select())
-      df <- data_select() %>% 
-        head(30) %>% 
-        dplyr::collect()
-      lsFringe <- 
-        df %>% 
-        homodatum::fringe()
-      
-      lsFringe$dic$hdType[grepl("longitud|lon|long", tolower(lsFringe$dic$id))] <- "Gln"
-      lsFringe$dic$hdType[grepl("latitud|lat", tolower(lsFringe$dic$id))] <- "Glt"
-      lsFringe$dic$hdType[grepl("edad", tolower(lsFringe$dic$id))] <- "Cat"
-      lsFringe$dic$hdType[grepl("hora|postal|id", tolower(lsFringe$dic$id))] <- "Txt"
-      lsFringe$dic$hdType[grepl("fecha|date", tolower(lsFringe$dic$id))] <- "Dat"
-      lsFringe$dic$hdType[grepl("mes|Mes", tolower(lsFringe$dic$id))] <- "Mon"
-      lsFringe$dic$hdType[grepl("_1", tolower(lsFringe$dic$id))] <- "Uid"
-      lsFringe$dic$hdType[grepl("geo|colonia", tolower(lsFringe$dic$id))] <- "Gnm"
-      lsFringe$dic$id <- lsFringe$dic$label
-      #dic <- r$ckanExtra
-      #print(lsFringe$dic)
-      lsFringe
+        req(data_select())
+        # df <- df %>%head(30) %>%dplyr::collect()
+        df <- data_select() %>% 
+          head(30) %>% 
+          dplyr::collect()
+        # lsFringe <- NULL
+        lsFringe <-  df %>% 
+            homodatum::fringe()
+          #lsFringe$dic$hdType[grepl("fecha|date", tolower(lsFringe$dic$id))] <- "Dat"
+          lsFringe$dic$hdType[grepl("mes|Mes", tolower(lsFringe$dic$id))] <- "Mon"
+          lsFringe$dic$hdType[grepl("longitud|lon|long", tolower(lsFringe$dic$id))] <- "Gln"
+          lsFringe$dic$hdType[grepl("latitud|lat", tolower(lsFringe$dic$id))] <- "Glt"
+          lsFringe$dic$hdType[grepl("edad", tolower(lsFringe$dic$id))] <- "Cat"
+          lsFringe$dic$hdType[grepl("hora|postal|id", tolower(lsFringe$dic$id))] <- "Txt"
+          lsFringe$dic$hdType[grepl("_1", tolower(lsFringe$dic$id))] <- "Uid"
+          lsFringe$dic$hdType[grepl("geo|colonia", tolower(lsFringe$dic$id))] <- "Gnm"
+          lsFringe$dic$hdType[grepl("fecha_trim|ubicacion_web|cob_geo_ent_clave|cob_geo_ent|indicador_clave", tolower(lsFringe$dic$id))] <- "___"       
+          lsFringe$dic$id <- lsFringe$dic$label
+          lsFringe
+        # },
+        # error = function(cond) {
+        #   list(dic = data.frame(id = names(df), label = names(df), hdType = "Cat"))
+        # })
+        
+
+        #dic <- r$ckanExtra
+        #print(lsFringe$dic)
+        lsFringe
       },
       error = function(cond) {
         return()
@@ -69,36 +78,40 @@ mod_selected_data_server <- function(id, r){
     
     varsToFilter <- reactive({
       tryCatch({
-      req(r$ckanConf)
-      #vars <- listConf$result$resource_disaggregate
-      vars <-  r$ckanConf$resource_disaggregate
+        req(r$ckanConf)
+        #vars <- setdiff(listConf$result$resource_disaggregate, c(NA, ""))
+        vars <-  setdiff(r$ckanConf$resource_disaggregate, c(NA, ""))
 
-      if (is.null(vars)) {
-        req(data_fringe())
-        dic <- data_fringe()$dic
-        catVars <- dic %>% dplyr::filter(hdType == "Cat") %>% .$id
-        vars <- 
-          purrr::map(catVars, function(var){
-            vars <- NULL
-            uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
-            if (length(uCats[[var]]) <= 30) {
-              vars <- var
-            } 
-            vars
-          }) %>%  purrr::discard(is.null) %>% unlist() 
-      } else {
-      vars <- vars %>% 
-        stringr::str_split(pattern = ",") %>% 
-        .[[1]] %>% 
-        trimws() %>% 
-        stringi::stri_trans_general(id = "Latin-ASCII")
-      vars <- gsub("Competencia", "competencia", vars)
-      }
-      df <-  data.frame(
-        id = paste0(tolower(vars), "Id"),
-        vars = vars
-      )
-      df
+        if (identical(vars, character())) vars <- NULL
+        if (is.null(vars)) {
+          req(data_fringe())
+          #dic <-  lsFringe$dic
+          dic <- data_fringe()$dic
+          catVars <- dic %>% dplyr::filter(hdType == "Cat") %>% .$id
+          vars <- 
+            purrr::map(catVars, function(var){
+              vars <- NULL
+              #uCats <- DBI::dbGetQuery(con, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
+              uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
+
+              if (length(uCats[[var]]) > 1 & length(uCats[[var]]) <= 30 ) {
+                vars <- var
+              } 
+              vars
+            }) %>%  purrr::discard(is.null) %>% unlist() 
+        } else {
+          vars <- vars %>% 
+            stringr::str_split(pattern = ",") %>% 
+            .[[1]] %>% 
+            trimws() %>% 
+            stringi::stri_trans_general(id = "Latin-ASCII")
+          vars <- gsub("Competencia", "competencia", vars)
+        }
+        df <-  data.frame(
+          id = paste0(tolower(vars), "Id"),
+          vars = vars
+        )
+        df
       },
       error = function(cond) {
         return()
@@ -110,9 +123,12 @@ mod_selected_data_server <- function(id, r){
       tryCatch({
         req(r$ckanData)
         req(varsToFilter())
+
         lCats <- 
           purrr::map(varsToFilter()$vars, function(var){
+            print(var)
             uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
+            #print(as.character(uCats[[var]]))
             x <- c("Todas", as.character(uCats[[var]]))
             #x[is.na(x)] <- "NA"
             x
@@ -141,11 +157,16 @@ mod_selected_data_server <- function(id, r){
       tryCatch({
         lNum <- 
           purrr::map(numToFilter(), function(var){
-            minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
-            maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData"))
+            print(var)
+            minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(CAST(",var," AS INT)) FROM cdmxData"))
+            print(minNum)
+            maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(CAST(", var," AS INT)) FROM cdmxData"))
             df <- data.frame(min = as.numeric(minNum[[1]]), max = as.numeric(maxNum[[1]]), id = var)
+            df <- df %>% dplyr::filter(!is.na(min), !is.na(max))
+            if (nrow(df) == 0) df <- NULL
             df
           }) %>% dplyr::bind_rows()
+        print(lNum)
         lNum
       },
       error = function(cond) {
@@ -169,11 +190,13 @@ mod_selected_data_server <- function(id, r){
     dateRange <- reactive({
       tryCatch({
         req(dateToFilter())
+        dateFormat <- "a_m_d"
+        if (!is.null(r$ckanExtra$dateFormat)) dateFormat <- r$ckanExtra$dateFormat
         lNum <- 
           purrr::map(dateToFilter(), function(var){
             minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(",var,") FROM cdmxData"))
             maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(",var,") FROM cdmxData"))
-            df <- data.frame(min = lubridate::dmy(minNum[[1]]), max = lubridate::dmy(maxNum[[1]]), id = var)
+            df <- data.frame(min = minNum[[1]], max = maxNum[[1]], id = var)
             df
           }) %>% dplyr::bind_rows()
         lNum
@@ -188,18 +211,22 @@ mod_selected_data_server <- function(id, r){
     coordinatesToPlot <- reactive({
       req(data_fringe())
       dic <- data_fringe()$dic
-      print(tail(dic))
       GlnDic <- dic %>% dplyr::filter(hdType %in% "Gln")
-      print(GlnDic)
       GltDic <- dic %>% dplyr::filter(hdType %in% "Glt")
-      print(GltDic)
       varCoor <- NULL
       if (nrow(GlnDic) == 0) return()
       if (nrow(GlnDic) > 0 & nrow(GltDic) > 0) varCoor <- c(GlnDic$id[1],GltDic$id[1])
       varCoor
     })
     
-   
+    geoToPlot <- reactive({
+      req(data_fringe())
+      dic <- data_fringe()$dic
+      GeoDic <- dic %>% dplyr::filter(hdType %in% c("Gcd", "Gnm"))
+      if (nrow(GeoDic) == 0) GeoDic <- NULL
+      GeoDic
+    })
+    
     
     
     observe({
@@ -212,6 +239,7 @@ mod_selected_data_server <- function(id, r){
       r$allDates <- dateToFilter()
       r$datesRange <- dateRange()
       r$coorToPlot <- coordinatesToPlot()
+      r$geoToPlot <- geoToPlot()
     })
     
   })
