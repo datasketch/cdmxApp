@@ -75,8 +75,9 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
+      
       if (r$active_viz %in% c("map", "map_bubbles")) {
-        ch <-  catVars[grepl("alcaldia", tolower(catVars))]
+        ch <-  catVars[grepl("alcaldia|alcaldía", tolower(catVars))]
       } else if (r$active_viz %in% c("line", "area")) {
         ch <- c("Histórico CDMX", catVars)
       } else {
@@ -106,6 +107,8 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
+      #print("in caaat")
+      #print(catVars)
       varPsel <- data.frame(id = c("ninguna", catVars),
                             label = c("Ninguna", catVars))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)

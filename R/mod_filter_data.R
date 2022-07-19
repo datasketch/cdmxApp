@@ -33,14 +33,12 @@ mod_filter_data_server <- function(id, r){
           vars_f <- r$vars_f
           for (i in 1:nrow(vars_f)) {
             if (is.null(r[[vars_f$id[i]]])) return()
-            print("holaaa acaa entraa todo bien")
             filterNA <- "NA" %in% r[[vars_f$id[i]]]
             varF <- setdiff(r[[vars_f$id[i]]], "NA")
-            print("hasta aacaa llega")
             df <- filterTbl(df, varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
           }
         } 
-        print(df)
+        #print(df)
         print(r$allNums)
         print(r$numRange)
         if (!is.null(r$allNums)) {
@@ -65,8 +63,6 @@ mod_filter_data_server <- function(id, r){
           )
         }
         
-        #print("into filter data")
-        print(df)
         dataFilter$info <- df
       },
       error = function(cond) {

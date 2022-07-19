@@ -66,7 +66,7 @@ mod_viz_data_server <- function(id, r){
         } else {
           if (length(varNum) > 2) return()
         }
-        print(df)
+        #print(df)
         viz$data <- df
       },
       error = function(cond) {

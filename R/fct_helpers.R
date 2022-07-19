@@ -129,7 +129,7 @@ selectTbl <-
         df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
       }
     } 
-    
+  
     
     df <-   df %>% dplyr::collect()
     df

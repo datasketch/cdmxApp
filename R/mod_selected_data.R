@@ -52,7 +52,7 @@ mod_selected_data_server <- function(id, r){
           lsFringe$dic$hdType[grepl("hora|postal|id", tolower(lsFringe$dic$id))] <- "Txt"
           lsFringe$dic$hdType[grepl("_1", tolower(lsFringe$dic$id))] <- "Uid"
           lsFringe$dic$hdType[grepl("geo|colonia", tolower(lsFringe$dic$id))] <- "Gnm"
-          lsFringe$dic$hdType[grepl("fecha_trim|ubicacion_web|cob_geo_ent_clave|cob_geo_ent|indicador_clave", tolower(lsFringe$dic$id))] <- "___"       
+          lsFringe$dic$hdType[grepl("fecha_trim|ubicacion_web|cob_geo_ent_clave|cob_geo_ent|indicador_clave|geopoint|calle", tolower(lsFringe$dic$id))] <- "___"       
           lsFringe$dic$id <- lsFringe$dic$label
           lsFringe
         # },
@@ -62,7 +62,7 @@ mod_selected_data_server <- function(id, r){
         
 
         #dic <- r$ckanExtra
-        #print(lsFringe$dic)
+        print(lsFringe$dic)
         lsFringe
       },
       error = function(cond) {
@@ -88,15 +88,17 @@ mod_selected_data_server <- function(id, r){
           #dic <-  lsFringe$dic
           dic <- data_fringe()$dic
           catVars <- dic %>% dplyr::filter(hdType == "Cat") %>% .$id
+
           vars <- 
             purrr::map(catVars, function(var){
               vars <- NULL
               #uCats <- DBI::dbGetQuery(con, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
               uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
-
+              
               if (length(uCats[[var]]) > 1 & length(uCats[[var]]) <= 30 ) {
                 vars <- var
               } 
+            
               vars
             }) %>%  purrr::discard(is.null) %>% unlist() 
         } else {
@@ -123,7 +125,6 @@ mod_selected_data_server <- function(id, r){
       tryCatch({
         req(r$ckanData)
         req(varsToFilter())
-
         lCats <- 
           purrr::map(varsToFilter()$vars, function(var){
             print(var)
@@ -232,6 +233,8 @@ mod_selected_data_server <- function(id, r){
     observe({
       r$d_sel <- data_select()
       r$dic_f <- dic_fringe()
+      # print("in observeeer")
+      # print(varsToFilter())
       r$vars_f <- varsToFilter()
       r$allCats <- catsToFilter()
       r$allNums <- numToFilter()

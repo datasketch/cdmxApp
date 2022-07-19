@@ -22,15 +22,17 @@ mod_viz_selection_server <- function(id, r){
     ns <- session$ns
     
     possible_viz <- reactive({
-     viz <- c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter")
- 
-     if (is.null(r$allNums)) {
-       if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
-     }
-     if (is.null(r$allDates)) viz <- setdiff(viz, "line")
-     if (is.null(r$coorToPlot)) viz <- setdiff(viz, c( "map_heat", "map_bubbles"))
-     if (is.null(r$geoToPlot)) viz <- setdiff(viz, "map")
-     c(viz, "table")
+      req(r$vars_f$vars)
+      viz <- c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter")
+      
+      if (is.null(r$allNums)) {
+        if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
+      }
+      if (is.null(r$allDates)) viz <- setdiff(viz, "line")
+      if (is.null(r$coorToPlot)) viz <- setdiff(viz, c( "map_heat", "map_bubbles"))
+      if (is.null(r$geoToPlot)) viz <- setdiff(viz, "map")
+      if (!any(grepl("alcaldia|alcaldía", tolower(r$vars_f$vars)))) viz <- setdiff(viz, c("map", "map_heat", "map_bubbles"))
+      c(viz, "table")
     })
     
     
@@ -80,7 +82,7 @@ mod_viz_selection_server <- function(id, r){
       r$active_viz <- actual_but$active
     })
     
-   
+    
   })
 }
 

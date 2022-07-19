@@ -51,7 +51,7 @@ mod_load_viz_server <- function(id, r){
                              color = "#000000")
       
       
-      if (r$desagregacionId == "ColoniaHechos") {
+      if (grepl("colonia", tolower(r$desagregacionId))) {
         lm <- lm %>%
           leaflet::addTopoJSON(topojson = coloniaCdmx,
                                weight = 1, opacity = 0.5,
@@ -60,41 +60,35 @@ mod_load_viz_server <- function(id, r){
       }
       
       lm <- lm %>%
-        leaflet::setView(lng = -99.2, lat = 19.33, 10.70) %>%
-        leaflet::addControl("Este mapa solo muestra 15,000 puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia",
-                            position = "bottomleft", className = "map-caption")
+        leaflet::setView(lng = -99.2, lat = 19.33, 10.70) 
       lm
     })
     
-    
-    dataMap <- reactive({
-      tryCatch({
+    dataMap <- reactiveValues(info = NULL)
+    observe({
+       tryCatch({
+        if (is.null(input$map1_zoom)) return()
         if (is.null(r$d_viz)) return()
         if (!(r$active_viz %in% c("map_bubbles", "map_heat"))) return()
         df <- r$d_viz %>% tidyr::drop_na()
+        
         if (input$map1_zoom <= 10) {
           nsample <- 10000
           if (nrow(df) < 10000) nsample <- nrow(df)
+          options(set.seed(999))
           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         } else {
-          nsample <- (input$map1_zoom*1000) + 15000
-          if (nsample > nrow(df)) nsample <- nrow(df)
+          if (nrow(df) < 10000) {
+            nsample <- nrow(df)
+          } else {
+            options(set.seed(999))
+            fac_mul <- nrow(df)/1000
+            nsample <- round((input$map1_zoom*1000) + fac_mul)
+          }
           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         }
-        df
-      },
-      error = function(cond) {
-        return()
-      })
-    })
+        names(df) <- tolower(names(df))
     
-    
-    observe({
-      req(r$active_viz)
-      if (!(r$active_viz %in% c("map_bubbles", "map_heat"))) return()
-      tryCatch({
-        req(dataMap())
-        df <- dataMap()
         lf <- leaflet::leafletProxy("map1", data = df)
         if (r$active_viz == "map_bubbles") {
           lf <- lf %>%
@@ -115,6 +109,8 @@ mod_load_viz_server <- function(id, r){
               )
             ) #%>%
         } else {
+          print("en heatmap")
+          print(df)
           lf <- lf %>%
             leaflet.extras::clearHeatmap() %>%
             leaflet.extras::addHeatmap(
@@ -127,6 +123,18 @@ mod_load_viz_server <- function(id, r){
               #gradient="GnYlRd"
             )
         }
+        if (nrow(r$d_viz) > nrow(df)) {
+        lf <-
+          lf %>%
+          leaflet::clearControls() %>%
+          leaflet::addControl(paste0("Este mapa solo muestra ", nrow(df), " puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia"),
+                              position = "bottomleft", className = "map-caption")
+        } else {
+          lf <-
+            lf %>%
+            leaflet::clearControls()
+        }
+        lf
       },
       error = function(cond) {
         return()

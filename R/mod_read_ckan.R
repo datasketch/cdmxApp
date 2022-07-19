@@ -25,7 +25,7 @@ mod_read_ckan_server <- function(id, r){
       tryCatch({
         generalUrl <- "https://datos-prueba.cdmx.gob.mx/api/3/action/resource_show?id="
         linkInfo <- r$url_par
-        if (is.null(linkInfo)) linkInfo <-"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5" #"b1926485-e512-4c4f-a03a-5d489bce8740"#"47e49a86-733a-4bf6-93d1-4aa87d9ad60f" ## #"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"140e35f9-9244-4b45-b638-816c2ab7651a"#"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
+        if (is.null(linkInfo)) linkInfo <- "d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"  #"b1926485-e512-4c4f-a03a-5d489bce8740"#"47e49a86-733a-4bf6-93d1-4aa87d9ad60f" ## #"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"140e35f9-9244-4b45-b638-816c2ab7651a"#"ff1d4cbf-5985-45db-b40f-d820ce2b01a2"#"d543a7b1-f8cb-439f-8a5c-e56c5479eeb5"###"2263bf74-c0ed-4e7c-bb9c-73f0624ac1a9" #"b089368e-f710-4f4b-9bae-f9f154d46220" 
         linkInfo <- paste0(generalUrl, linkInfo)
         listConf <- jsonlite::fromJSON(linkInfo)
         listConf$result
@@ -55,6 +55,7 @@ mod_read_ckan_server <- function(id, r){
       if (identical(dateFormat, character())) dateFormat <- NULL
       if (idDic == "c9e96ab4-c127-4ee1-a222-bfa2b5d759de") dateFormat <- "a_m_d"
       if (idDic == "7593b324-6010-44f7-8132-cb8b2276c842") dateFormat <- "d_m_a"
+      if (idDic == "12d22477-bcf1-49ee-92aa-16a0d0a5817c") dateFormat <- "d_m_a_hms"
       
       
       listUrl <- 
@@ -67,16 +68,20 @@ mod_read_ckan_server <- function(id, r){
       
       dataDic <- listUrl[grep("Dic", listUrl$name),]
       
-      if (nrow(dataDic) == 0 ) {
-        dataDic <- NULL  #stop("Debe ingresar el diccionario en formato xlsx o csv")
-      } else {
-        if (dataDic$format == "csv") {
-          dataDic <- readr::read_csv(dataDic$url)
+      tryCatch({
+        if (nrow(dataDic) == 0 ) {
+          dataDic <- NULL  #stop("Debe ingresar el diccionario en formato xlsx o csv")
         } else {
-          dataDic <- rio::import(dataDic$url)
+          if (dataDic$format == "csv") {
+            dataDic <- readr::read_csv(dataDic$url)
+          } else {
+            dataDic <- rio::import(dataDic$url)
+          }
         }
-      }
-      
+      },
+      error = function(cond) {
+        dataDic <- NULL
+      })
       
       infoDic <- list(
         titulo = listDic$title,
@@ -105,30 +110,40 @@ mod_read_ckan_server <- function(id, r){
       #file <- listConf$result$url
       file <- infoUrl()$url
       con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-      encode <- readr::guess_encoding(file)$encoding[1]
-      csv <- readr::read_csv(file, na = c("NA", "", "nula"), locale = readr::locale(encoding = encode), show_col_types = FALSE)
-      csv <- Filter(function(x) !all(is.na(x)), csv)
-     
-      #listConf$result$date_format
-      #csv <- readr::read_csv("sampleData.csv")
-      if (!is.null(dicCkan()$dateFormat)) {
-        indFecha <- grep("fecha|Fecha", names(csv))
-        if (!identical(indFecha, integer())) {
-          dateFormat <- dicCkan()$dateFormat
-          lf <- 
-            purrr::map(indFecha, function (i) {
-              if (dateFormat %in% c("d_m_a", "d/m/a")) {
-                csv[[i]] <<- as.character(lubridate::dmy(csv[[i]])) }
-              if (dateFormat %in% c("a_m_d", "a/m/d")) {
-                csv[[i]] <<- as.character(lubridate::ymd(csv[[i]])) }
-              if (dateFormat %in% c("m_a_d", "m/a/d")) {
-                csv[[i]] <<- as.character(lubridate::myd(csv[[i]])) }
-            })
-        }
-      }
       
+      ext <- substring(file, regexpr("\\.([[:alnum:]]+)$", file) + 1L)
+      #csv <- readr::read_csv("sampleData.csv")
+      if (ext == "csv") {
+        encode <- readr::guess_encoding(file)$encoding[1]
+        csv <- readr::read_csv(file, na = c("NA", "", "nula"), locale = readr::locale(encoding = encode), show_col_types = FALSE)
+      }
+      if (ext == "xlsx") {
+        csv <- rio::import(file)
+      }
+      csv <- Filter(function(x) !all(is.na(x)), csv)
+      
+      #listConf$result$date_format
+      
+      #if (!is.null(dicCkan()$dateFormat)) {
+      indFecha <- grep("fecha|Fecha", names(csv))
+      if (!identical(indFecha, integer())) {
+        dateFormat <- dicCkan()$dateFormat
+        if (is.null(dateFormat)) dateFormat <- "d_m_a"
+        lf <- 
+          purrr::map(indFecha, function (i) {
+            if (dateFormat %in% c("d_m_a", "d/m/a")) {
+              csv[[i]] <<- as.character(lubridate::dmy(csv[[i]])) }
+            if (dateFormat %in% c("a_m_d", "a/m/d")) {
+              csv[[i]] <<- as.character(lubridate::ymd(csv[[i]])) }
+            if (dateFormat %in% c("m_a_d", "m/a/d")) {
+              csv[[i]] <<- as.character(lubridate::myd(csv[[i]])) }
+            if (dateFormat %in% c("d_m_a_hms")) {
+              csv[[i]] <<- as.character(lubridate::as_date(lubridate::ymd_hms(csv[[i]]))) }
+          })
+      }
+      #}
       DBI::dbWriteTable(con, "cdmxData", csv, extended_types = T)
-   
+      
       con
       # },
       # error = function(cond) {
