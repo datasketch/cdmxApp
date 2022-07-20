@@ -181,8 +181,17 @@ mod_selected_data_server <- function(id, r){
       req(data_fringe())
       dic <- data_fringe()$dic
       dateDic <- dic %>% dplyr::filter(hdType == "Dat")
+      reqDate <-  trimws(setdiff(r$ckanConf$resource_priority_date %>% 
+                                   stringr::str_split(pattern = ",") %>% 
+                                   .[[1]], 
+                                 c(NA, "")))
+      
       if (nrow(dateDic) > 0) {
-        dateDic$id
+        d <- dateDic$id
+        if (!identical(reqDate, character())) {
+          d <-  unique(c(reqDate, dateDic$id))
+        }
+        d
       } else {
         return()
       }
