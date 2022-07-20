@@ -41,9 +41,10 @@ mod_viz_data_server <- function(id, r){
         
         if (vizSel %in% c("line", "area"))  {
           req(r$datesSelected)
-          varDate <- r$datesSelected
+          varDate <- paste0("temporal_", r$datesSelected)
           if (varCats == "Histórico CDMX") varCats <- NULL
-          varCats <- c(varCats, varDate)
+          varCats <- c(varCats,  varDate)
+          print(varCats)
           haveDate <- TRUE
         }
         if (vizSel %in% c("map_bubbles", "map_heat")){

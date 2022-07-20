@@ -56,10 +56,13 @@ mod_filter_data_server <- function(id, r){
         if (!is.null(r$allDates)) {
           print(r$allDates)
           rangeDef <- r$datesRange[1,]
-          df <- filterDatTbl(df,
-                             rangeDef$id,
+          rangeDef$dateFil <- paste0("temporal_",rangeDef$id)
+          print(c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")))
+          print(c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max))))
+          df <- filterNumTbl(df,
+                             rangeDef$dateFil,
                              c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
-                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max)))
+                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max), format="%Y-%m"))
           )
         }
         

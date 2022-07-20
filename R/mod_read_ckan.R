@@ -139,11 +139,12 @@ mod_read_ckan_server <- function(id, r){
               csv[[i]] <<- as.character(lubridate::myd(csv[[i]])) }
             if (dateFormat %in% c("d_m_a_hms")) {
               csv[[i]] <<- as.character(lubridate::as_date(lubridate::ymd_hms(csv[[i]]))) }
+            csv[[paste0("temporal_", names(csv)[i])]] <<- format(as.Date(csv[[i]]), "%Y-%m")
           })
       }
       #}
       DBI::dbWriteTable(con, "cdmxData", csv, extended_types = T)
-      
+   
       con
       # },
       # error = function(cond) {

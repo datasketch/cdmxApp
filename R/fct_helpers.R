@@ -49,19 +49,19 @@ filterNumTbl <-
 
 
 
-filterDatTbl <-
-  function (dataTbl, varToFilter, rangeDate, originaDate) {
-    df <- dataTbl
-    var <- dplyr::sym(varToFilter)
-    
-    df <- df %>% dplyr::collect() 
-    df <- df %>% dplyr::mutate(Fechax = lubridate::ymd(!!var))
-    df <- df %>% 
-      tidyr::separate(Fechax, into = c("anio", "mes", "dia"), sep = "-", extra = "drop") 
-    df$Fechax <- paste0(df$anio, "-", df$mes)
-    df <- df %>% dplyr::select(-dia, -mes, -anio)
-    filterNumTbl(df, "Fechax", rangeDate, originaDate)
-  }
+# filterDatTbl <-
+#   function (dataTbl, varToFilter, rangeDate, originaDate) {
+#     df <- dataTbl
+#     var <- dplyr::sym(varToFilter)
+#     
+#     df <- df %>% dplyr::collect() 
+#     df <- df %>% dplyr::mutate(Fechax = lubridate::ymd(!!var))
+#     df <- df %>% 
+#       tidyr::separate(Fechax, into = c("anio", "mes", "dia"), sep = "-", extra = "drop") 
+#     df$Fechax <- paste0(df$anio, "-", df$mes)
+#     df <- df %>% dplyr::select(-dia, -mes, -anio)
+#     filterNumTbl(df, "Fechax", rangeDate, originaDate)
+#   }
 
 
 summaryTbl <- 
@@ -99,17 +99,7 @@ selectTbl <-
     df <- df %>% 
       dplyr::select(!!varToSel) 
     
-    if (haveDate) {
-      if (is.null(varDate)) return()
-      df <- df %>% dplyr::collect() %>% tidyr::drop_na(!!varDate)
-      df[[varDate]] <- lubridate::ymd(df[[varDate]])  
-      
-      df <- df %>% 
-        dplyr::arrange(arrange(across(starts_with("Fecha"), desc))) %>%
-        tidyr::separate(!!varDate, into = c("anio", "mes", "dia"), sep = "-", extra = "drop") 
-      df[[varDate]] <- paste0(df$anio, "-", df$mes)
-      df <- df %>% dplyr::select(-dia, -mes, -anio)
-    }
+
     
     varG <- dplyr::sym(varToGroup[1])
     df <- df %>% dplyr::group_by(!!varG)
@@ -132,6 +122,13 @@ selectTbl <-
   
     
     df <-   df %>% dplyr::collect()
+    
+    if (haveDate) {
+      if (is.null(varDate)) return()
+      df <- df %>% tidyr::drop_na(!!varDate)
+      names(df) <- gsub("temporal_", "", names(df))
+    }
+    
     df
     
   }
