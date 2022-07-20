@@ -28,41 +28,10 @@ mod_description_modal_server <- function(id, r){
     })
     
     output$info_plots <- renderUI({
-      HTML(
-      "
-      <p>Esta base de datos contiene la información actualizada de las <span style='font-weight: 400;'>víctimas de
-      los delitos en las carpetas de investigación de la Fiscalía General de 
-      Justicia (FGJ) de la Ciudad de México a partir de enero de 2019. </span>
-      <p/>
-      <p>
-      Para una correcta interpretación de la información, se realizan las siguientes 
-      aclaraciones. 
-      <p/>
-      <p>
-      El campo 'FechaHecho' representa la fecha en la que se cometió. 
-      <p/>
-      <p>
-      El campo 'FechaInicio' corresponde a la fecha de la apertura de la carpeta de 
-      investigación. 
-      <p/>
-      <p>
-      En esta base se señala el sexo de la víctima, 
-      así como la fecha en que ocurrieron los hechos denunciados.
-      <p/>
-      <p>
-      Es importante destacar que, aunque en algunas ocasiones la víctima es la denunciante,
-      en otras, denunciante y víctima son diferentes (por ejemplo, casos en los que menores 
-      de edad son víctimas). Es posible que en una misma denuncia se incluya a una o más 
-      víctimas.
-      <p/>
-      <p>
-      Estas y otras aclaraciones las puedes encontrar en el Diccionario que se 
-      adjunta a la presente base. Los datos de esta base fueron actualizados por la FGJ el 29 de
-      julio de 2020. En esta página se puede descargar una nota realizada por la FGJ en la que
-      se explica el proceso de la actualización y la nueva información. 
-      Los datos anteriores a la podrán seguir consultándose.
-      <p/>"
-      )
+      HTML(paste0(
+        "<h4>",listConf$result$name, "</h4><br/>",
+        "<p>",listConf$result$description, "</p>"
+      ))
     })
     
     observeEvent(r$modal_dicc, {
@@ -72,6 +41,7 @@ mod_description_modal_server <- function(id, r){
     output$tableDic <- DT::renderDataTable({
       req(r$ckanExtra)
       df <- r$ckanExtra$dataDic
+      if (is.null(df)) return()
       dtable <- DT::datatable(df,
                               rownames = F,
                               escape = FALSE,
@@ -108,36 +78,71 @@ mod_description_modal_server <- function(id, r){
       shinypanels::showModal(ns("modal_rec_info"))
     })
 
-    output$PdfReclasificacion <- downloadHandler(
-      filename = "nota-reclasificacion.pdf",
-      content = function(file) {
-        file.copy(app_sys("app/www/recursos/nota-reclasificacion.pdf"), file)
-      }
-    )
-    
-    output$PdfUpdate <- downloadHandler(
-      filename = "nota-actualizacion.pdf",
-      content = function(file) {
-        file.copy(app_sys("app/www/recursos/nota-actualizacion.pdf"), file)
-      }
-    )
     
     
-    output$PdfOldUpdate <- downloadHandler(
-      filename = "nota-actualizacion-290720.pdf",
-      content = function(file) {
-        file.copy(app_sys("app/www/recursos/nota-actualizacion-290720.pdf"), file)
-      }
-    )
+    # output$PdfUpdate <- downloadHandler(
+    #   filename = "nota-actualizacion.pdf",
+    #   content = function(file) {
+    #     download.file(url = "https://datos-prueba.cdmx.gob.mx/dataset/7593b324-6010-44f7-8132-cb8b2276c842/resource/8ec51d06-b430-4722-a811-2cd396c4ba66/download/nota-para-la-actualizacion-victimas-en-carpetas-de-investigacion-pgj.pdf",
+    #                   destfile = paste0(app_sys("app/www/recursos/"), "/pdf1.pdf"))
+    #     file.copy(app_sys("app/www/recursos/pdf1.pdf"), file)
+    #   }
+    # )
+    observe({
+      # infoResources <- listDic$listResources$format
+      infoResources <- r$ckanExtra$listResources
+      if (is.null(infoResources)) return()
+      purrr::map(1:nrow(infoResources), function(i) {
+        output[[paste0("infoResources", i)]] <- downloadHandler(
+          filename = paste0(infoResources$name[i], ".", infoResources$format[i]),
+          content = function(file) {
+            saveFile <- paste0(app_sys("app/www/recursos/"), "/pdf", i, ".", infoResources$format[i])
+            download.file(url = infoResources$url[i],
+                          destfile = saveFile)
+            file.copy(app_sys(paste0("app/www/recursos/pdf",i,".", infoResources$format[i])), file)
+          }
+        )
+      })
+    })
+    
+    
     
     output$info_recs <- renderUI({
+      infoResources <- r$ckanExtra$listResources
+      if (is.null(infoResources)) return() 
+      
       div(style="display: inline-grid;gap: 21px;",
-      downloadLink(ns("PdfReclasificacion"), "Nota Reclasificación"),
-      downloadLink(ns("PdfUpdate"), "Nota para la Actualización"),
-      downloadLink(ns("PdfOldUpdate"), "Nota Actualización 29/07/20")
+      purrr::map(1:nrow(infoResources), function(i) {
+            downloadLink(ns(paste0("infoResources", i)), infoResources$name[i])
+        
+      })
       )
     })
     
+    # output$PdfReclasificacion <- downloadHandler(
+    #   filename = "nota-reclasificacion.pdf",
+    #   content = function(file) {
+    #     file.copy(app_sys("app/www/recursos/nota-reclasificacion.pdf"), file)
+    #   }
+    # )
+    # 
+    # 
+    # 
+    # 
+    # output$PdfOldUpdate <- downloadHandler(
+    #   filename = "nota-actualizacion-290720.pdf",
+    #   content = function(file) {
+    #     file.copy(app_sys("app/www/recursos/nota-actualizacion-290720.pdf"), file)
+    #   }
+    # )
+    # 
+    # output$info_recs <- renderUI({
+    #   div(style="display: inline-grid;gap: 21px;",
+    #   downloadLink(ns("PdfReclasificacion"), "Nota Reclasificación"),
+    #   downloadLink(ns("PdfUpdate"), "Nota para la Actualización"),
+    #   downloadLink(ns("PdfOldUpdate"), "Nota Actualización 29/07/20")
+    #   )
+    # })
   })
 }
     
