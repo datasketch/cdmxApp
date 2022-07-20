@@ -23,7 +23,16 @@ mod_viz_selection_server <- function(id, r){
     
     possible_viz <- reactive({
       req(r$vars_f$vars)
+      #reqViz <- setdiff(listConf$result$chart_type %>% stringr::str_split(pattern = ",") %>% .[[1]], c(NA, ""))
+      reqViz <-  trimws(setdiff(r$ckanConf$chart_type %>% 
+                           stringr::str_split(pattern = ",") %>% 
+                           .[[1]], 
+                         c(NA, "")))
+      
       viz <- c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter")
+      if (!identical(reqViz, character())) {
+      viz <- unique(c(reqViz, viz))
+      }
       
       if (is.null(r$allNums)) {
         if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")

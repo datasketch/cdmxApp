@@ -58,12 +58,12 @@ mod_read_ckan_server <- function(id, r){
       if (idDic == "12d22477-bcf1-49ee-92aa-16a0d0a5817c") dateFormat <- "d_m_a_hms"
       
       
-      listUrl <- 
+      listDic <- 
         listDic %>% 
         .$resources #%>%
       
       
-      listUrl <- listUrl %>%   dplyr::select(name, format, url)
+      listUrl <- listDic %>%   dplyr::select(name, format, url)
       listUrl$format <- gsub("\\.", "",tolower(listUrl$format))
       
       dataDic <- listUrl[grep("Dic", listUrl$name),]
