@@ -22,18 +22,21 @@ mod_viz_selection_server <- function(id, r){
     ns <- session$ns
     
     possible_viz <- reactive({
-      req(r$vars_f$vars)
-      #reqViz <- setdiff(listConf$result$chart_type %>% stringr::str_split(pattern = ",") %>% .[[1]], c(NA, ""))
-      reqViz <-  trimws(setdiff(r$ckanConf$chart_type %>% 
-                           stringr::str_split(pattern = ",") %>% 
-                           .[[1]], 
-                         c(NA, "")))
-      
+    
+      reqViz <- NULL
       viz <- c( "map", "map_heat", "map_bubbles",  "bar", "treemap", "line", "scatter")
-      if (!identical(reqViz, character())) {
-      viz <- unique(c(reqViz, viz))
+      if (!is.null(r$ckanConf$chart_type)) {
+        #reqViz <- setdiff(listConf$result$chart_type %>% stringr::str_split(pattern = ",") %>% .[[1]], c(NA, ""))
+        reqViz <-  trimws(setdiff(r$ckanConf$chart_type %>% 
+                                    stringr::str_split(pattern = ",") %>% 
+                                    .[[1]], 
+                                  c(NA, "")))
+        if (!identical(reqViz, character())) {
+          viz <- unique(c(reqViz, viz))
+        }
       }
-      
+      if (is.null(r$allCats)) viz <- setdiff(viz, c("bar", "treemap"))
+   
       if (is.null(r$allNums)) {
         if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
       }
@@ -41,16 +44,23 @@ mod_viz_selection_server <- function(id, r){
       if (is.null(r$coorToPlot)) viz <- setdiff(viz, c( "map_heat", "map_bubbles"))
       if (is.null(r$geoToPlot)) viz <- setdiff(viz, "map")
       if (!any(grepl("alcaldia|alcaldía", tolower(r$vars_f$vars)))) viz <- setdiff(viz, c("map", "map_heat", "map_bubbles"))
+      
+
       c(viz, "table")
+      
+      
+      
     })
     
     
     viz_tool <- reactive({
+    
       if (is.null(possible_viz())) return()
       df_viz <- data.frame(id = c( "map", "map_heat" ,"map_bubbles", "bar", "treemap", "line", "scatter"  ,"table"),
                            label = c( "Coropleta", "Mapa de calor", "Puntos" ,"Barras","Treemap", "Líneas", "Dispersión", "Tabla"))
       viz_a <- data.frame(id = possible_viz())
       df_viz <- viz_a %>% dplyr::left_join(df_viz) %>% dplyr::filter(id %in% possible_viz())
+
       df_viz$label
     })
     

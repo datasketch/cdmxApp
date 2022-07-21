@@ -81,7 +81,7 @@ mod_selected_data_server <- function(id, r){
         req(r$ckanConf)
         #vars <- setdiff(listConf$result$resource_disaggregate, c(NA, ""))
         vars <-  setdiff(r$ckanConf$resource_disaggregate, c(NA, ""))
-
+        
         if (identical(vars, character())) vars <- NULL
         if (is.null(vars)) {
           req(data_fringe())
@@ -127,7 +127,6 @@ mod_selected_data_server <- function(id, r){
         req(varsToFilter())
         lCats <- 
           purrr::map(varsToFilter()$vars, function(var){
-            print(var)
             uCats <- DBI::dbGetQuery(r$ckanData, paste0("SELECT DISTINCT(",var,") FROM cdmxData"))
             #print(as.character(uCats[[var]]))
             x <- c("Todas", as.character(uCats[[var]]))
@@ -158,16 +157,13 @@ mod_selected_data_server <- function(id, r){
       tryCatch({
         lNum <- 
           purrr::map(numToFilter(), function(var){
-            print(var)
             minNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MIN(CAST(",var," AS INT)) FROM cdmxData"))
-            print(minNum)
             maxNum <- DBI::dbGetQuery(r$ckanData, paste0("SELECT MAX(CAST(", var," AS INT)) FROM cdmxData"))
             df <- data.frame(min = as.numeric(minNum[[1]]), max = as.numeric(maxNum[[1]]), id = var)
             df <- df %>% dplyr::filter(!is.na(min), !is.na(max))
             if (nrow(df) == 0) df <- NULL
             df
           }) %>% dplyr::bind_rows()
-        print(lNum)
         lNum
       },
       error = function(cond) {
@@ -178,6 +174,7 @@ mod_selected_data_server <- function(id, r){
     
     
     dateToFilter <- reactive({
+      if (is.null(r$ckanExtra$dateFormat)) return()
       req(data_fringe())
       dic <- data_fringe()$dic
       dateDic <- dic %>% dplyr::filter(hdType == "Dat")

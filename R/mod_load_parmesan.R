@@ -73,6 +73,7 @@ mod_load_parmesan_server <- function(id, r){
     
     var_opts <- reactive({
       req(r$active_viz)
+  
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
       
@@ -83,6 +84,8 @@ mod_load_parmesan_server <- function(id, r){
       } else {
         ch <- catVars
       }
+      print("vaaaars")
+      print(ch)
       ch
     })
     
@@ -107,8 +110,8 @@ mod_load_parmesan_server <- function(id, r){
       req(r$active_viz)
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
-      #print("in caaat")
-      #print(catVars)
+      print("in caaat")
+      print(catVars)
       varPsel <- data.frame(id = c("ninguna", catVars),
                             label = c("Ninguna", catVars))
       varPsel <- varPsel %>% dplyr::filter(id != r$varViewId)

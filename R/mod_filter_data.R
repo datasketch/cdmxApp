@@ -31,13 +31,18 @@ mod_filter_data_server <- function(id, r){
         df <- r$d_sel
         if (!is.null(r$vars_f)) {
           vars_f <- r$vars_f
+          
           for (i in 1:nrow(vars_f)) {
             if (is.null(r[[vars_f$id[i]]])) return()
+            print("#####")
+            print(r[[vars_f$id[i]]])
             filterNA <- "NA" %in% r[[vars_f$id[i]]]
             varF <- setdiff(r[[vars_f$id[i]]], "NA")
             df <- filterTbl(df, varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
           }
         } 
+        print("$$$$$")
+        print(df)
         #print(df)
         print(r$allNums)
         print(r$numRange)
@@ -53,19 +58,22 @@ mod_filter_data_server <- function(id, r){
           }
         }
         
-        if (!is.null(r$allDates)) {
-          print(r$allDates)
-          rangeDef <- r$datesRange[1,]
-          rangeDef$dateFil <- paste0("temporal_",rangeDef$id)
-          print(c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")))
-          print(c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max))))
-          df <- filterNumTbl(df,
-                             rangeDef$dateFil,
-                             c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
-                             c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max), format="%Y-%m"))
-          )
+        if (!is.null(r$ckanExtra$dateFormat)) {
+          if (!is.null(r$allDates)) {
+            print(r$allDates)
+            rangeDef <- r$datesRange[1,]
+            rangeDef$dateFil <- paste0("temporal_",rangeDef$id)
+            print(c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")))
+            print(c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max))))
+            df <- filterNumTbl(df,
+                               rangeDef$dateFil,
+                               c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
+                               c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max), format="%Y-%m"))
+            )
+          }
         }
-        
+        print("filter")
+        print(df)
         dataFilter$info <- df
       },
       error = function(cond) {

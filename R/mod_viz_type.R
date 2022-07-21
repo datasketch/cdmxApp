@@ -29,14 +29,16 @@ mod_viz_type_server <- function(id, r){
         df <- r$d_viz
         tv <- "CatNum"
         if (ncol(df) == 3) tv <- "CatCatNum"
-        if (sum(grepl("Mes|Año|Fecha|fecha",names(df)))>0) {
+        if (sum(grepl("Mes|Año|Fecha|fecha", names(df))) > 0) {
           tv <- "YeaNum"
           if (ncol(df) == 3) tv <- "CatYeaNum"
         }
         if (r$active_viz %in% "map") tv <- "GnmNum"
         if (r$active_viz %in% "scatter") {
+          req(r$allNums)
           tv <- "CatNumNum"
           if (ncol(df) == 4) tv <- "CatNumNumNum"
+          if (is.null(r$allCats)) tv <- gsub("Cat", "", tv)
         }
         tv
       },

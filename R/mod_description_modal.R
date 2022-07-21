@@ -28,9 +28,13 @@ mod_description_modal_server <- function(id, r){
     })
     
     output$info_plots <- renderUI({
+      tx <- r$ckanConf$name
+      if (is.null(r$ckanConf$name)) tx <- ""
+      ds <- r$ckanConf$description
+      if (is.null(r$ckanConf$description)) ds <- ""
       HTML(paste0(
-        "<h4>",listConf$result$name, "</h4><br/>",
-        "<p>",listConf$result$description, "</p>"
+        "<h4>", tx, "</h4><br/>",
+        "<p>", ds, "</p>"
       ))
     })
     
@@ -96,10 +100,11 @@ mod_description_modal_server <- function(id, r){
         output[[paste0("infoResources", i)]] <- downloadHandler(
           filename = paste0(infoResources$name[i], ".", infoResources$format[i]),
           content = function(file) {
-            saveFile <- paste0(app_sys("app/www/recursos/"), "/pdf", i, ".", infoResources$format[i])
+            saveFile <- paste0(tempdir(), "/pdf", i, ".", infoResources$format[i])
+            print(saveFile)
             download.file(url = infoResources$url[i],
                           destfile = saveFile)
-            file.copy(app_sys(paste0("app/www/recursos/pdf",i,".", infoResources$format[i])), file)
+            file.copy(saveFile, file)
           }
         )
       })
