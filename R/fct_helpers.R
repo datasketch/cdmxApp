@@ -84,30 +84,34 @@ summaryTbl <-
 selectTbl <-
   function(dataTbl, agg = "count", varToSel, varToGroup, 
            varToAgg, haveDate = FALSE, varDate, viz, dateFormat = "a_m_d") {
+    
+    
     if (is.null(dataTbl)) return()
     if (is.null(varToSel)) return()
-    if (is.null(varToGroup)) return()
     if (is.null(viz)) return()
-    if (viz != "scatter") {
-      if (!is.null(varToAgg)) {
-        if (length(varToAgg == 1)) varToAgg <- dplyr::sym(varToAgg[1])
-      }
-    }
+    
     
     if (agg == "pctg") agg <- "count"
     df <- dataTbl
     df <- df %>% 
       dplyr::select(!!varToSel) 
     
-
+    #print(df)
     
-    varG <- dplyr::sym(varToGroup[1])
-    df <- df %>% dplyr::group_by(!!varG)
-    
-    
-    if (length(varToGroup) == 2) {
-      varGadd <- dplyr::sym(varToGroup[2])
-      df <- df %>% dplyr::group_by(!!varG, !!varGadd)
+    if (viz != "scatter") {
+      if (is.null(varToGroup)) return()
+      if (!is.null(varToAgg)) {
+        if (length(varToAgg == 1)) varToAgg <- dplyr::sym(varToAgg[1])
+      }
+      
+      varG <- dplyr::sym(varToGroup[1])
+      df <- df %>% dplyr::group_by(!!varG)
+      
+      
+      if (length(varToGroup) == 2) {
+        varGadd <- dplyr::sym(varToGroup[2])
+        df <- df %>% dplyr::group_by(!!varG, !!varGadd)
+      }
     }
     
     if (!(viz %in% c("scatter", "map_bubbles", "map_heat"))) {
@@ -119,7 +123,7 @@ selectTbl <-
         df <- df %>% dplyr::summarise(Total = sum(!!varToAgg, na.rm = TRUE))
       }
     } 
-  
+    
     
     df <-   df %>% dplyr::collect()
     

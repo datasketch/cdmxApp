@@ -31,11 +31,10 @@ mod_viz_data_server <- function(id, r){
       tryCatch({
         vizSel <- r$active_viz
         varNum <- r$varNum
+        varCats <- r$v_sel
         if (vizSel %in% c("scatter")) {
           if (is.null(varNum)) varNum <-  r$allNums[1:2]
         }
-        
-        varCats <- r$v_sel
         varDate <- NULL
         haveDate <- FALSE
         
@@ -44,7 +43,6 @@ mod_viz_data_server <- function(id, r){
           varDate <- paste0("temporal_", r$datesSelected)
           if (varCats == "Histórico CDMX") varCats <- NULL
           varCats <- c(varCats,  varDate)
-          print(varCats)
           haveDate <- TRUE
         }
         if (vizSel %in% c("map_bubbles", "map_heat")){
@@ -61,13 +59,15 @@ mod_viz_data_server <- function(id, r){
                         haveDate = haveDate,
                         varDate = varDate,
                         viz = vizSel, dateFormat = dateFormat)
-        
+        #print(df)
         if (vizSel == "scatter") {
-          if (ncol(df) == 2) return()
+          if (!is.null(r$allCats)) {
+            if (ncol(df) == 2) return()
+          }
         } else {
           if (length(varNum) > 2) return()
         }
-        #print(df)
+
         viz$data <- df
       },
       error = function(cond) {

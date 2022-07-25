@@ -31,9 +31,6 @@ mod_subsetting_data_server <- function(id, r){
         req(r$vars_f)
         df <- r$d_fil
         varsF <- r$vars_f
-        print("veeer")
-        print(varsF)
-        print("ffin")
         l_lb <-
           purrr::map(1:nrow(varsF), function(i) {
             df_o <- data.frame(id = r$allCats[[varsF$vars[i]]])

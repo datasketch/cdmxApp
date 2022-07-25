@@ -225,7 +225,7 @@ mod_load_viz_server <- function(id, r){
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
         }
         
-        if (r$active_viz %in% c("bar", "line", "scatter")) {
+        if (r$active_viz %in% c("bar", "line")) {
           opts_viz$legend_title <- '<span style="font-size: 9px; color: #666; font-weight: normal">Haz clic en la leyenda para mostrar u </br>ocultar la categoría</span>'
         }
         
@@ -327,7 +327,7 @@ mod_load_viz_server <- function(id, r){
     output$table_view <- DT::renderDataTable({
       req(r$d_fil)
       if (r$active_viz != "table") return()
-      df <- r$d_fil %>% collect()
+      df <- r$d_fil %>% dplyr::collect()
       #df <- df %>% dplyr::select(-FechaInicioR, -FechaHechoR)
       dtable <- DT::datatable(df,
                               rownames = F,

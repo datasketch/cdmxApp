@@ -8,6 +8,7 @@ options(timeout=100)
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
+    
     golem_add_external_resources(),
     # Your application UI logic 
     shinypanels::panelsPage(
@@ -88,11 +89,11 @@ golem_add_external_resources <- function(){
     # for example, you can add shinyalert::useShinyalert() 
     
     
-    # include busy start up symbol
+    #include busy start up symbol
     shinybusy::busy_start_up(
       loader = tags$img(
         src = "www/img/loading_gris.gif",
-        width = 100), 
+        width = 100),
       mode = "auto",
       color = "#435b69",
       background = "#FFF")

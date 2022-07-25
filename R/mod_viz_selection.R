@@ -30,20 +30,20 @@ mod_viz_selection_server <- function(id, r){
         reqViz <-  trimws(setdiff(r$ckanConf$chart_type %>% 
                                     stringr::str_split(pattern = ",") %>% 
                                     .[[1]], 
-                                  c(NA, "")))
+                                  c(NA, "", " ")))
         if (!identical(reqViz, character())) {
           viz <- unique(c(reqViz, viz))
         }
       }
       if (is.null(r$allCats)) viz <- setdiff(viz, c("bar", "treemap"))
-   
-      if (is.null(r$allNums)) {
+      if (is.null(r$allNums)) viz <- setdiff(viz, "scatter")
+      if (!is.null(r$allNums)) {
         if (length(r$allNums) < 2) viz <- setdiff(viz, "scatter")
       }
       if (is.null(r$allDates)) viz <- setdiff(viz, "line")
       if (is.null(r$coorToPlot)) viz <- setdiff(viz, c( "map_heat", "map_bubbles"))
       if (is.null(r$geoToPlot)) viz <- setdiff(viz, "map")
-      if (!any(grepl("alcaldia|alcaldía", tolower(r$vars_f$vars)))) viz <- setdiff(viz, c("map", "map_heat", "map_bubbles"))
+      if (!any(grepl("alcaldia|alcaldía", tolower(r$vars_f$vars)))) viz <- setdiff(viz, c("map"))
       
 
       c(viz, "table")

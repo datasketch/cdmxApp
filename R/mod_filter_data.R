@@ -31,7 +31,7 @@ mod_filter_data_server <- function(id, r){
         df <- r$d_sel
         if (!is.null(r$vars_f)) {
           vars_f <- r$vars_f
-          
+          print(r$vars_f)
           for (i in 1:nrow(vars_f)) {
             if (is.null(r[[vars_f$id[i]]])) return()
             print("#####")
@@ -41,11 +41,7 @@ mod_filter_data_server <- function(id, r){
             df <- filterTbl(df, varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
           }
         } 
-        print("$$$$$")
-        print(df)
-        #print(df)
-        print(r$allNums)
-        print(r$numRange)
+       
         if (!is.null(r$allNums)) {
           if (!is.null(r$numRange)) {
             for (i in r$allNums) {
@@ -63,8 +59,6 @@ mod_filter_data_server <- function(id, r){
             print(r$allDates)
             rangeDef <- r$datesRange[1,]
             rangeDef$dateFil <- paste0("temporal_",rangeDef$id)
-            print(c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")))
-            print(c(format(as.Date(rangeDef$min), format="%Y-%m"), format(as.Date(rangeDef$max))))
             df <- filterNumTbl(df,
                                rangeDef$dateFil,
                                c(format(as.Date(r[[paste0(rangeDef$id, "range")]][1]), format="%Y-%m"),format(as.Date(r[[paste0(rangeDef$id, "range")]][2]), format="%Y-%m")),
@@ -72,8 +66,6 @@ mod_filter_data_server <- function(id, r){
             )
           }
         }
-        print("filter")
-        print(df)
         dataFilter$info <- df
       },
       error = function(cond) {
