@@ -32,7 +32,9 @@ mod_viz_data_server <- function(id, r){
         vizSel <- r$active_viz
         varNum <- r$varNum
         varCats <- r$v_sel
+      
         if (vizSel %in% c("scatter")) {
+          if (all(grepl("Ninguna", varCats))) varCats <- NULL
           if (is.null(varNum)) varNum <-  r$allNums[1:2]
         }
         varDate <- NULL
@@ -50,6 +52,7 @@ mod_viz_data_server <- function(id, r){
           varCats <- r$coorToPlot
         }
         varSel <- c(varCats, varNum)
+        print(varSel)
         df <- r$d_fil
         df <- selectTbl(df, 
                         agg = r$aggId, 
@@ -60,14 +63,14 @@ mod_viz_data_server <- function(id, r){
                         varDate = varDate,
                         viz = vizSel, dateFormat = dateFormat)
         #print(df)
-        if (vizSel == "scatter") {
-          if (!is.null(r$allCats)) {
-            if (ncol(df) == 2) return()
-          }
-        } else {
-          if (length(varNum) > 2) return()
-        }
-
+        # if (vizSel == "scatter") {
+        #   if (!is.null(varCats)) {
+        #     if (ncol(df) == 2) return()
+        #   }
+        # } else {
+        #   if (length(varNum) > 2) return()
+        # }
+      #print(df)
         viz$data <- df
       },
       error = function(cond) {

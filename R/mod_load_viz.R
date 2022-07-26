@@ -262,6 +262,11 @@ mod_load_viz_server <- function(id, r){
             opts_viz$sort <- "desc"
           }
         }
+        if (r$active_viz == "scatter") {
+          if (r$aggScatterViz) {
+            opts_viz$scatter_agg <- TRUE
+          }
+        }
         
         
         

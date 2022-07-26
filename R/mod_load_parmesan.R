@@ -13,6 +13,7 @@ mod_load_parmesan_ui <- function(id){
   tagList(
     uiOutput(ns("varViewOut")),
     uiOutput(ns("desagregacionOut")),
+    uiOutput(ns("aggScatter")),
     uiOutput(ns("aggOut")),
     uiOutput(ns("percOut")),
     uiOutput(ns("NumericFilters")),
@@ -43,14 +44,14 @@ mod_load_parmesan_server <- function(id, r){
                             selected = r$allNums[1]
       )
     })
-
+    
     observe({
       if (is.null(r$allDates)) return()
       r$datesSelected <- input[["datesSelected"]]
     })
-
-
-
+    
+    
+    
     output$dateRange <- renderUI({
       if (is.null(r$allDates)) return()
       rangeDef <- r$datesRange[1,]
@@ -64,7 +65,7 @@ mod_load_parmesan_server <- function(id, r){
                                   endLabel = "Final del rango"
       )
     })
-
+    
     observe({
       if (is.null(r$allDates)) return()
       rangeDef <- r$datesRange[1,]
@@ -73,7 +74,7 @@ mod_load_parmesan_server <- function(id, r){
     
     var_opts <- reactive({
       req(r$active_viz)
-  
+      
       if (is.null(r$vars_f)) return()
       catVars <- r$vars_f$vars
       print(catVars)
@@ -81,6 +82,8 @@ mod_load_parmesan_server <- function(id, r){
         ch <-  catVars[grepl("alcaldia|alcaldía", tolower(catVars))]
       } else if (r$active_viz %in% c("line", "area")) {
         ch <- c("Histórico CDMX", catVars)
+      } else if (r$active_viz %in% c("scatter")) {
+        ch <- c("Ninguna", catVars)
       } else {
         ch <- catVars
       }
@@ -123,7 +126,7 @@ mod_load_parmesan_server <- function(id, r){
     
     output$desagregacionOut <- renderUI({
       req(r$active_viz)
-      if (r$active_viz %in% "line") return()
+      if (r$active_viz %in% c("line", "scatter")) return()
       req(desVarOpts())
       shiny::radioButtons(ns("desagregacionId"),
                           "Desagregar por:",
@@ -143,16 +146,31 @@ mod_load_parmesan_server <- function(id, r){
         ch <- setNames(c("count", "pctg"), c("Conteo", "Porcentaje"))
       } else {
         ch <- setNames(c("count", "sum", "mean"), c("Conteo", "Suma", "Promedio"))
-        if (r$active_viz == "scatter") ch <- setNames(c( "sum", "mean"), c("Suma", "Promedio"))
+        if (r$active_viz == "scatter") {
+          if (is.null(r$aggScatterViz)) return()
+          ch <- NULL
+          if (r$aggScatterViz) {
+            ch <- setNames(c( "sum", "mean"), c("Suma", "Promedio"))
+          }
+        }
       }
       
-      shiny::radioButtons(ns("aggId"), 
-                          "Tipo de unidad",
-                          choices = ch,
-                          selected = ch[[1]]
-      )
+      if (is.null(ch)) {
+        return()
+      } else {
+        shiny::radioButtons(ns("aggId"), 
+                            "Tipo de unidad",
+                            choices = ch,
+                            selected = ch[[1]]
+        )
+      }
     })
     
+    output$aggScatter <- renderUI({
+      req(r$active_viz)
+      if (r$active_viz != "scatter") return()
+      shinyinvoer::toggleSwitchInput(ns("aggScatterSel"), " Agregar", on_label = " ", off_label = " ")
+    })
     
     output$percOut <- renderUI({
       if(is.null(r$allNums)) return()
@@ -163,6 +181,7 @@ mod_load_parmesan_server <- function(id, r){
       r$varViewId <- input[["varViewId"]]
       r$desagregacionId <- input[["desagregacionId"]]
       r$aggId <- input[["aggId"]]
+      r$aggScatterViz <- input[["aggScatterSel"]]
       r$pctgNum <- input[["pctgNumVar"]]
       #r$datesRanges <- input[]
     })
@@ -270,7 +289,7 @@ mod_load_parmesan_server <- function(id, r){
     # tryCatch({
     
     observe({
-
+      
       if (is.null(r$vars_f)) return()
       
       varS <- r$vars_f
@@ -425,7 +444,7 @@ mod_load_parmesan_server <- function(id, r){
       if (is.null(colors_show())) return()
       colors_show()
     })
-
+    
     
     # Initialize parmesan
     path <- app_sys("app/app_config/parmesan")
