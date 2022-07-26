@@ -89,14 +89,15 @@ selectTbl <-
     if (is.null(dataTbl)) return()
     if (is.null(varToSel)) return()
     if (is.null(viz)) return()
-    
+    if (is.null(agg)) agg <- 'count'
     
     if (agg == "pctg") agg <- "count"
     df <- dataTbl
+
     df <- df %>% 
       dplyr::select(!!varToSel) 
     
-    #print(df)
+   
     
     if (viz != "scatter") {
       if (is.null(varToGroup)) return()

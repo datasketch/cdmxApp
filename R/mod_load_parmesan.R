@@ -169,11 +169,16 @@ mod_load_parmesan_server <- function(id, r){
     output$aggScatter <- renderUI({
       req(r$active_viz)
       if (r$active_viz != "scatter") return()
+      if (is.null(r$allCats)) return()
+      if (!is.null(r$v_sel)) {
+        if (r$v_sel == "Ninguna") return()
+      }
       shinyinvoer::toggleSwitchInput(ns("aggScatterSel"), " Agregar", on_label = " ", off_label = " ")
     })
     
     output$percOut <- renderUI({
       if(is.null(r$allNums)) return()
+      if (r$active_viz == "scatter") return()
       shinyinvoer::toggleSwitchInput(ns("pctgNumVar"), " Porcentaje", on_label = " ", off_label = " ")
     })
     
@@ -213,8 +218,7 @@ mod_load_parmesan_server <- function(id, r){
     output$NumericFilters <- renderUI({
       req(r$active_viz)
       req(r$allNums)
-      req(r$aggId)
-      if (r$aggId == "count") return()
+      
       selOps <- r$allNums[1]
       maxI <- 1
       
@@ -223,6 +227,9 @@ mod_load_parmesan_server <- function(id, r){
           selOps <- c(selOps, r$allNums[2])
           maxI <- 2
         }
+      } else {
+        req(r$aggId)
+        if (r$aggId == "count") return()
       }
       
       shiny::selectizeInput(inputId = ns("numericSelected"), 
@@ -245,8 +252,8 @@ mod_load_parmesan_server <- function(id, r){
     output$NumericRange <- renderUI({
       req(r$allNums)
       req(r$numRange)
-      if (length(r$allNums) > 0) {
-        purrr::map(r$allNums, function(i) {
+      if (length(r$numRange$id) > 0) {
+        purrr::map(r$numRange$id, function(i) {
           rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
           shiny::sliderInput(inputId = ns(paste0(rangeDef$id, "range")),
                              label = rangeDef$id,
@@ -355,7 +362,7 @@ mod_load_parmesan_server <- function(id, r){
     
     colors_default <- reactive({
       req(r$active_viz)
-      if (r$active_viz %in% c("map")) {
+      if (r$active_viz %in% c("map", "treemap")) {
         list(
           palette_a = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
           palette_b = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),
@@ -363,23 +370,6 @@ mod_load_parmesan_server <- function(id, r){
           palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
           palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
           palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
-        )
-        
-        # } else if (r$active_viz == "map_bubbles") {
-        #   list(
-        #     palette_a = c("#3E9FCC"),
-        #     palette_b = c("#93D0F1"),
-        #     palette_c = c("#19719F")
-        #   )
-      } else if (r$active_viz %in% c("treemap", "scatter")) {
-        list(
-          palette_a = c("#1B5C51", "#4E786F", "#66887F", "#7E9992", "#96ACA5", "#AFBFBB", "#C8D4D1", "#E2EBE9"),
-          palette_b = c("#B48E5D", "#C3A57D", "#CBB18E", "#D3BDA0", "#DCCAB2", "#E4D6C5", "#EDE3D7", "#F6F1EB"),
-          palette_c = c("#0E709E", "#568BB2", "#709ABC", "#88A9C7", "#9FBAD2", "#B5CADD", "#CBDBE8", "#E0EDF3"),
-          palette_d = c("#253786", "#52599C", "#696DA9", "#8182B6", "#999AC4", "#B1B1D2", "#CACADE", "#E1E2EB"),
-          palette_e = c("#9E2348", "#B15267", "#BB6979", "#C6818D", "#D19AA3", "#DCB3B9", "#E8CCD1", "#F4E5E9"),
-          palette_f = c("#B33718", "#C45633", "#CC6644", "#D47657", "#DD876B", "#E69880", "#EFAA96", "#F8BBAD")
-          
         )
       } else if (r$active_viz == "bar"){
         req(r$desagregacionId)
@@ -389,7 +379,7 @@ mod_load_parmesan_server <- function(id, r){
             palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
             palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
           )
-        } else {
+        }  else {
           list(
             palette_a = c("#1B5C51"),
             palette_b = c("#B48E5D"),
@@ -399,29 +389,36 @@ mod_load_parmesan_server <- function(id, r){
             palette_f = c("#B33718")
           )
         }
-      } else if (r$active_viz %in% c("line", "area")) {
-        req(r$varViewId)
-        if(r$varViewId == "Histórico CDMX") {
-          list(
-            palette_a = c("#1B5C51"),
-            palette_b = c("#B48E5D"),
-            palette_c = c("#0E709E"),
-            palette_d = c("#253786"),
-            palette_e = c("#9E2348"),
-            palette_f = c("#B33718")
-          )
-        } else {
-          list(
-            palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
-            palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
-            palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
-          )
-        }
+      } else if (r$active_viz == "scatter") {
+        list(
+          palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
+          palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
+          palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
+        )
+     
+    } else if (r$active_viz %in% c("line", "area")) {
+      req(r$varViewId)
+      if(r$varViewId == "Histórico CDMX") {
+        list(
+          palette_a = c("#1B5C51"),
+          palette_b = c("#B48E5D"),
+          palette_c = c("#0E709E"),
+          palette_d = c("#253786"),
+          palette_e = c("#9E2348"),
+          palette_f = c("#B33718")
+        )
       } else {
-        return()
+        list(
+          palette_a = c("#3E9FCC", "#8A6BAC", "#EA5254", "#F18951", "#FCC448", "#71B365"),
+          palette_b = c("#93D0F1", "#D8CEE4", "#EB9594", "#F9BE9B", "#FFE095", "#CBE3C6"),
+          palette_c = c("#19719F", "#5D3A84", "#D02622", "#D16020", "#CF981B", "#438536")
+        )
       }
-      
-    })
+    } else {
+      return()
+    }
+    
+  })
     
     colors_show <- reactive({
       if (is.null(colors_default())) return()
@@ -496,8 +493,8 @@ mod_load_parmesan_server <- function(id, r){
     
     
     
-  })
-}
+})
+  }
 
 ## To be copied in the UI
 # mod_load_parmesan_ui("load_parmesan_ui_1")

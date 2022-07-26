@@ -36,7 +36,9 @@ mod_viz_type_server <- function(id, r){
         if (r$active_viz %in% "map") tv <- "GnmNum"
         if (r$active_viz %in% "scatter") {
           varCats <- r$allCats
+          if (!is.null(r$v_sel)) {
           if (r$v_sel == "Ninguna") varCats <- NULL
+          }
           req(r$allNums)
           tv <- "CatNumNum"
           if (ncol(df) == 4) tv <- "CatNumNumNum"
@@ -59,7 +61,7 @@ mod_viz_type_server <- function(id, r){
         } else {
           vp <- paste0("hgchmagic::", paste0("hgch_", r$active_viz, "_", viz_type()))
         }
-        #print(vp)
+        print(vp)
         vp
       },
       error = function(cond) {

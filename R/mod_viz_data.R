@@ -27,16 +27,19 @@ mod_viz_data_server <- function(id, r){
     observe({
       req(r$active_viz)
       req(r$d_fil)
-      req(r$aggId)
+      
       tryCatch({
         vizSel <- r$active_viz
         varNum <- r$varNum
         varCats <- r$v_sel
-      
+        aggViz <- r$aggId
         if (vizSel %in% c("scatter")) {
+          if (!is.null(varCats)) {
           if (all(grepl("Ninguna", varCats))) varCats <- NULL
+          }
           if (is.null(varNum)) varNum <-  r$allNums[1:2]
-        }
+          
+        } 
         varDate <- NULL
         haveDate <- FALSE
         
@@ -52,10 +55,9 @@ mod_viz_data_server <- function(id, r){
           varCats <- r$coorToPlot
         }
         varSel <- c(varCats, varNum)
-        print(varSel)
         df <- r$d_fil
         df <- selectTbl(df, 
-                        agg = r$aggId, 
+                        agg = aggViz, 
                         varToSel = varSel,
                         varToGroup = varCats, 
                         varToAgg = varNum, 

@@ -113,7 +113,7 @@ mod_selected_data_server <- function(id, r){
           id = paste0(tolower(vars), "Id"),
           vars = vars
         )
-        print(df)
+        #print(df)
         df
       },
       error = function(cond) {

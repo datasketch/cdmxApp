@@ -66,7 +66,7 @@ mod_load_viz_server <- function(id, r){
     
     dataMap <- reactiveValues(info = NULL)
     observe({
-       tryCatch({
+      tryCatch({
         if (is.null(input$map1_zoom)) return()
         if (is.null(r$d_viz)) return()
         if (!(r$active_viz %in% c("map_bubbles", "map_heat"))) return()
@@ -88,7 +88,7 @@ mod_load_viz_server <- function(id, r){
           df <- df[sample(1:nrow(df), nsample, replace = FALSE),]
         }
         names(df) <- tolower(names(df))
-    
+        
         lf <- leaflet::leafletProxy("map1", data = df)
         if (r$active_viz == "map_bubbles") {
           lf <- lf %>%
@@ -124,11 +124,11 @@ mod_load_viz_server <- function(id, r){
             )
         }
         if (nrow(r$d_viz) > nrow(df)) {
-        lf <-
-          lf %>%
-          leaflet::clearControls() %>%
-          leaflet::addControl(paste0("Este mapa solo muestra ", nrow(df), " puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia"),
-                              position = "bottomleft", className = "map-caption")
+          lf <-
+            lf %>%
+            leaflet::clearControls() %>%
+            leaflet::addControl(paste0("Este mapa solo muestra ", nrow(df), " puntos a la vez. Da zoom para ver todos los puntos a nivel calle o colonia"),
+                                position = "bottomleft", className = "map-caption")
         } else {
           lf <-
             lf %>%
@@ -201,14 +201,16 @@ mod_load_viz_server <- function(id, r){
         )
         
         #print(df)
-        if (r$aggId == "pctg") {
-          opts_viz$percentage <- TRUE
-          if (ncol(df) > 2) opts_viz$percentage_by <- names(df)[[2]]
-        }
-        if (!is.null(r$pctgNum)) {
-          if (r$pctgNum) {
+        if (r$active_viz != "scatter") {
+          if (r$aggId == "pctg") {
             opts_viz$percentage <- TRUE
             if (ncol(df) > 2) opts_viz$percentage_by <- names(df)[[2]]
+          }
+          if (!is.null(r$pctgNum)) {
+            if (r$pctgNum) {
+              opts_viz$percentage <- TRUE
+              if (ncol(df) > 2) opts_viz$percentage_by <- names(df)[[2]]
+            }
           }
         }
         #print(opts_viz$percentage_by)
@@ -219,7 +221,7 @@ mod_load_viz_server <- function(id, r){
           }
         }
         
-        if (r$active_viz %in% c("treemap", "pie", "scatter")) {
+        if (r$active_viz %in% c("treemap", "pie")) {
           opts_viz$color_by <- names(r$d_viz)[1]
           opts_viz$legend_show <- FALSE
           opts_viz$palette_colors <- rev(r$colorsPlot[[r$colorsId]])
@@ -263,14 +265,17 @@ mod_load_viz_server <- function(id, r){
           }
         }
         if (r$active_viz == "scatter") {
-          if (r$aggScatterViz) {
-            opts_viz$scatter_agg <- TRUE
-          }
+          opts_viz$legend_show <- FALSE
+          opts_viz$color_by <- names(r$d_viz)[1]
+          if (!is.null(r$allCats)) {
+            if (r$aggScatterViz) {
+              opts_viz$scatter_agg <- TRUE
+            } }
         }
         
         
         
-        #print(opts_viz)
+        
         opts_viz
       },
       error = function(cond) {

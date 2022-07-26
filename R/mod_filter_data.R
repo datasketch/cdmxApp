@@ -34,8 +34,6 @@ mod_filter_data_server <- function(id, r){
           print(r$vars_f)
           for (i in 1:nrow(vars_f)) {
             if (is.null(r[[vars_f$id[i]]])) return()
-            print("#####")
-            print(r[[vars_f$id[i]]])
             filterNA <- "NA" %in% r[[vars_f$id[i]]]
             varF <- setdiff(r[[vars_f$id[i]]], "NA")
             df <- filterTbl(df, varToFilter = vars_f$vars[i], catsToView = varF, filterNA = filterNA)
@@ -44,7 +42,7 @@ mod_filter_data_server <- function(id, r){
        
         if (!is.null(r$allNums)) {
           if (!is.null(r$numRange)) {
-            for (i in r$allNums) {
+            for (i in r$numRange$id) {
               rangeDef <- r$numRange %>% dplyr::filter(id %in% i)
               df <- filterNumTbl(dataTbl = df,
                                  varToFilter = i,
@@ -53,7 +51,7 @@ mod_filter_data_server <- function(id, r){
             }
           }
         }
-        
+      
         if (!is.null(r$ckanExtra$dateFormat)) {
           if (!is.null(r$allDates)) {
             print(r$allDates)
