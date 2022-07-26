@@ -5,6 +5,10 @@ html, body {
   color: #435b69 !important;
 }
 
+.shiny-output-error { visibility: hidden; }
+
+.shiny-output-error:before { visibility: hidden;}
+
 a {
  font-family: 'Roboto';
  font-style: normal;
